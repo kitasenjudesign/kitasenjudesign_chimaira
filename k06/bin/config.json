@@ -1,0 +1,27 @@
+{
+	"data":[
+		{
+			"cam":"mov/cam3.json",
+			"mov":"mov/03.mp4",
+			"offset":1
+		},
+		{
+			"cam":"mov/cam6.json",
+			"mov":"mov/06.mp4",
+			"offset":1
+		},		
+		{
+			"cam":"mov/cam1.json",
+			"mov":"mov/01.mp4",
+			"offset":1
+		},	
+
+		{
+			"cam":"mov/cam4.json",
+			"mov":"mov/04.mp4",
+			"offset":1
+		}
+		
+	]
+
+}

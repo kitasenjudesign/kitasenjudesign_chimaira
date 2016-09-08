@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  
+  <title>KITASENJUDESIGN KIMAIRA</title>
+  <script type="text/javascript" src="./lib/io/socket.io.js"></script>
+  <script type="text/javascript" src="./lib/jquery-2.1.0.min.js"></script>
+
+  
+</head>
+<body>
+
+  <h1>KIMAIRA</h1><br><br>
+
+  <a href="k04/bin/">04fish</a><br>
+  <a href="k05/bin/">05dot</a><br>
+  <a href="k06/bin/">06extra</a><br>
+  <a href="k00/bin/">00faces</a><br>
+  <a href="k01/bin/">01single</a><br>
+  <a href="k06/bin/">06matchmovj</a><br>
+
+
+  <div class="container">
+      <form class="form-inline">
+        <div class="form-group">
+          <label for="msgForm">_</label>
+          <input type="text" class="form-control" id="msgForm">
+        </div>
+          <button type="submit" class="btn btn-primary">send</button>
+      </form>
+      <div id="chatLogs"></div>
+  </div>
+    
+
+    <script type="text/javascript">
+        //var socket = io.connect();
+
+        $.getJSON("config.json" , function(data) {
+            
+           var socket = io.connect(data.host);
+        
+            socket.on("server_to_client", function(data){appendMsg(data.value)});
+        
+            function appendMsg(text) {
+                $("#chatLogs").append("<div>" + text + "</div>");
+            }
+        
+            $("form").submit(function(e){
+                var message = $("#msgForm").val();
+                $("#msgForm").val('');
+                socket.emit("client_to_server", {value : message});
+                e.preventDefault();
+            });
+            
+        });
+
+        
+    </script>
+</body>
+</html>
