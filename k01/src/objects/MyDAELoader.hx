@@ -72,8 +72,8 @@ class MyDAELoader
 		dae.scale.x = dae.scale.y = dae.scale.z =150;
 	
 		//material = untyped dae.children[0].children[0].material;
-		//var url:String = "face/dede_face_diff.png";
-		var url:String = "face/Texture_001.jpg";
+		var url:String = "face/dede_face_diff.png";
+		//var url:String = "face/Texture_001.jpg";
 		
 		_texture1 = ImageUtils.loadTexture( Path.assets + url);// mae_face.png");
 		_texture1.minFilter = Three.NearestFilter;

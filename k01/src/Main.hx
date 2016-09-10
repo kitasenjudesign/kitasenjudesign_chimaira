@@ -15,7 +15,9 @@ class Main
 	
 	static function main() 
 	{
+		
 		Browser.window.onload = untyped _init;
+		
 	}
 	
 	static private function _init() 

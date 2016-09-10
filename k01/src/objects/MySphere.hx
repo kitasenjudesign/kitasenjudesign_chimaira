@@ -50,7 +50,7 @@ class MySphere extends Object3D
 		
 		super();
 	
-		if (!Dat.bg) return;
+		//if (!Dat.bg) return;
 		
 		var texture:Texture = ImageUtils.loadTexture( Path.assets + 'bg/m01.jpg' );
 
@@ -94,7 +94,7 @@ class MySphere extends Object3D
 	//
 	public function changeBg():Bool {
 	
-		if (!Dat.bg) return false;
+		//if (!Dat.bg) return false;
 		
 		mate.map = _textures[_texIndex%_textures.length];
 		_texIndex++;
@@ -119,7 +119,7 @@ class MySphere extends Object3D
 	
 	public function update(audio:MyAudio):Void {
 		
-		if (!Dat.bg) return;
+		//if (!Dat.bg) return;
 		
 		_audio = audio;
 		

@@ -88,7 +88,7 @@ class MyFaceSingle extends Object3D
 	
 	public function init(d:MyDAELoader,cubecam:CubeCamera):Void {
 	
-		if (Dat.bg) return;
+		//if (Dat.bg) return;
 		
 		_daeLoader = d;
 		
@@ -197,7 +197,7 @@ class MyFaceSingle extends Object3D
 	
 	public function updateSingle(audio:MyAudio):Void {
 		
-		if (Dat.bg) return;
+		//if (Dat.bg) return;
 		if (dae == null) return;
 		
 		_audio = audio;

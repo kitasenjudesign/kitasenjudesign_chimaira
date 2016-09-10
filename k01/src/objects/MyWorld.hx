@@ -58,9 +58,9 @@ class MyWorld extends Object3D
 		
 		
 		sphere = new MySphere();
-		if (Dat.bg) {
+		//if (Dat.bg) {
 			add(sphere);
-		}
+		//}
 		
 		for(i in 0...5){
 			var face:MyFace = new MyFace(i);

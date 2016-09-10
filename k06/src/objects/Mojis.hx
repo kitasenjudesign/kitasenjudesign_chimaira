@@ -17,7 +17,6 @@ import three.SphereGeometry;
 import three.Texture;
 import three.Vector3;
 import video.VideoPlane;
-import video.VideoPlayer;
 
 /**
  * ...
@@ -37,7 +36,7 @@ class Mojis extends Object3D
 	private var _videoPlane:VideoPlane;
 	private var _texture:Texture;
 	private var _offsetY:Float = 0;
-	var _eyeball:Mesh;
+	private var _eyeball:Mesh;
 	
 
 	public function new() 
@@ -46,8 +45,6 @@ class Mojis extends Object3D
 	}
 	
 	/*
-	 * 
-	 * 
 	 * 
 	 */
 	public function init(callback:Void->Void):Void {
@@ -102,20 +99,20 @@ class Mojis extends Object3D
 		}
 		
 		
-		var p:Plane = new Plane(
-			new Vector3( 0, 1, 0 ), 0.8 
-		);
 		
-		_texture = ImageUtils.loadTexture( "mate3.png" );
+		//_texture = ImageUtils.loadTexture( "mate3.png" );
+		_texture = ImageUtils.loadTexture( Path.assets + "face/dede_face_diff.png" );
+		/*
 		_texture.wrapS = Three.RepeatWrapping;
 		_texture.wrapT = Three.RepeatWrapping;
 		_texture.repeat.set(2, 2);
-		
+		*/
 		_material = new MeshPhongMaterial( { color:0xffffff, map:_texture } );
 		//_material.alphaMap = _texture;
-		_material.alphaTest = 0.5;
-		_material.transparent = true;
-		_material.clippingPlanes = [p];
+		
+		//_material.alphaTest = 0.5;
+		//_material.transparent = true;
+		_material.clippingPlanes = [new Plane(new Vector3( 0, 1, 0 ), 0.8 )];//
 		_material.clipShadows = true;
 		_material.side = Three.DoubleSide;
 		
@@ -139,37 +136,40 @@ class Mojis extends Object3D
 			face.init( _loader, null );
 			face.dae.material = _material;	
 			face.dae.castShadow = true;
-			var ss:Float = 50 + 30 * Math.random();
+			var ss:Float = 40 + 10 * Math.random();
 			face.dae.scale.set(ss, ss, ss);
 			
 			face.dae.position.x = 20 * (Math.random() - 0.5);
 			face.dae.position.y = i * -250;
 			face.dae.position.z = 20 * (Math.random() - 0.5);
 			
-			face.dae.rotation.y = Math.random() * 2 * Math.PI;
-			//add(face.dae);
+			//face.dae.rotation.y = Math.random() * 2 * Math.PI;
+			add(face.dae);
 			_faces.push(face);
 			
 		}
 		
-		
+		/*
 		var eyeMat:MeshPhongMaterial = _material.clone();
 		eyeMat.map = ImageUtils.loadTexture( 		Path.assets + "eye/eye_color.jpg");
 		eyeMat.normalMap = ImageUtils.loadTexture( 	Path.assets + "eye/eye_normal.png" );
 		eyeMat.refractionRatio = 0.2;
 		eyeMat.reflectivity = 0.2;
+		*/
 		//eyeMat.emissive = 0.5;
 		
 		//= new MeshPhongMaterial( { 
 		//			map:ImageUtils.loadTexture( 		Path.assets + "eye/eye_color.jpg"), 
 		//			normalMap:ImageUtils.loadTexture( 	Path.assets + "eye/eye_normal.png" ) 
 		//	} );
+		/*
 		_eyeball = new Mesh(
 			new SphereGeometry(100, 100, 10, 10),
 			eyeMat
 		);
 		_eyeball.position.y = 120;
 		add(_eyeball);
+		*/
 		
 		/*
 		var hoge:SkeltonLoader = new SkeltonLoader();
@@ -214,8 +214,8 @@ class Mojis extends Object3D
 		//}
 		
 		if (_texture != null) {
-			_offsetY += 0.003;
-			_texture.offset.set(0, _offsetY);
+			//_offsetY += 0.003;
+			//_texture.offset.set(0, _offsetY);
 		}
 		
 		
@@ -229,9 +229,9 @@ class Mojis extends Object3D
 			
 			for(i in 0..._faces.length){
 				
-				_faces[i].dae.rotation.x += 0.001 + i / 2350;
+				//_faces[i].dae.rotation.x += 0.001 + i / 2350;
 				_faces[i].dae.rotation.y += 0.03 + i / 340;
-				_faces[i].dae.rotation.z += 0.0015 + i / 2300;
+				//_faces[i].dae.rotation.z += 0.0015 + i / 2300;
 				
 				_faces[i].updateSingle(a);
 				_faces[i].dae.position.y += 0.4;
@@ -260,5 +260,6 @@ class Mojis extends Object3D
 	}
 		
 	
+
 	
 }

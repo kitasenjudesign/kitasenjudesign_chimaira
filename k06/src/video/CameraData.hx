@@ -35,6 +35,7 @@ class CameraData
 
 	private var _fov:Float = 0;
 	private var _points:Array<Array<Float>>;
+	private var _positions:Array<Vector3>;
 	private var _area:Dynamic;
 	
 	
@@ -66,7 +67,18 @@ class CameraData
 		var data:Dynamic = Json.parse(data);
 		_frameData = data.frames;
 		_points = data.points;
-		_area = data.area;
+		
+		var p:Array<Array<Float>> = data.positions;
+		_positions = [];
+		
+		for (i in 0...p.length) {
+			_positions[i] = new Vector3(
+				p[i][0],
+				p[i][1],
+				-p[i][2]
+			);
+		}
+		
 		//area wo kuwaeru
 		
 		if (_callback != null) {
@@ -74,6 +86,8 @@ class CameraData
 		}
 	}
 	
+	
+	/*
 	public function getArea():Mesh {
 		
 		if (_area == null) return null;
@@ -92,20 +106,9 @@ class CameraData
 			_area.z			
 		);
 		return mesh;
-		/*
-		"q": [
-            -0.0, 
-            -0.0, 
-            0.0, 
-            1.0
-        ], 
-        "sx": 500.0, 
-        "sy": 200.0, 
-        "sz": 300.0, 
-        "x": -256.13080187852154, 
-        "y": 95.92736435586987, 
-        "z": -0.0
-		*/
+	}*/
+	public function getPositions():Array<Vector3> {
+		return _positions;
 	}
 	
 	public function getPointsGeo():Geometry {

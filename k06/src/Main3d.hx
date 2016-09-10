@@ -16,6 +16,7 @@ import three.AmbientLight;
 import three.Color;
 import three.ImageUtils;
 import three.Mesh;
+import three.PerspectiveCamera;
 import three.PlaneGeometry;
 import three.Scene;
 import three.ShadowMaterial;
@@ -83,8 +84,6 @@ class Main3d
 	
 	private function _onInit0():Void
 	{
-		
-		
 		_camera = new ExCamera(33.235, W / H, 10, 10000);
 		_camera.amp = 1000;		
 		_scene = new Scene();
@@ -132,14 +131,14 @@ class Main3d
 		//light.position.x = 10*(Math.random()-0.5);
 		light.position.x = 30;
 		light.position.y = 3000;
-		light.position.z = 10;
+		light.position.z = 100;
 		
 		light.castShadow = true;
 		untyped __js__("
-			light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 30, 1, 200, 4000 ) );
-			light.shadow.bias = -0.000222;
-			light.shadow.mapSize.width = 1024;
-			light.shadow.mapSize.height = 1024;		
+			light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 30, 16/9, 200, 4000 ) );
+			light.shadow.bias = 0.001;// -0.000222;
+			light.shadow.mapSize.width = 2048;
+			light.shadow.mapSize.height = 2048;		
 		");
 		_scene.add(light);
 		
@@ -162,7 +161,7 @@ class Main3d
 			mm
 		);
 		_shadowGround.receiveShadow = true;
-		_shadowGround.position.y = 0.1;
+		_shadowGround.position.y = 0;
 		_shadowGround.rotation.x = -Math.PI / 2;
 		_scene.add(_shadowGround);
 				

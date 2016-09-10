@@ -45,7 +45,7 @@ class MyFace extends MyFaceSplitA
 	
 	public function updateMaterial(matMode:Int,isWire:Bool=false):Void {
 		
-		if (Dat.bg) return;
+		//if (Dat.bg) return;
 		
 		switch( matMode ) {
 			case MyFace.MAT_DEFAULT:

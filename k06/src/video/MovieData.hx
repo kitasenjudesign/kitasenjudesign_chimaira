@@ -12,6 +12,7 @@ class MovieData
 	public var pathMov		:String;
 	public var pathCam		:String;
 	public var offset		:Int = 0;//frame
+	
 	public var camData	:CameraData;
 	
 	public function new(o:Dynamic) 

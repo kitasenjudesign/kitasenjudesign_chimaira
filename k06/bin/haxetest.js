@@ -152,13 +152,13 @@ Main3d.prototype = {
 		var light = new THREE.SpotLight(16777215,1.5);
 		light.position.x = 30;
 		light.position.y = 3000;
-		light.position.z = 10;
+		light.position.z = 100;
 		light.castShadow = true;
 		
-			light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 30, 1, 200, 4000 ) );
-			light.shadow.bias = -0.000222;
-			light.shadow.mapSize.width = 1024;
-			light.shadow.mapSize.height = 1024;		
+			light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 30, 16/9, 200, 4000 ) );
+			light.shadow.bias = 0.001;// -0.000222;
+			light.shadow.mapSize.width = 2048;
+			light.shadow.mapSize.height = 2048;		
 		;
 		this._scene.add(light);
 		var a = new THREE.AmbientLight(5592405);
@@ -172,7 +172,7 @@ Main3d.prototype = {
 		mm.opacity = 0.5;
 		this._shadowGround = new THREE.Mesh(new THREE.PlaneGeometry(700,700,5,5),mm);
 		this._shadowGround.receiveShadow = true;
-		this._shadowGround.position.y = 0.1;
+		this._shadowGround.position.y = 0;
 		this._shadowGround.rotation.x = -Math.PI / 2;
 		this._scene.add(this._shadowGround);
 		this._pp = new effect.PostProcessing2();
@@ -470,9 +470,9 @@ common.Dat._onInit = function() {
 	common.Dat.gui.domElement.style.position = "absolute";
 	common.Dat.gui.domElement.style.right = "0px";
 	var yy = window.innerHeight / 2 + common.StageRef.get_stageHeight() / 2 + common.Config.canvasOffsetY;
-	common.Dat.gui.domElement.style.top = yy + "px";
+	common.Dat.gui.domElement.style.top = Math.floor(yy / 2) + "px";
 	common.Dat.gui.domElement.style.opacity = 1;
-	common.Dat.gui.domElement.style.zIndex = 10;
+	common.Dat.gui.domElement.style.zIndex = 1000;
 	common.Dat.gui.domElement.style.transformOrigin = "1 0";
 	common.Dat.gui.domElement.style.transform = "scale(0.8,0.8)";
 	common.Key.init();
@@ -509,22 +509,22 @@ common.Dat._onKeyDown = function(e) {
 	}
 };
 common.Dat._goURL1 = function() {
-	common.Dat._goURL("../../04/bin/");
+	common.Dat._goURL("../../k04/bin/");
 };
 common.Dat._goURL2 = function() {
-	common.Dat._goURL("../../05/bin/");
+	common.Dat._goURL("../../k05/bin/");
 };
 common.Dat._goURL3 = function() {
-	common.Dat._goURL("../../02/bin/");
+	common.Dat._goURL("../../k02/bin/");
 };
 common.Dat._goURL4 = function() {
-	common.Dat._goURL("../../03/bin/");
+	common.Dat._goURL("../../k03/bin/");
 };
 common.Dat._goURL5 = function() {
-	common.Dat._goURL("../../00/bin/");
+	common.Dat._goURL("../../k00/bin/");
 };
 common.Dat._goURL6 = function() {
-	common.Dat._goURL("../../01/bin/");
+	common.Dat._goURL("../../k01/bin/");
 };
 common.Dat._goURL = function(url) {
 	console.log("goURL " + url);
@@ -665,8 +665,7 @@ common.StageRef.get_stageWidth = function() {
 	return window.innerWidth;
 };
 common.StageRef.get_stageHeight = function() {
-	if(common.Dat.bg) return Math.floor(window.innerWidth * 816 / 1920);
-	return Math.floor(window.innerWidth * 576 / 1920);
+	return window.innerHeight;
 };
 common.WSocket = function() {
 };
@@ -1119,15 +1118,9 @@ objects.Mojis.prototype = $extend(THREE.Object3D.prototype,{
 				g.merge(geo,mat4);
 			}
 		}
-		var p = new THREE.Plane(new THREE.Vector3(0,1,0),0.8);
-		this._texture = THREE.ImageUtils.loadTexture("mate3.png");
-		this._texture.wrapS = 1000;
-		this._texture.wrapT = 1000;
-		this._texture.repeat.set(2,2);
+		this._texture = THREE.ImageUtils.loadTexture("../../assets/" + "face/dede_face_diff.png");
 		this._material = new THREE.MeshPhongMaterial({ color : 16777215, map : this._texture});
-		this._material.alphaTest = 0.5;
-		this._material.transparent = true;
-		this._material.clippingPlanes = [p];
+		this._material.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),0.8)];
 		this._material.clipShadows = true;
 		this._material.side = 2;
 		this._meshes = [];
@@ -1148,22 +1141,14 @@ objects.Mojis.prototype = $extend(THREE.Object3D.prototype,{
 			face.init(this._loader,null);
 			face.dae.material = this._material;
 			face.dae.castShadow = true;
-			var ss = 50 + 30 * Math.random();
+			var ss = 40 + 10 * Math.random();
 			face.dae.scale.set(ss,ss,ss);
 			face.dae.position.x = 20 * (Math.random() - 0.5);
 			face.dae.position.y = i3 * -250;
 			face.dae.position.z = 20 * (Math.random() - 0.5);
-			face.dae.rotation.y = Math.random() * 2 * Math.PI;
+			this.add(face.dae);
 			this._faces.push(face);
 		}
-		var eyeMat = this._material.clone();
-		eyeMat.map = THREE.ImageUtils.loadTexture("../../assets/" + "eye/eye_color.jpg");
-		eyeMat.normalMap = THREE.ImageUtils.loadTexture("../../assets/" + "eye/eye_normal.png");
-		eyeMat.refractionRatio = 0.2;
-		eyeMat.reflectivity = 0.2;
-		this._eyeball = new THREE.Mesh(new THREE.SphereGeometry(100,100,10,10),eyeMat);
-		this._eyeball.position.y = 120;
-		this.add(this._eyeball);
 		if(this._callback != null) this._callback();
 	}
 	,setEnvMap: function(texture) {
@@ -1172,8 +1157,6 @@ objects.Mojis.prototype = $extend(THREE.Object3D.prototype,{
 	}
 	,update: function(a) {
 		if(this._texture != null) {
-			this._offsetY += 0.003;
-			this._texture.offset.set(0,this._offsetY);
 		}
 		if(this._eyeball != null) {
 			this._eyeball.rotation.x += 0.01;
@@ -1185,9 +1168,7 @@ objects.Mojis.prototype = $extend(THREE.Object3D.prototype,{
 			var _g = this._faces.length;
 			while(_g1 < _g) {
 				var i = _g1++;
-				this._faces[i].dae.rotation.x += 0.001 + i / 2350;
 				this._faces[i].dae.rotation.y += 0.03 + i / 340;
-				this._faces[i].dae.rotation.z += 0.0015 + i / 2300;
 				this._faces[i].updateSingle(a);
 				this._faces[i].dae.position.y += 0.4;
 				if(this._faces[i].dae.position.y > 500) {
@@ -1574,15 +1555,18 @@ video.CameraData.prototype = {
 		var data1 = JSON.parse(data);
 		this._frameData = data1.frames;
 		this._points = data1.points;
-		this._area = data1.area;
+		var p = data1.positions;
+		this._positions = [];
+		var _g1 = 0;
+		var _g = p.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			this._positions[i] = new THREE.Vector3(p[i][0],p[i][1],-p[i][2]);
+		}
 		if(this._callback != null) this._callback();
 	}
-	,getArea: function() {
-		if(this._area == null) return null;
-		var mesh = new THREE.Mesh(new THREE.BoxGeometry(this._area.sx,this._area.sy,this._area.sz,3,3,3),new THREE.MeshBasicMaterial({ color : 16711680, wireframe : true}));
-		mesh.quaternion.copy(new THREE.Quaternion(this._area.q[0],this._area.q[1],this._area.q[2],this._area.q[3]));
-		mesh.position.set(this._area.x,this._area.y,this._area.z);
-		return mesh;
+	,getPositions: function() {
+		return this._positions;
 	}
 	,getPointsGeo: function() {
 		var g = new THREE.Geometry();
@@ -1739,9 +1723,6 @@ video.VideoPlayer.prototype = $extend(THREE.Object3D.prototype,{
 	,_onLoad2: function(e) {
 		this._camData = this._movieData.camData;
 		var frameData = this._camData.getFrameData(0);
-		var mm = this._camData.getArea();
-		if(mm != null) {
-		}
 		var geo = this._camData.getPointsGeo();
 		if(geo != null) {
 		}
@@ -1756,6 +1737,7 @@ video.VideoPlayer.prototype = $extend(THREE.Object3D.prototype,{
 		this._camera.setFOV(this._fov);
 		this._loading = false;
 		this._video.addEventListener("ended",$bind(this,this._onFinish));
+		this._video.volume = 0;
 		this._video.play();
 		window.document.addEventListener("keydown",$bind(this,this._onKeyDown));
 		if(this._callback2 != null) this._callback2();

@@ -156,11 +156,11 @@ class Main3d
 		_world.faceVisible(true);
 		//_dummy.update(_audio);
 			
-		if ( Dat.bg ) {
-			_renderer.render(_scene, _camera);
-		}else{
+		//if ( Dat.bg ) {
+		//	_renderer.render(_scene, _camera);
+		//}else{
 			_pp.update( _audio );
-		}
+		//}
 		//_renderer.render(_scene, _camera);
 		
 		

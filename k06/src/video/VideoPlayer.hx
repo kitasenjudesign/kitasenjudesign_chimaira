@@ -125,6 +125,11 @@ class VideoPlayer extends Object3D
 	 */
 	private function _onLoad():Void {
 		
+		/////////////////////////////////////いろいろ変える
+
+		//_movieData
+		//_movieData.camData
+		
 		_video.src = _movieData.pathMov;
 		//_video.style.display = "none";
 		_video.addEventListener("canplay", _onLoad2);
@@ -137,11 +142,6 @@ class VideoPlayer extends Object3D
 		//Browser.window.alert("_onLoad");
 		_camData	= _movieData.camData;
 		var frameData:Dynamic = _camData.getFrameData(0);
-		//mm
-		var mm:Mesh = _camData.getArea();
-		if ( mm!=null ) {
-			//add(mm);
-		}
 		
 		var geo:Geometry = _camData.getPointsGeo();
 		if (geo != null) {
@@ -152,8 +152,6 @@ class VideoPlayer extends Object3D
 			//var points:LineSegments = new LineSegments(geo, new LineBasicMaterial( { color:0xff0000 } ));
 			//add(points);
 		}
-		
-		
 		
 		//////////////////////////////////////////////setting
 		var q:Array<Float> = frameData.q;
@@ -171,8 +169,10 @@ class VideoPlayer extends Object3D
 	
 		_loading = false;
 		_video.addEventListener("ended", _onFinish);
+		_video.volume = 0;
 		_video.play();
 		
+		//
 		Browser.document.addEventListener("keydown" , _onKeyDown);
 		
 		//callback2
@@ -183,8 +183,12 @@ class VideoPlayer extends Object3D
 		
 	}
 	
+	/**
+	 * _onKeyDown
+	 * @param	e
+	 */
 	private function _onKeyDown(e):Void {
-	
+		//
 		switch(Std.parseInt(e.keyCode)) {
 			case Dat.RIGHT :
 				_onFinish(null);

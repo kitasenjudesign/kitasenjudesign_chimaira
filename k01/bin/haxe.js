@@ -147,7 +147,7 @@ Main3d.prototype = {
 		this._world.update(this._audio);
 		this._world.faceVisible(false);
 		this._world.faceVisible(true);
-		if(common.Dat.bg) this._renderer.render(this._scene,this._camera); else this._pp.update(this._audio);
+		this._pp.update(this._audio);
 		window.requestAnimationFrame($bind(this,this._run));
 	}
 };
@@ -382,9 +382,9 @@ common.Dat._onInit = function() {
 	common.Dat.gui.domElement.style.position = "absolute";
 	common.Dat.gui.domElement.style.right = "0px";
 	var yy = window.innerHeight / 2 + common.StageRef.get_stageHeight() / 2 + common.Config.canvasOffsetY;
-	common.Dat.gui.domElement.style.top = yy + "px";
+	common.Dat.gui.domElement.style.top = Math.floor(yy / 2) + "px";
 	common.Dat.gui.domElement.style.opacity = 1;
-	common.Dat.gui.domElement.style.zIndex = 10;
+	common.Dat.gui.domElement.style.zIndex = 1000;
 	common.Dat.gui.domElement.style.transformOrigin = "1 0";
 	common.Dat.gui.domElement.style.transform = "scale(0.8,0.8)";
 	common.Key.init();
@@ -421,22 +421,22 @@ common.Dat._onKeyDown = function(e) {
 	}
 };
 common.Dat._goURL1 = function() {
-	common.Dat._goURL("../../04/bin/");
+	common.Dat._goURL("../../k04/bin/");
 };
 common.Dat._goURL2 = function() {
-	common.Dat._goURL("../../05/bin/");
+	common.Dat._goURL("../../k05/bin/");
 };
 common.Dat._goURL3 = function() {
-	common.Dat._goURL("../../02/bin/");
+	common.Dat._goURL("../../k02/bin/");
 };
 common.Dat._goURL4 = function() {
-	common.Dat._goURL("../../03/bin/");
+	common.Dat._goURL("../../k03/bin/");
 };
 common.Dat._goURL5 = function() {
-	common.Dat._goURL("../../00/bin/");
+	common.Dat._goURL("../../k00/bin/");
 };
 common.Dat._goURL6 = function() {
-	common.Dat._goURL("../../01/bin/");
+	common.Dat._goURL("../../k01/bin/");
 };
 common.Dat._goURL = function(url) {
 	Tracer.log("goURL " + url);
@@ -882,7 +882,7 @@ objects.MyDAELoader.prototype = {
 	,_onComplete: function(collada) {
 		this.dae = collada.scene;
 		this.dae.scale.x = this.dae.scale.y = this.dae.scale.z = 150;
-		var url = "face/Texture_001.jpg";
+		var url = "face/dede_face_diff.png";
 		this._texture1 = THREE.ImageUtils.loadTexture("../../assets/" + url);
 		this._texture1.minFilter = 1003;
 		this._texture1.magFilter = 1003;
@@ -967,7 +967,6 @@ objects.MyFaceSingle = function(idx) {
 objects.MyFaceSingle.__super__ = THREE.Object3D;
 objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 	init: function(d,cubecam) {
-		if(common.Dat.bg) return;
 		this._daeLoader = d;
 		this.dae = new THREE.Mesh(this._daeLoader.geometry.clone(),new THREE.MeshDepthMaterial());
 		this.dae.rotation.y = Math.PI / 2;
@@ -1017,7 +1016,6 @@ objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 		return n;
 	}
 	,updateSingle: function(audio) {
-		if(common.Dat.bg) return;
 		if(this.dae == null) return;
 		this._audio = audio;
 		var g = this.dae.geometry;
@@ -1102,7 +1100,6 @@ objects.MyFace.prototype = $extend(objects.MyFaceSplitA.prototype,{
 	}
 	,updateMaterial: function(matMode,isWire) {
 		if(isWire == null) isWire = false;
-		if(common.Dat.bg) return;
 		switch(matMode) {
 		case 0:
 			this.dae.material = this._daeLoader.material;
@@ -1159,7 +1156,6 @@ objects.MySphere = function() {
 	this._nejireX = 0;
 	this._count = 0;
 	THREE.Object3D.call(this);
-	if(!common.Dat.bg) return;
 	var texture = THREE.ImageUtils.loadTexture("../../assets/" + "bg/m01.jpg");
 	this._textures = [texture,THREE.ImageUtils.loadTexture("../../assets/" + "bg/m02.jpg"),THREE.ImageUtils.loadTexture("../../assets/" + "bg/00.jpg"),THREE.ImageUtils.loadTexture("../../assets/" + "bg/01.jpg"),THREE.ImageUtils.loadTexture("../../assets/" + "bg/03.jpg")];
 	this.mate = new THREE.MeshBasicMaterial({ map : texture});
@@ -1186,13 +1182,11 @@ objects.MySphere = function() {
 objects.MySphere.__super__ = THREE.Object3D;
 objects.MySphere.prototype = $extend(THREE.Object3D.prototype,{
 	changeBg: function() {
-		if(!common.Dat.bg) return false;
 		this.mate.map = this._textures[this._texIndex % this._textures.length];
 		this._texIndex++;
 		return false;
 	}
 	,update: function(audio) {
-		if(!common.Dat.bg) return;
 		this._audio = audio;
 		var g = this.mesh.geometry;
 		g.verticesNeedUpdate = true;
@@ -1265,7 +1259,7 @@ objects.MyWorld.prototype = $extend(THREE.Object3D.prototype,{
 		this._dae = dae;
 		this.death = new THREE.Mesh(new THREE.SphereGeometry(15,10,10),new THREE.MeshBasicMaterial({ color : 0}));
 		this.sphere = new objects.MySphere();
-		if(common.Dat.bg) this.add(this.sphere);
+		this.add(this.sphere);
 		var _g = 0;
 		while(_g < 5) {
 			var i = _g++;
