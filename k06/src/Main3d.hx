@@ -8,19 +8,25 @@ import common.StageRef;
 import effect.PostProcessing2;
 import haxe.Http;
 import js.Browser;
+import light.MySpotLight;
+import light.ShadowPlane;
 import objects.CgBg;
-import objects.Mojis;
+import objects.objs.Mojis;
 import objects.MyDAELoader;
+import objects.objs.Objs;
 import sound.MyAudio;
 import three.AmbientLight;
 import three.Color;
+import three.DirectionalLight;
 import three.ImageUtils;
 import three.Mesh;
+import three.MeshBasicMaterial;
 import three.PerspectiveCamera;
 import three.PlaneGeometry;
 import three.Scene;
 import three.ShadowMaterial;
 import three.SpotLight;
+import three.Vector3;
 import three.WebGLRenderer;
 import video.VideoPlayer;
 //import effect.PostProcessing2;
@@ -43,7 +49,9 @@ class Main3d
 	private var _video:VideoPlayer;
 	private var http:Http;
 	private var _shadowGround:Mesh;
-	private var _mojis:Mojis;
+	
+	private var _objects:Objs;
+	private var _light:DirectionalLight;
 	private var _dae:MyDAELoader;
 	private var _pp:PostProcessing2;
 	private var _bg:CgBg;
@@ -63,7 +71,7 @@ class Main3d
 		
 		_renderer = new WebGLRenderer({
 			/*preserveDrawingBuffer: true,*/ 
-			alpha:true,
+			//alpha:true,
 			antialias:true, 
 			devicePixelRatio:1	
 		});
@@ -74,16 +82,14 @@ class Main3d
 	}
 	
 	private function _onInitA():Void{
-		//_audio = new MyAudio();
-		//_audio.init(_onInit0);
-		//Browser.window.alert("mojis");
-		_mojis = new Mojis();
-		_mojis.init(_onInit0);
+
+		_objects = new Objs();
+		_objects.init(_onInitB);
 		
 	}
 	
-	private function _onInit0():Void
-	{
+	private function _onInitB():Void{
+	
 		_camera = new ExCamera(33.235, W / H, 10, 10000);
 		_camera.amp = 1000;		
 		_scene = new Scene();
@@ -106,14 +112,9 @@ class Main3d
 		_bg.init();
 		_scene.add(_bg);		
 		
-		//_videoPlane	= new VideoPlane();
-		//_scene.add(_videoPlane);
-		_scene.add(_mojis);
+		_scene.add(_objects);
 		_scene.add(_video);
 		
-		
-		
-		//_renderer.shadowMapEnabled = true;
 		untyped _renderer.localClippingEnabled = true;
 		untyped _renderer.shadowMap.enabled = true;
 		untyped _renderer.shadowMap.type = untyped __js__("THREE.BasicShadowMap");
@@ -127,35 +128,32 @@ class Main3d
         Browser.document.body.appendChild(_renderer.domElement);
 	
 		//var light:DirectionalLight = new DirectionalLight(0xffffff);
-		var light = new SpotLight( 0xffffff, 1.5 );
-		//light.position.x = 10*(Math.random()-0.5);
-		light.position.x = 30;
-		light.position.y = 3000;
-		light.position.z = 100;
-		
-		light.castShadow = true;
-		untyped __js__("
-			light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 30, 16/9, 200, 4000 ) );
-			light.shadow.bias = 0.001;// -0.000222;
-			light.shadow.mapSize.width = 2048;
-			light.shadow.mapSize.height = 2048;		
-		");
+		var light:MySpotLight = new MySpotLight();
 		_scene.add(light);
 		
-		var a:AmbientLight = new AmbientLight(0x555555);
+		_light = new DirectionalLight(0x888888, 1);
+		_scene.add(_light);
+		
+		var a:AmbientLight = new AmbientLight(0x888888);
 		_scene.add(a);
 		
 		_skyboxMat = new SkyboxTexture();
 		_skyboxMat.init(ImageUtils.loadTexture("mate.png"));
 		_skyboxMat.update(_renderer);
 
-		_video.setInitCallback(_onStartVideo);
+		_video.setStartCallback(_onStartVideo);
+		_video.start();
 		_updateTexture();
 		
-		var mm:ShadowMaterial = new ShadowMaterial();
-		mm.opacity = 0.5;
-		//var mm:MeshBasicMaterial = new MeshBasicMaterial( { color:0xcccccc,side:Three.DoubleSide } );
+		_shadowGround = new ShadowPlane();
+		_scene.add(_shadowGround);
+		
+		//var mm:ShadowMaterial = new ShadowMaterial();
 		//mm.opacity = 0.5;
+		
+		/*
+		var mm:MeshBasicMaterial = new MeshBasicMaterial( { color:0xff0000 } );
+		//shadow no ookisa
 		_shadowGround = new Mesh(
 			new PlaneGeometry(700, 700, 5, 5),
 			mm
@@ -163,7 +161,7 @@ class Main3d
 		_shadowGround.receiveShadow = true;
 		_shadowGround.position.y = 0;
 		_shadowGround.rotation.x = -Math.PI / 2;
-		_scene.add(_shadowGround);
+		_scene.add(_shadowGround);*/
 				
 		//var axis:AxisHelper = new AxisHelper(100);   
 		//_scene.add(axis);
@@ -219,7 +217,10 @@ class Main3d
 	
 	private function _onStartVideo():Void {
 		//startVideo
+		
+		_objects.start( _video.getMovieData() );
 		_updateTexture();
+		
 	}
 	
 	/**
@@ -229,6 +230,7 @@ class Main3d
 		
 		Browser.document.getElementById("loading").style.display = "none";
 		_skyboxMat.init(_video.getTexture());
+		_skyboxMat.update( _renderer );
 		
 	}
 	
@@ -244,18 +246,22 @@ class Main3d
 			_audio.update();
 		}		
 		
-		_skyboxMat.update(_renderer);
-		_mojis.setEnvMap( _skyboxMat.getTexture() );
-		
-		
+		//_skyboxMat.update( _renderer );
 		_video.update(_camera);
 		
 		if (!_video.getEnded()) {
-			_mojis.update(_audio);
+			
+			_objects.setEnvMap( _skyboxMat.getTexture() );
+			_objects.update( _audio );
+			//_objects.visible = true;
 		}
 		
 		_pp.update(_audio);
 		//_renderer.render(_scene, _camera);
+		
+		var vv:Vector3 = new Vector3(1, 0.3, 0);
+		vv.applyQuaternion(_camera.quaternion.clone());
+		_light.position.copy(vv);		
 		
 		//Timer.delay(_run, Math.floor(1000 / 30));
 		if(loop)Three.requestAnimationFrame( untyped _run);
@@ -280,6 +286,8 @@ class Main3d
 		_camera.aspect = W / H;// , 10, 50000);
 		_camera.updateProjectionMatrix();
 
+	
+		
 		//_video.resize(960, 540, oy);
 		_video.resize(W, H, oy);
 	}

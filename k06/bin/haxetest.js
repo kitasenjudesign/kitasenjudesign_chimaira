@@ -116,15 +116,15 @@ var Main3d = function() {
 };
 Main3d.prototype = {
 	init: function() {
-		this._renderer = new THREE.WebGLRenderer({ alpha : true, antialias : true, devicePixelRatio : 1});
+		this._renderer = new THREE.WebGLRenderer({ antialias : true, devicePixelRatio : 1});
 		this._renderer.domElement.id = "webgl";
 		common.Dat.init($bind(this,this._onInitA));
 	}
 	,_onInitA: function() {
-		this._mojis = new objects.Mojis();
-		this._mojis.init($bind(this,this._onInit0));
+		this._objects = new objects.objs.Objs();
+		this._objects.init($bind(this,this._onInitB));
 	}
-	,_onInit0: function() {
+	,_onInitB: function() {
 		this._camera = new camera.ExCamera(33.235,Main3d.W / Main3d.H,10,10000);
 		this._camera.amp = 1000;
 		this._scene = new THREE.Scene();
@@ -139,7 +139,7 @@ Main3d.prototype = {
 		this._bg = new objects.CgBg();
 		this._bg.init();
 		this._scene.add(this._bg);
-		this._scene.add(this._mojis);
+		this._scene.add(this._objects);
 		this._scene.add(this._video);
 		this._renderer.localClippingEnabled = true;
 		this._renderer.shadowMap.enabled = true;
@@ -149,31 +149,19 @@ Main3d.prototype = {
 		this._renderer.domElement.style.position = "absolute";
 		this._camera.init(this._renderer.domElement);
 		window.document.body.appendChild(this._renderer.domElement);
-		var light = new THREE.SpotLight(16777215,1.5);
-		light.position.x = 30;
-		light.position.y = 3000;
-		light.position.z = 100;
-		light.castShadow = true;
-		
-			light.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 30, 16/9, 200, 4000 ) );
-			light.shadow.bias = 0.001;// -0.000222;
-			light.shadow.mapSize.width = 2048;
-			light.shadow.mapSize.height = 2048;		
-		;
-		this._scene.add(light);
-		var a = new THREE.AmbientLight(5592405);
+		var light1 = new light.MySpotLight();
+		this._scene.add(light1);
+		this._light = new THREE.DirectionalLight(8947848,1);
+		this._scene.add(this._light);
+		var a = new THREE.AmbientLight(8947848);
 		this._scene.add(a);
 		this._skyboxMat = new common.SkyboxTexture();
 		this._skyboxMat.init(THREE.ImageUtils.loadTexture("mate.png"));
 		this._skyboxMat.update(this._renderer);
-		this._video.setInitCallback($bind(this,this._onStartVideo));
+		this._video.setStartCallback($bind(this,this._onStartVideo));
+		this._video.start();
 		this._updateTexture();
-		var mm = new THREE.ShadowMaterial();
-		mm.opacity = 0.5;
-		this._shadowGround = new THREE.Mesh(new THREE.PlaneGeometry(700,700,5,5),mm);
-		this._shadowGround.receiveShadow = true;
-		this._shadowGround.position.y = 0;
-		this._shadowGround.rotation.x = -Math.PI / 2;
+		this._shadowGround = new light.ShadowPlane();
 		this._scene.add(this._shadowGround);
 		this._pp = new effect.PostProcessing2();
 		this._pp.init(this._scene,this._camera,this._renderer,null);
@@ -210,11 +198,13 @@ Main3d.prototype = {
 		this._bg.show();
 	}
 	,_onStartVideo: function() {
+		this._objects.start(this._video.getMovieData());
 		this._updateTexture();
 	}
 	,_updateTexture: function() {
 		window.document.getElementById("loading").style.display = "none";
 		this._skyboxMat.init(this._video.getTexture());
+		this._skyboxMat.update(this._renderer);
 	}
 	,_update: function() {
 		this._run(false);
@@ -222,11 +212,15 @@ Main3d.prototype = {
 	,_run: function(loop) {
 		if(loop == null) loop = false;
 		if(this._audio != null && this._audio.isStart) this._audio.update();
-		this._skyboxMat.update(this._renderer);
-		this._mojis.setEnvMap(this._skyboxMat.getTexture());
 		this._video.update(this._camera);
-		if(!this._video.getEnded()) this._mojis.update(this._audio);
+		if(!this._video.getEnded()) {
+			this._objects.setEnvMap(this._skyboxMat.getTexture());
+			this._objects.update(this._audio);
+		}
 		this._pp.update(this._audio);
+		var vv = new THREE.Vector3(1,0.3,0);
+		vv.applyQuaternion(this._camera.quaternion.clone());
+		this._light.position.copy(vv);
 		if(loop) window.requestAnimationFrame($bind(this,this._run));
 	}
 	,_onResize: function(d) {
@@ -719,13 +713,15 @@ effect.PostProcessing2.prototype = {
 		this._composer.renderTarget2.format = 1021;
 		var s = new THREE.ShaderPass(effect.shaders.MyTiltShiftShader.getObject());
 		this._composer.addPass(s);
-		s.enabled = false;
+		s.enabled = true;
 		var s2 = new THREE.ShaderPass(effect.shaders.VignetteShader.getObject());
+		this._composer.addPass(s2);
+		s2.enabled = true;
 		this._displacePass = new effect.pass.DisplacementPass();
 		this._displacePass.enabled = false;
 		this._composer.addPass(this._displacePass);
 		this._xLoopPass = new effect.pass.XLoopPass();
-		this._xLoopPass.enabled = true;
+		this._xLoopPass.enabled = false;
 		this._composer.addPass(this._xLoopPass);
 		this._colorPass = new effect.pass.ColorMapPass();
 		this._colorPass.enabled = false;
@@ -881,7 +877,7 @@ effect.shaders.CopyShader.getObject = function() {
 effect.shaders.MyTiltShiftShader = function() {
 };
 effect.shaders.MyTiltShiftShader.getObject = function() {
-	return { uniforms : { tDiffuse : { type : "t", value : null}, v : { type : "f", value : 0.0021484375}, r : { type : "f", value : 0.5}, k : { type : "fv1", value : [1.0,4.0,6.0,4.0,1.0,4.0,16.0,24.0,16.0,4.0,6.0,24.0,36.0,24.0,6.0,4.0,16.0,24.0,16.0,4.0,1.0,4.0,6.0,4.0,1.0]}}, vertexShader : "\r\n\t\t\t\tvarying vec2 vUv;\r\n\t\t\t\tvoid main() {\r\n\t\t\t\t\tvUv = uv;\r\n\t\t\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\r\n\t\t\t\t}", fragmentShader : "\r\n\t\t\t\tuniform sampler2D tDiffuse;\r\n\t\t\t\tuniform float v;\r\n\t\t\t\tuniform float r;\r\n\t\t\t\tuniform float k[25];\r\n\t\t\t\tvarying vec2 vUv;\r\n\r\n\t\t\t\tvoid main() {\r\n\r\n\t\t\t\t\tvec4 sum = vec4( 0.0 );\r\n\t\t\t\t\tfloat vv = v * abs( r - vUv.y );\r\n\t\t\t\t\t\r\n\t\t\t\t\tfor(float i=-1.0;i<=1.0;i++){\r\n\t\t\t\t\t\tfor(float j = -1.0; j <=1.0; j++) {\r\n\t\t\t\t\t\t\tsum += texture2D( tDiffuse, vec2( vUv.x + i * vv, vUv.y + j * vv ) ) / 9.0;\r\n\t\t\t\t\t\t\t//idx += 1;\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\t\t\t\t\t\r\n\t\t\t\t\tgl_FragColor = sum;\r\n\r\n\t\t\t\t}"};
+	return { uniforms : { tDiffuse : { type : "t", value : null}, v : { type : "f", value : 0.00234375}, r : { type : "f", value : 0.5}, k : { type : "fv1", value : [1.0,4.0,6.0,4.0,1.0,4.0,16.0,24.0,16.0,4.0,6.0,24.0,36.0,24.0,6.0,4.0,16.0,24.0,16.0,4.0,1.0,4.0,6.0,4.0,1.0]}}, vertexShader : "\r\n\t\t\t\tvarying vec2 vUv;\r\n\t\t\t\tvoid main() {\r\n\t\t\t\t\tvUv = uv;\r\n\t\t\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\r\n\t\t\t\t}", fragmentShader : "\r\n\t\t\t\tuniform sampler2D tDiffuse;\r\n\t\t\t\tuniform float v;\r\n\t\t\t\tuniform float r;\r\n\t\t\t\tuniform float k[25];\r\n\t\t\t\tvarying vec2 vUv;\r\n\r\n\t\t\t\tvoid main() {\r\n\r\n\t\t\t\t\tvec4 sum = vec4( 0.0 );\r\n\t\t\t\t\tfloat vv = v * abs( r - vUv.y );\r\n\t\t\t\t\t\r\n\t\t\t\t\tfor(float i=-1.0;i<=1.0;i++){\r\n\t\t\t\t\t\tfor(float j = -1.0; j <=1.0; j++) {\r\n\t\t\t\t\t\t\tsum += texture2D( tDiffuse, vec2( vUv.x + i * vv, vUv.y + j * vv ) ) / 9.0;\r\n\t\t\t\t\t\t\t//idx += 1;\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\t\t\t\t\t\r\n\t\t\t\t\tsum.x *= 1.2;\r\n\t\t\t\t\tsum.y *= 1.1;\r\n\t\t\t\t\tsum.z *= 1.0;\r\n\t\t\t\t\t\r\n\t\t\t\t\t\r\n\t\t\t\t\tgl_FragColor = sum;\r\n\r\n\t\t\t\t}"};
 };
 effect.shaders.VignetteShader = function() {
 };
@@ -990,6 +986,48 @@ js.Browser.createXMLHttpRequest = function() {
 	if(typeof ActiveXObject != "undefined") return new ActiveXObject("Microsoft.XMLHTTP");
 	throw "Unable to create XMLHttpRequest object.";
 };
+var light = {};
+light.MySpotLight = function() {
+	THREE.SpotLight.call(this,16711680,0);
+	this.position.x = 200;
+	this.position.y = 3000;
+	this.position.z = 200;
+	this.castShadow = true;
+	var fuga = this;
+	
+			fuga.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 30, 16/9, 200, 4000 ) );
+			fuga.shadow.bias = 0;// 0.001;// -0.000222;
+			fuga.shadow.mapSize.width = 2048;
+			fuga.shadow.mapSize.height = 2048;		
+			fuga.shadow.onlyShadow = true;
+		;
+	this.onlyShadow = true;
+	this.lookAt(new THREE.Vector3());
+	light.MySpotLight.instance = this;
+};
+light.MySpotLight.__super__ = THREE.SpotLight;
+light.MySpotLight.prototype = $extend(THREE.SpotLight.prototype,{
+	setSize: function(f) {
+		this.position.normalize();
+		this.position.x *= 6000 * f;
+		this.position.y *= 6000 * f;
+		this.position.z *= 6000 * f;
+	}
+});
+light.ShadowPlane = function() {
+	var mm = new THREE.ShadowMaterial();
+	mm.opacity = 0.5;
+	THREE.Mesh.call(this,new THREE.PlaneGeometry(700,700,5,5),mm);
+	this.receiveShadow = true;
+	this.position.y = 0;
+	this.rotation.x = -Math.PI / 2;
+	light.ShadowPlane.instance = this;
+};
+light.ShadowPlane.setScale = function(s) {
+};
+light.ShadowPlane.__super__ = THREE.Mesh;
+light.ShadowPlane.prototype = $extend(THREE.Mesh.prototype,{
+});
 var net = {};
 net.badimon = {};
 net.badimon.five3D = {};
@@ -1070,125 +1108,24 @@ objects.CgBg.prototype = $extend(THREE.Object3D.prototype,{
 		this.visible = false;
 	}
 });
-objects.Mojis = function() {
-	this._offsetY = 0;
-	this._faces = [];
-	this._rad = 0;
+objects.MatchMoveObects = function() {
 	THREE.Object3D.call(this);
 };
-objects.Mojis.__super__ = THREE.Object3D;
-objects.Mojis.prototype = $extend(THREE.Object3D.prototype,{
-	init: function(callback) {
-		this._callback = callback;
-		this._shape = new FontShapeMaker();
-		this._shape.init("AOTFProM4.json",$bind(this,this._onInitA));
+objects.MatchMoveObects.__super__ = THREE.Object3D;
+objects.MatchMoveObects.prototype = $extend(THREE.Object3D.prototype,{
+	init: function() {
 	}
-	,_onInitA: function() {
-		this._loader = new objects.MyDAELoader();
-		this._loader.load($bind(this,this._onInit0));
+	,show: function(data) {
+		this._data = data;
+		this.visible = true;
 	}
-	,_onInit0: function() {
-		var all = "北千住デザイン";
-		var list = [];
-		var nn = 8;
-		var _g1 = 0;
-		var _g = Math.floor(all.length / nn + 1);
-		while(_g1 < _g) {
-			var i = _g1++;
-			list.push(HxOverrides.substr(all,i * nn,nn));
-		}
-		var space = 200;
-		var spaceY = 250;
-		var g = new THREE.Geometry();
-		var _g11 = 0;
-		var _g2 = list.length;
-		while(_g11 < _g2) {
-			var i1 = _g11++;
-			var src = list[i1];
-			var _g3 = 0;
-			var _g21 = src.length;
-			while(_g3 < _g21) {
-				var j = _g3++;
-				var shapes = this._shape.getShapes(HxOverrides.substr(src,j,1),true);
-				var geo = new THREE.ExtrudeGeometry(shapes,{ bevelEnabled : true, amount : 50});
-				var mat4 = new THREE.Matrix4();
-				mat4.multiply(new THREE.Matrix4().makeScale(2,2,2));
-				var vv = new THREE.Vector3((j * space - (nn - 1) / 2 * space) * 0.5,-i1 * spaceY * 0.5,0);
-				mat4.multiply(new THREE.Matrix4().makeTranslation(vv.x,vv.y,vv.z));
-				g.merge(geo,mat4);
-			}
-		}
-		this._texture = THREE.ImageUtils.loadTexture("../../assets/" + "face/dede_face_diff.png");
-		this._material = new THREE.MeshPhongMaterial({ color : 16777215, map : this._texture});
-		this._material.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),0.8)];
-		this._material.clipShadows = true;
-		this._material.side = 2;
-		this._meshes = [];
-		var _g4 = 0;
-		while(_g4 < 4) {
-			var i2 = _g4++;
-			var m = new THREE.Mesh(g,this._material);
-			m.castShadow = true;
-			var rr = Math.random() * 0.1;
-			m.scale.set(0.2 + rr,0.2 + rr,0.2 + rr);
-			m.position.y += 60 * (Math.random() - 0.5);
-			this._meshes.push(m);
-		}
-		var _g5 = 0;
-		while(_g5 < 4) {
-			var i3 = _g5++;
-			var face = new objects.MyFaceSingle(0);
-			face.init(this._loader,null);
-			face.dae.material = this._material;
-			face.dae.castShadow = true;
-			var ss = 40 + 10 * Math.random();
-			face.dae.scale.set(ss,ss,ss);
-			face.dae.position.x = 20 * (Math.random() - 0.5);
-			face.dae.position.y = i3 * -250;
-			face.dae.position.z = 20 * (Math.random() - 0.5);
-			this.add(face.dae);
-			this._faces.push(face);
-		}
-		if(this._callback != null) this._callback();
+	,hide: function() {
+		this.visible = false;
 	}
 	,setEnvMap: function(texture) {
-		this._material.envMap = texture;
-		if(this._eyeball != null) this._eyeball.material.envMap = texture;
 	}
 	,update: function(a) {
-		if(this._texture != null) {
-		}
-		if(this._eyeball != null) {
-			this._eyeball.rotation.x += 0.01;
-			this._eyeball.rotation.y += 0.015;
-			this._eyeball.rotation.z += 0.018;
-		}
-		if(this._faces.length > 0) {
-			var _g1 = 0;
-			var _g = this._faces.length;
-			while(_g1 < _g) {
-				var i = _g1++;
-				this._faces[i].dae.rotation.y += 0.03 + i / 340;
-				this._faces[i].updateSingle(a);
-				this._faces[i].dae.position.y += 0.4;
-				if(this._faces[i].dae.position.y > 500) {
-					this._faces[i].dae.position.y = -500;
-					this._faces[i].dae.rotation.set(0,Math.random() * 2 * Math.PI,0);
-					var ss = 50 + 30 * Math.random();
-					this._faces[i].dae.scale.set(ss,ss,ss);
-					this._faces[i].changeIndex(i);
-				}
-			}
-		}
-		var _g11 = 0;
-		var _g2 = this._meshes.length;
-		while(_g11 < _g2) {
-			var i1 = _g11++;
-			this._meshes[i1].rotation.x += 0.001 * (i1 + 1);
-			this._meshes[i1].rotation.y += 0.003 * (i1 + 1);
-			this._meshes[i1].rotation.z += 0.004 * (i1 + 1);
-			this._meshes[i1].position.y = 100 * Math.sin(this._rad + Math.PI / 2) + i1 * 10;
-		}
+		if(!this.visible) return;
 	}
 });
 objects.MyDAELoader = function() {
@@ -1333,6 +1270,7 @@ objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 	,updateSingle: function(audio) {
 		if(common.Dat.bg) return;
 		if(this.dae == null) return;
+		if(!this.visible) return;
 		this._audio = audio;
 		var g = this.dae.geometry;
 		g.verticesNeedUpdate = true;
@@ -1372,7 +1310,6 @@ objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 			g.vertices[i].z += (tgtZ - g.vertices[i].z) / 2;
 			if(this.isSplit) this._splitSpirit(g.vertices[i],tgtX,tgtY,tgtZ);
 		}
-		g.computeVertexNormals();
 	}
 	,_splitSpirit: function(vv,tgtX,tgtY,tgtZ) {
 		var border1 = this.border + this.borderHeight / 2;
@@ -1416,6 +1353,234 @@ objects.data.EffectData.getPrev = function() {
 	if(objects.data.EffectData._count < 0) objects.data.EffectData._count = objects.data.EffectData.effects.length - 1;
 	return objects.data.EffectData.effects[objects.data.EffectData._count];
 };
+objects.objs = {};
+objects.objs.Eyes = function() {
+	objects.MatchMoveObects.call(this);
+};
+objects.objs.Eyes.__super__ = objects.MatchMoveObects;
+objects.objs.Eyes.prototype = $extend(objects.MatchMoveObects.prototype,{
+	init: function() {
+	}
+	,update: function(a) {
+	}
+});
+objects.objs.Faces = function() {
+	objects.MatchMoveObects.call(this);
+};
+objects.objs.Faces.__super__ = objects.MatchMoveObects;
+objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
+	init: function() {
+		this._loader = new objects.MyDAELoader();
+		this._loader.load($bind(this,this._onInit0));
+	}
+	,_onInit0: function() {
+		this._texture = THREE.ImageUtils.loadTexture("../../assets/" + "face/dede_face_diff.png");
+		this._material = new THREE.MeshPhongMaterial({ color : 16777215, map : this._texture});
+		this._material.refractionRatio = 0.1;
+		this._material.reflectivity = 0.1;
+		this._material.shininess = 0.01;
+		this._material.wireframe = false;
+		this._material.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),1)];
+		this._material.clipShadows = true;
+		this._material.side = 0;
+		this._faces = [];
+		var _g = 0;
+		while(_g < 5) {
+			var i = _g++;
+			var face = new objects.MyFaceSingle(0);
+			face.init(this._loader,null);
+			face.dae.material = this._material;
+			face.dae.castShadow = true;
+			var ss = 40 + 10 * Math.random();
+			face.dae.scale.set(ss,ss,ss);
+			face.position.x = 20 * (Math.random() - 0.5);
+			face.position.y = 100;
+			face.position.z = 20 * (Math.random() - 0.5);
+			this.add(face);
+			this._faces.push(face);
+		}
+	}
+	,_changeMat: function() {
+	}
+	,show: function(data) {
+		this._data = data;
+		this.visible = true;
+		var pos = this._data.camData.positions;
+		var ss = this._data.size;
+		var yy = this._data.offsetY;
+		var _g1 = 0;
+		var _g = this._faces.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			if(i < pos.length) {
+				var p = pos[i];
+				this._faces[i].scale.set(ss,ss,ss);
+				this._faces[i].position.x = p.x;
+				this._faces[i].position.y = p.y + yy;
+				this._faces[i].position.z = p.z;
+				this._faces[i].changeIndex(i);
+				this._faces[i].visible = true;
+			} else this._faces[i].visible = false;
+		}
+	}
+	,setEnvMap: function(texture) {
+		this._material.envMap = texture;
+	}
+	,update: function(a) {
+		if(!this.visible) return;
+		if(this._faces.length > 0) {
+			var _g1 = 0;
+			var _g = this._faces.length;
+			while(_g1 < _g) {
+				var i = _g1++;
+				this._faces[i].rotation.y += 0.03 + i / 340;
+				this._faces[i].updateSingle(a);
+				if(this._faces[i].position.y > 500) {
+					this._faces[i].position.y = -500;
+					this._faces[i].rotation.set(0,Math.random() * 2 * Math.PI,0);
+					var ss = 50 + 30 * Math.random();
+					this._faces[i].scale.set(ss,ss,ss);
+				}
+			}
+		}
+	}
+});
+objects.objs.Mojis = function() {
+	this._offsetY = 0;
+	this._rad = 0;
+	objects.MatchMoveObects.call(this);
+};
+objects.objs.Mojis.__super__ = objects.MatchMoveObects;
+objects.objs.Mojis.prototype = $extend(objects.MatchMoveObects.prototype,{
+	init: function() {
+		this._shape = new FontShapeMaker();
+		this._shape.init("AOTFProM3.json",$bind(this,this._onInitA));
+	}
+	,_onInitA: function() {
+		this._loader = new objects.MyDAELoader();
+		this._loader.load($bind(this,this._onInit0));
+	}
+	,_onInit0: function() {
+		var all = "デデマウス";
+		var list = [];
+		var nn = all.length;
+		var _g1 = 0;
+		var _g = Math.floor(all.length / nn + 1);
+		while(_g1 < _g) {
+			var i = _g1++;
+			list.push(HxOverrides.substr(all,i * nn,nn));
+		}
+		var space = 230;
+		var spaceY = 250;
+		var g = new THREE.Geometry();
+		var _g11 = 0;
+		var _g2 = list.length;
+		while(_g11 < _g2) {
+			var i1 = _g11++;
+			var src = list[i1];
+			var _g3 = 0;
+			var _g21 = src.length;
+			while(_g3 < _g21) {
+				var j = _g3++;
+				var shapes = this._shape.getShapes(HxOverrides.substr(src,j,1),true);
+				var geo = new THREE.ExtrudeGeometry(shapes,{ bevelEnabled : true, amount : 30});
+				var mat4 = new THREE.Matrix4();
+				mat4.multiply(new THREE.Matrix4().makeScale(2,2,2));
+				var vv = new THREE.Vector3((j * space - (nn - 1) / 2 * space) * 0.5,-i1 * spaceY * 0.5,0);
+				mat4.multiply(new THREE.Matrix4().makeTranslation(vv.x,vv.y,vv.z));
+				g.merge(geo,mat4);
+			}
+		}
+		this._material = new THREE.MeshPhongMaterial({ color : 16777215});
+		this._material.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),0.8)];
+		this._material.clipShadows = true;
+		this._material.side = 0;
+		this._meshes = [];
+		var _g4 = 0;
+		while(_g4 < 5) {
+			var i2 = _g4++;
+			var m = new THREE.Mesh(g,this._material);
+			m.scale.set(0.1,0.1,0.1);
+			m.castShadow = true;
+			this.add(m);
+			this._meshes.push(m);
+		}
+	}
+	,show: function(data) {
+		this._data = data;
+		this.visible = true;
+		var pos = this._data.camData.positions;
+		var ss = this._data.size;
+		var yy = this._data.offsetY;
+		var _g1 = 0;
+		var _g = this._meshes.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			if(i < pos.length) {
+				var p = pos[i];
+				this._meshes[i].scale.set(0.2,0.2,0.2);
+				this._meshes[i].position.x = p.x;
+				this._meshes[i].position.y = p.y + yy;
+				this._meshes[i].position.z = p.z;
+			} else this._meshes[i].visible = false;
+		}
+	}
+	,setEnvMap: function(texture) {
+		this._material.envMap = texture;
+	}
+	,update: function(a) {
+		if(this._texture != null) {
+		}
+		var _g1 = 0;
+		var _g = this._meshes.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			this._meshes[i].rotation.x += 0.001 * (i + 1);
+			this._meshes[i].rotation.y += 0.003 * (i + 1);
+			this._meshes[i].rotation.z += 0.004 * (i + 1);
+		}
+	}
+});
+objects.objs.Objs = function() {
+	this._index = 0;
+	THREE.Object3D.call(this);
+};
+objects.objs.Objs.__super__ = THREE.Object3D;
+objects.objs.Objs.prototype = $extend(THREE.Object3D.prototype,{
+	init: function(callback) {
+		this._mojis = new objects.objs.Mojis();
+		this._mojis.init();
+		this._eyes = new objects.objs.Eyes();
+		this._eyes.init();
+		this._faces = new objects.objs.Faces();
+		this._faces.init();
+		this._objects = [this._faces,this._mojis,this._eyes];
+		TweenMax.delayedCall(0.1,callback);
+	}
+	,start: function(data) {
+		this._currentData = data;
+		this.hideAll();
+		this._currentObj = this._objects[this._index % this._objects.length];
+		this._currentObj.show(data);
+		this.add(this._currentObj);
+		this._index++;
+	}
+	,hideAll: function() {
+		var _g1 = 0;
+		var _g = this._objects.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			this._objects[i].hide();
+			this.remove(this._objects[i]);
+		}
+	}
+	,setEnvMap: function(t) {
+		if(this._currentObj != null) this._currentObj.setEnvMap(t);
+	}
+	,update: function(a) {
+		if(this._currentObj != null) this._currentObj.update(a);
+	}
+});
 var sound = {};
 sound.MyAudio = function() {
 	this.globalVolume = 0.897;
@@ -1550,23 +1715,20 @@ video.CameraData.prototype = {
 		this._http = new haxe.Http(filename);
 		this._http.onData = $bind(this,this._onData);
 		this._http.request();
+		this.positions = [];
 	}
 	,_onData: function(data) {
 		var data1 = JSON.parse(data);
 		this._frameData = data1.frames;
 		this._points = data1.points;
 		var p = data1.positions;
-		this._positions = [];
 		var _g1 = 0;
 		var _g = p.length;
 		while(_g1 < _g) {
 			var i = _g1++;
-			this._positions[i] = new THREE.Vector3(p[i][0],p[i][1],-p[i][2]);
+			this.positions[i] = new THREE.Vector3(p[i][0],p[i][1],-p[i][2]);
 		}
 		if(this._callback != null) this._callback();
-	}
-	,getPositions: function() {
-		return this._positions;
 	}
 	,getPointsGeo: function() {
 		var g = new THREE.Geometry();
@@ -1583,6 +1745,7 @@ video.CameraData.prototype = {
 		return this._frameData[frame];
 	}
 	,update: function(f,cam) {
+		console.debug("F" + f + " " + this._frameData.length);
 		if(f >= this._frameData.length) return;
 		var q = this._frameData[f].q;
 		var qtn = new THREE.Quaternion(q[0],q[1],q[2],q[3]);
@@ -1635,11 +1798,15 @@ video.Config.prototype = {
 	}
 };
 video.MovieData = function(o) {
-	this.offset = 0;
+	this.size = 0;
+	this.offsetY = 0;
+	this.offsetFrame = 0;
 	if(o != null) {
 		this.pathCam = o.cam;
 		this.pathMov = o.mov;
-		this.offset = o.offset;
+		this.offsetFrame = o.offsetFrame;
+		this.size = o.size;
+		this.offsetY = o.y;
 	}
 };
 video.MovieData.prototype = {
@@ -1656,6 +1823,7 @@ video.VideoPlane = function() {
 	this._geo = new THREE.PlaneBufferGeometry(2,2,10,10);
 	this._mat = new video.VideoShader();
 	THREE.Mesh.call(this,this._geo,this._mat);
+	this.frustumCulled = false;
 };
 video.VideoPlane.__super__ = THREE.Mesh;
 video.VideoPlane.prototype = $extend(THREE.Mesh.prototype,{
@@ -1676,6 +1844,8 @@ video.VideoPlane.prototype = $extend(THREE.Mesh.prototype,{
 	}
 });
 video.VideoPlayer = function() {
+	this._videoMode = "MODE_3D";
+	this._loop = false;
 	this._loading = false;
 	this._fov = 34;
 	this._index = 0;
@@ -1698,16 +1868,17 @@ video.VideoPlayer.prototype = $extend(THREE.Object3D.prototype,{
 		this._video.style.zIndex = "0";
 		this._video.style.top = "0";
 		this._video.style.left = "0";
-		window.document.body.appendChild(this._video);
+		this._video.loop = this._loop;
+		if(this._videoMode == "MODE_VIDEO") window.document.body.appendChild(this._video);
 		this._videoPlane = new video.VideoPlane();
 		this._videoPlane.init(this._video);
-		this.setInitCallback(this._callback);
-		this._start();
+		if(this._videoMode == "MODE_3D") this.add(this._videoPlane);
+		this._callback();
 	}
-	,setInitCallback: function(cb) {
+	,setStartCallback: function(cb) {
 		this._callback2 = cb;
 	}
-	,_start: function() {
+	,start: function() {
 		this._loading = true;
 		this._video.src = "";
 		this._movieData = this._list[this._index % this._list.length];
@@ -1723,15 +1894,13 @@ video.VideoPlayer.prototype = $extend(THREE.Object3D.prototype,{
 	,_onLoad2: function(e) {
 		this._camData = this._movieData.camData;
 		var frameData = this._camData.getFrameData(0);
-		var geo = this._camData.getPointsGeo();
-		if(geo != null) {
-		}
 		var q = frameData.q;
 		this._q = new THREE.Quaternion(q[0],q[1],q[2],q[3]);
 		this._fov = frameData.fov;
 		this._camera.position.x = frameData.x;
 		this._camera.position.y = frameData.y;
 		this._camera.position.z = frameData.z;
+		light.MySpotLight.instance.setSize(this._movieData.size);
 		this._camera.quaternion.copy(this._q);
 		this._camera.lookAt(this._tgt);
 		this._camera.setFOV(this._fov);
@@ -1751,13 +1920,14 @@ video.VideoPlayer.prototype = $extend(THREE.Object3D.prototype,{
 		}
 	}
 	,_onFinish: function(hoge) {
+		if(this._loop) return;
 		this._video.removeEventListener("ended",$bind(this,this._onFinish));
 		var nextIndex = this._index + 1;
 		if(this._index == nextIndex) {
 			this._index = this._index + 1;
 			this._index = this._index % this._list.length;
 		} else this._index = nextIndex;
-		this._start();
+		this.start();
 	}
 	,show: function() {
 		this.visible = true;
@@ -1771,8 +1941,8 @@ video.VideoPlayer.prototype = $extend(THREE.Object3D.prototype,{
 		return this._video;
 	}
 	,update: function(camera) {
-		this._videoPlane.update();
-		if(this._camData != null && !this._loading) this._camData.update(Math.floor(this._video.currentTime * 30) + this._movieData.offset,camera);
+		if(this._videoMode == "MODE_3D") this._videoPlane.update();
+		if(this._camData != null && !this._loading) this._camData.update(Math.floor(this._video.currentTime * 30) + this._movieData.offsetFrame,camera);
 	}
 	,getTexture: function() {
 		var canvas;
@@ -1783,7 +1953,7 @@ video.VideoPlayer.prototype = $extend(THREE.Object3D.prototype,{
 		canvas.width = ww;
 		canvas.height = hh;
 		var contex = canvas.getContext("2d");
-		contex.drawImage(this._video,0,0,960,540,0,0,ww,hh);
+		contex.drawImage(this._video,0,0,512,512,0,0,ww,hh);
 		var tex = new THREE.Texture(canvas);
 		tex.needsUpdate = true;
 		return tex;
@@ -1792,9 +1962,17 @@ video.VideoPlayer.prototype = $extend(THREE.Object3D.prototype,{
 		if(this._video != null) return this._video.ended; else return true;
 	}
 	,resize: function(w,h,oy) {
-		this._video.width = w;
-		this._video.height = h;
-		this._video.style.top = oy + "px";
+		if(this._videoMode == "MODE_VIDEO") {
+			this._video.width = w;
+			this._video.height = h;
+			this._video.style.top = oy + "px";
+		} else {
+			this._video.width = 960;
+			this._video.height = 540;
+		}
+	}
+	,getMovieData: function() {
+		return this._movieData;
 	}
 });
 video.VideoShader = function() {
@@ -2049,6 +2227,8 @@ sound.MyAudio.FFTSIZE = 64;
 three._WebGLRenderer.RenderPrecision_Impl_.highp = "highp";
 three._WebGLRenderer.RenderPrecision_Impl_.mediump = "mediump";
 three._WebGLRenderer.RenderPrecision_Impl_.lowp = "lowp";
+video.VideoPlayer.MODE_VIDEO = "MODE_VIDEO";
+video.VideoPlayer.MODE_3D = "MODE_3D";
 Main.main();
 })();
 

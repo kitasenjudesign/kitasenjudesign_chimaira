@@ -5,6 +5,8 @@ import js.Browser;
 import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
 import js.html.VideoElement;
+import light.MySpotLight;
+import light.ShadowPlane;
 import three.Geometry;
 import three.Line;
 import three.LineBasicMaterial;
@@ -33,6 +35,10 @@ import video.VideoPlane;
 class VideoPlayer extends Object3D
 {
 
+	public static inline var MODE_VIDEO:String = "MODE_VIDEO";
+	public static inline var MODE_3D:String = "MODE_3D";
+	
+	
 	private var _video:VideoElement;
 	private var _filename:String;
 	private var _config:Config;
@@ -52,6 +58,8 @@ class VideoPlayer extends Object3D
 	private var _tgt:Vector3;
 	private var _scene:Scene;
 	private var _videoPlane:VideoPlane;
+	private var _loop:Bool = false;
+	private var _videoMode:String = MODE_3D;
 	
 	public function new() 
 	{
@@ -84,26 +92,29 @@ class VideoPlayer extends Object3D
 		_video.style.zIndex = "0";
 		_video.style.top = "0";
 		_video.style.left = "0";
+		_video.loop = _loop;
 		//_video.style.visibility = "hidden";
-		Browser.document.body.appendChild(_video);		
+		if(_videoMode==MODE_VIDEO)Browser.document.body.appendChild(_video);		
 		
 		_videoPlane = new VideoPlane();
 		_videoPlane.init(_video);
-		//add(_videoPlane);
+		if(_videoMode==MODE_3D)add(_videoPlane);
 		
 		//_callback();
-		setInitCallback(_callback);
-		_start();
+		//setInitCallback(_callback);
+		//_start();
+		_callback();
 	}
 	
 	/**
 	 * start
 	 */
-	public function setInitCallback(cb:Void->Void):Void {
+	public function setStartCallback(cb:Void->Void):Void {
 		_callback2 = cb;	
 	}
 	
-	private function _start():Void {
+	//
+	public function start():Void {
 		
 		//trace("_start " + _index);
 		_loading = true;
@@ -143,16 +154,6 @@ class VideoPlayer extends Object3D
 		_camData	= _movieData.camData;
 		var frameData:Dynamic = _camData.getFrameData(0);
 		
-		var geo:Geometry = _camData.getPointsGeo();
-		if (geo != null) {
-			/*
-			var points:PointCloud = new PointCloud(
-				geo, new PointCloudMaterial( { color:0xffffff, size:4 } )
-			);*/
-			//var points:LineSegments = new LineSegments(geo, new LineBasicMaterial( { color:0xff0000 } ));
-			//add(points);
-		}
-		
 		//////////////////////////////////////////////setting
 		var q:Array<Float> = frameData.q;
 		_q = new Quaternion( q[0],q[1],q[2],q[3] );
@@ -163,6 +164,8 @@ class VideoPlayer extends Object3D
 		_camera.position.y = frameData.y;
 		_camera.position.z = frameData.z;
 		
+		MySpotLight.instance.setSize( _movieData.size );
+		
 		_camera.quaternion.copy(_q);
 		_camera.lookAt(_tgt );
 		_camera.setFOV(_fov);
@@ -170,6 +173,7 @@ class VideoPlayer extends Object3D
 		_loading = false;
 		_video.addEventListener("ended", _onFinish);
 		_video.volume = 0;
+		
 		_video.play();
 		
 		//
@@ -199,6 +203,12 @@ class VideoPlayer extends Object3D
 	 * 
 	 */
 	private function _onFinish(hoge:Dynamic):Void {
+		
+		if (_loop) {
+			return;
+		}
+		
+		
 		_video.removeEventListener("ended", _onFinish);
 		
 		var nextIndex:Int = _index + 1;// Math.floor( Math.random() * _list.length );
@@ -208,10 +218,13 @@ class VideoPlayer extends Object3D
 		}else {
 			_index = nextIndex;
 		}		
-		_start();
+		start();
+		
 	}
 	
-	
+	/**
+	 * 
+	 */
 	public function show():Void {
 		
 		visible = true;
@@ -233,11 +246,13 @@ class VideoPlayer extends Object3D
 	
 	public function update(camera:ExCamera):Void {
 		
-		_videoPlane.update();
+		if (_videoMode == MODE_3D) {
+			_videoPlane.update();
+		}
 		
 		if(_camData!=null && !_loading ){
 			_camData.update(
-				Math.floor((_video.currentTime) * 30) + _movieData.offset,
+				Math.floor((_video.currentTime) * 30) + _movieData.offsetFrame,
 				camera
 			);
 			
@@ -256,7 +271,7 @@ class VideoPlayer extends Object3D
 		canvas.height = hh;
 		
 		var contex:CanvasRenderingContext2D = canvas.getContext2d();
-		contex.drawImage(_video, 0, 0, 960, 540, 0, 0, ww, hh);
+		contex.drawImage(_video, 0, 0, 512,512, 0, 0, ww, hh);
 		//contex.fillStyle = '#0000ff';
 		//contex.fillRect(0, 0, ww-1, hh-1);
 
@@ -272,8 +287,18 @@ class VideoPlayer extends Object3D
 	
 	public function resize(w:Int, h:Int,oy:Float) 
 	{
-		_video.width = w;
-		_video.height = h;
-		_video.style.top = oy+"px";// -(h - Browser.window.innerHeight) / 2;
+		if(_videoMode==MODE_VIDEO){
+			_video.width = w;
+			_video.height = h;
+			_video.style.top = oy + "px";// -(h - Browser.window.innerHeight) / 2;
+		}else {
+			_video.width = 960;
+			_video.height = 540;		
+		}
+	}
+	
+	public function getMovieData():MovieData
+	{
+		return _movieData;
 	}
 }

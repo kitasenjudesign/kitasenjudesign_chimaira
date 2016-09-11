@@ -23,6 +23,7 @@ class VideoPlane extends Mesh
 			cast _geo, _mat
 		);
 	
+		this.frustumCulled = false;
 		//hide();
 	}
 	

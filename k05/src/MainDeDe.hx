@@ -74,11 +74,11 @@ class MainDeDe
 		_bg.scale.set(2, 2, 2);
 		_scene.add(_bg);
 		
-		if( Dat.bg ){
+		//if( Dat.bg ){
 			_bg.visible = true;
-		}else {
-			_bg.visible = false;
-		}
+		//}else {
+		//	_bg.visible = false;
+		//}
 		
 		#if debug
 		_dummy = new DummyBars();

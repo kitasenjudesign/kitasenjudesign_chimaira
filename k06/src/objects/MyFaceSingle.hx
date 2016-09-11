@@ -184,6 +184,7 @@ class MyFaceSingle extends Object3D
 		
 		if (Dat.bg) return;
 		if (dae == null) return;
+		if (!this.visible) return;
 		
 		_audio = audio;
 		var g:Geometry = untyped dae.geometry;
@@ -269,7 +270,7 @@ class MyFaceSingle extends Object3D
 			//g.computeVertexNormals();
 		
 		//g.colorsNeedUpdate = true;
-		g.computeVertexNormals();
+		//g.computeVertexNormals();
 		
 		
 	}

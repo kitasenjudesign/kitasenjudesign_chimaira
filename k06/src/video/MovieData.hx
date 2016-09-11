@@ -8,12 +8,13 @@ import video.CameraData;
 class MovieData
 {
 
-	
 	public var pathMov		:String;
 	public var pathCam		:String;
-	public var offset		:Int = 0;//frame
+	public var offsetFrame		:Int = 0;//frame
 	
 	public var camData	:CameraData;
+	public var offsetY:Float = 0;
+	public var size:Float = 0;
 	
 	public function new(o:Dynamic) 
 	{
@@ -21,7 +22,9 @@ class MovieData
 			
 			pathCam = o.cam;
 			pathMov = o.mov;
-			offset = o.offset;
+			offsetFrame = o.offsetFrame;
+			size = o.size;
+			offsetY = o.y;
 			//"cam":"mov/cam1.json",
 			//"mov":"mov/01.mp4",
 			//"offset":1

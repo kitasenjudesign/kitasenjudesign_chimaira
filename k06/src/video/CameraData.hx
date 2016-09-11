@@ -3,6 +3,7 @@ import camera.ExCamera;
 import common.Dat;
 import haxe.Http;
 import haxe.Json;
+import js.Browser;
 import three.BoxGeometry;
 import three.Geometry;
 import three.Matrix3;
@@ -35,9 +36,9 @@ class CameraData
 
 	private var _fov:Float = 0;
 	private var _points:Array<Array<Float>>;
-	private var _positions:Array<Vector3>;
 	private var _area:Dynamic;
-	
+
+	public var positions:Array<Vector3>;
 	
 	public function new() 
 	{
@@ -52,7 +53,7 @@ class CameraData
 		
 		_http.onData = _onData;
 		_http.request();
-		
+		positions = [];
 		/*
 		Dat.gui.add(this, "_rx",0,6.288).listen();
 		Dat.gui.add(this, "_ry",0,6.288).listen();
@@ -65,14 +66,16 @@ class CameraData
 	
 	private function _onData(data:String):Void {
 		var data:Dynamic = Json.parse(data);
+
 		_frameData = data.frames;
 		_points = data.points;
 		
+		
 		var p:Array<Array<Float>> = data.positions;
-		_positions = [];
+		
 		
 		for (i in 0...p.length) {
-			_positions[i] = new Vector3(
+			positions[i] = new Vector3(
 				p[i][0],
 				p[i][1],
 				-p[i][2]
@@ -107,9 +110,7 @@ class CameraData
 		);
 		return mesh;
 	}*/
-	public function getPositions():Array<Vector3> {
-		return _positions;
-	}
+	
 	
 	public function getPointsGeo():Geometry {
 		var g:Geometry = new Geometry();
@@ -131,6 +132,8 @@ class CameraData
 	}
 	
 	public function update(f:Int,cam:ExCamera):Void {
+		
+		Tracer.debug("F"+f +" "+_frameData.length);
 		
 		if (f >= _frameData.length) {
 			return;

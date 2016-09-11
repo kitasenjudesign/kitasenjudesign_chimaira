@@ -144,7 +144,7 @@ MainDeDe.prototype = {
 		this._bg.position.z = -40;
 		this._bg.scale.set(2,2,2);
 		this._scene.add(this._bg);
-		if(common.Dat.bg) this._bg.visible = true; else this._bg.visible = false;
+		this._bg.visible = true;
 		common.StageRef.setCenter();
 		if(common.Dat.bg) {
 			this._oy = 100;
@@ -227,7 +227,7 @@ MyPointCloud.prototype = $extend(THREE.Object3D.prototype,{
 	init: function() {
 		MyPointCloud.cloud = this;
 		this._mat = new THREE.PointCloudMaterial({ color : 16777215, size : 15});
-		if(common.Dat.bg) this._mat.size = 10; else this._mat.size = 15;
+		this._mat.size = 5;
 		this._mat.depthTest = false;
 		var g1 = new THREE.Geometry();
 		var _g = 0;

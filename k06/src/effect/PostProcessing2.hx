@@ -77,11 +77,11 @@ class PostProcessing2
 				
 		var s:ShaderPass = new ShaderPass(MyTiltShiftShader.getObject());
 		_composer.addPass(s);
-		s.enabled = false;
+		s.enabled = true;
 		
 		var s2:ShaderPass = new ShaderPass( VignetteShader.getObject() );
-		////_composer.addPass(s2);
-		//s2.enabled = true;
+		_composer.addPass(s2);
+		s2.enabled = true;
 		
 		
 		//
@@ -91,7 +91,7 @@ class PostProcessing2
 		
 		//passes
 		_xLoopPass = new XLoopPass();
-		_xLoopPass.enabled = true;
+		_xLoopPass.enabled = false;
 		
 		_composer.addPass(_xLoopPass);
 		

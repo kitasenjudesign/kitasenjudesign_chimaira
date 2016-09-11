@@ -18,7 +18,7 @@ class MyTiltShiftShader
 			uniforms: {
 
 				"tDiffuse": { type: "t", value: null },
-				"v":        { type: "f", value: 1.1 / 512.0 },
+				"v":        { type: "f", value: 1.2 / 512.0 },
 				"r":		{type:"f",value:0.5},
 				"k"  : { type: "fv1", value: [
 					1.0, 4.0, 6.0, 4.0, 1.0,
@@ -55,6 +55,11 @@ class MyTiltShiftShader
 							//idx += 1;
 						}
 					}
+					
+					sum.x *= 1.2;
+					sum.y *= 1.1;
+					sum.z *= 1.0;
+					
 					
 					gl_FragColor = sum;
 

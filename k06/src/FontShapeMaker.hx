@@ -139,7 +139,6 @@ class FontShapeMaker
 				var tgt:String = motif[i][0];
 				if (tgt == "M" || tgt=="H") {
 					
-					
 					if (tgt == "H") {
 						g = new Path();
 						shape.holes.push(untyped g);
