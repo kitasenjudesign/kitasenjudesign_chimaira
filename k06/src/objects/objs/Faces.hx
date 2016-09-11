@@ -1,8 +1,10 @@
 package objects.objs;
 import common.Path;
 import js.Browser;
+import materials.Textures;
 import objects.MyDAELoader;
 import sound.MyAudio;
+import three.Color;
 import three.ImageUtils;
 import three.MeshPhongMaterial;
 import three.Plane;
@@ -17,10 +19,22 @@ import video.MovieData;
 class Faces extends MatchMoveObects
 {
 
+	
+	public static inline var MAT_WIREFRAME	:Int = 0;
+	public static inline var MAT_MIRROR		:Int = 1;
+	public static inline var MAT_COLOR		:Int = 2;
+	public static inline var MAT_NET		:Int = 3;
+	public static inline var MAT_NET_RED	:Int = 4;
+	public static inline var MAT_NUM:Int = 5;
+	
+	//public static var MATERIALS
+	
 	private var _faces		:Array<MyFaceSingle>;
 	private var _material	:MeshPhongMaterial;
 	private var _texture:Texture;
 	private var _loader:MyDAELoader;
+	private var _matIndex:Int = 0;
+	private var _offsetY:Float = 0;
 	
 	public function new() 
 	{
@@ -39,25 +53,31 @@ class Faces extends MatchMoveObects
 	
 	private function _onInit0():Void {
 		
-		_texture = ImageUtils.loadTexture( Path.assets + "face/dede_face_diff.png" );
+		_texture = Textures.dedeColor; //ImageUtils.loadTexture( Path.assets + "face/dede_face_diff.png" );
+		//_texture.wrapS = Three.RepeatWrapping;
+		//_texture.wrapT = Three.RepeatWrapping;
+		//_texture.repeat.set(2, 2);
+		
+		
 		_material = new MeshPhongMaterial( { color:0xffffff, map:_texture } );
 		_material.refractionRatio = 0.1;
 		_material.reflectivity = 0.1;
 		_material.shininess = 0.01;
 		
-		_material.wireframe = false;
-		//_material.alphaMap = _texture;
-		//_material.alphaTest = 0.5;
-		//_material.transparent = true;
+		//_material.wireframe = false;
+		//_material.alphaMap = Textures.meshMono;
+		_material.alphaTest = 0.5;
+		_material.transparent = true;
+		
 		_material.clippingPlanes = [new Plane(new Vector3( 0, 1, 0 ), 1)];//0.8 )];//
 		_material.clipShadows = true;
-		_material.side = Three.FrontSide;		
+		_material.side = Three.DoubleSide;		
 
 		
 		//faces
 		_faces = [];
 		
-		for(i in 0...5){
+		for(i in 0...5){ 
 			
 			var face:MyFaceSingle = new MyFaceSingle(0);
 			face.init( _loader, null );
@@ -80,9 +100,6 @@ class Faces extends MatchMoveObects
 	}
 	
 	
-	private function _changeMat():Void {
-		
-	}
 	
 	
 	/**
@@ -97,6 +114,10 @@ class Faces extends MatchMoveObects
 		var ss:Float = _data.size;
 		var yy:Float = _data.offsetY;
 		
+		if (Math.random() < 0.1) {
+			ss = ss * 2.2;
+		}
+		
 		for (i in 0..._faces.length) {
 			
 			if (i < pos.length) {
@@ -108,15 +129,88 @@ class Faces extends MatchMoveObects
 				_faces[i].position.z = p.z;
 				_faces[i].changeIndex(i);		
 				_faces[i].visible = true;
+				
 			}else {
 				_faces[i].visible = false;				
 				
 			}
-
 			
 		}
 		
+		_changeMat();
+		
 	}	
+	
+	private function _changeMat():Void {
+		
+		/*
+
+	public static inline var MAT_WIREFRAME	:Int = 0;
+	public static inline var MAT_MIRROR		:Int = 1;
+	public static inline var MAT_COLOR		:Int = 2;
+	public static inline var MAT_MESH		:Int = 3;
+	public static inline var MAT_MESH_RED	:Int = 4;	
+		*/
+	
+		//3pattern
+		_matIndex++;
+		_matIndex = _matIndex % MAT_NUM;
+		
+		
+		switch(_matIndex) {
+			case MAT_WIREFRAME://0
+				//normal
+				_material.map = Textures.colorWhite;
+				_material.color = (Math.random() < 0.5) ? new Color(0xffffff) : new Color(0xcc0000); 
+				_material.refractionRatio = 0.7;
+				_material.reflectivity = 0.7;				
+				_material.wireframe = true;
+				_material.transparent = false;
+				
+			case MAT_MIRROR://1
+				_material.map = Textures.colorWhite;
+				_material.transparent = false;				
+				_material.refractionRatio = 1;
+				_material.reflectivity = 1;
+				//_material.shininess = 0.01;				
+				_material.wireframe = false;
+				
+				
+			case MAT_COLOR://2
+				
+				_material.map = Textures.dedeColor;
+				_material.color = Math.random()<0.5 ? new Color(0xffffff) : new Color(0xcc2222); 
+				_material.transparent = false;
+				_material.refractionRatio = 0.1;
+				_material.reflectivity = 0.1;
+				_material.wireframe = false;
+			
+			case MAT_NET://3
+				Browser.window.alert("net!! " + _matIndex);
+				//_material.map = Textures.dedeColor;
+				_material.transparent = true;
+				_material.alphaTest = 0.5;				
+				_material.alphaMap = Textures.meshMono;				
+				_material.wireframe = false;
+			
+				
+				
+			case MAT_NET_RED:
+				Browser.window.alert("red!! " + _matIndex);
+				//_material.map = ImageUtils.loadTexture("mate3.png");
+				_material.wireframe = false;
+				_material.map = Textures.meshRed;
+				_material.alphaMap = Textures.colorWhite;
+				_material.refractionRatio = 1;
+				_material.reflectivity = 1;				
+				_material.side = Three.DoubleSide;
+				
+		}
+	
+		_material.needsUpdate = true;
+	}
+		
+	
 	
 	/**
 	 * 
@@ -134,6 +228,13 @@ class Faces extends MatchMoveObects
 	override public function update(a:MyAudio):Void {
 		
 		if (!this.visible) return;
+		
+		
+		//update
+		if ( _matIndex == MAT_NET || _matIndex == MAT_NET_RED ) {
+			_offsetY += 0.01;
+			Textures.meshMono.offset.set(0, _offsetY);
+		}		
 		
 		
 		if (_faces.length > 0) {
@@ -154,11 +255,13 @@ class Faces extends MatchMoveObects
 					var ss:Float = 50 + 30 * Math.random();
 					_faces[i].scale.set(ss, ss, ss);
 			
-					
 					//_faces[i]
 				}
 			}
 		}		
+		
+		
+		
 	}	
 	
 	

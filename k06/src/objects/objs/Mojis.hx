@@ -1,6 +1,7 @@
 package objects.objs;
 
 import common.Path;
+import materials.Textures;
 import objects.MyDAELoader;
 import objects.MyFaceSingle;
 import sound.MyAudio;
@@ -63,47 +64,18 @@ class Mojis extends MatchMoveObects
 	private function _onInit0():Void {
 		
 		var all:String = "デデマウス";
-		// "は東京都足立区千住をベースに活動するデザイン集団です。";// 主にプログラミングを使った映像やグラフィックの研究・開発を行っています。そのほかホームページ制作・記事執筆・ロゴ制作・同人誌制作なども行っています。お問い合わせはツイッター@_nabeよりお願いたします。";
-		//var all:String = "あけましておめでとうございます。今年もよろしくお願いします。";
-		var list:Array<String> = [];
-		var nn:Int = all.length;
-		for (i in 0...Math.floor( all.length / nn+1 )) {
-			list.push(all.substr(i * nn, nn));
-		}
 		
-		var space:Float = 230;
-		var spaceY:Float = 250;
-		
-		var g:Geometry = new Geometry();
-		
-		for (i in 0...list.length) {
-			var src:String = list[i];
-			for(j in 0...src.length){
-			
-				var shapes:Array<Shape> = _shape.getShapes(src.substr(j,1), true);
-				var geo:ExtrudeGeometry = new ExtrudeGeometry(shapes, { bevelEnabled:true, amount:30 } );
-				
-				var mat4:Matrix4 = new Matrix4();
-				mat4.multiply( new Matrix4().makeScale(2, 2, 2) );
-				var vv:Vector3 = 
-					new Vector3( 
-						(j * space - (nn - 1) / 2 * space)*0.5, 
-						(- i * spaceY)*0.5, 
-						0
-				);
-				mat4.multiply( new Matrix4().makeTranslation(vv.x,vv.y,vv.z));
-				g.merge(geo, mat4);
-			
-			}
-		}
-		
+		MojiMaker.init(_shape);
+		var g:Geometry = MojiMaker.hexpixels;
 		////material
 		//_texture = ImageUtils.loadTexture( Path.assets + "face/dede_face_diff.png" );
 		_material = new MeshPhongMaterial( { color:0xffffff } );
+		//_material.map = Textures.meshRed;
 		//_material.wireframe = true;
 		//_material.alphaMap = _texture;
 		//_material.alphaTest = 0.5;
 		//_material.transparent = true;
+		
 		_material.clippingPlanes = [new Plane(new Vector3( 0, 1, 0 ), 0.8 )];//
 		_material.clipShadows = true;
 		_material.side = Three.FrontSide;		
@@ -112,6 +84,7 @@ class Mojis extends MatchMoveObects
 		
 		for (i in 0...5) {
 			var m:Mesh = new Mesh(g, _material);
+			
 			m.scale.set(0.1, 0.1, 0.1);
 			m.castShadow = true;
 			add(m);

@@ -168,7 +168,7 @@ class VideoPlayerOld extends Object3D
 			var points:PointCloud = new PointCloud(
 				geo, new PointCloudMaterial( { color:0xffffff, size:4 } )
 			);*/
-			var points:Line = new Line(geo, new LineBasicMaterial( { color:0xff0000 } ));
+			//var points:Line = new Line(geo, new LineBasicMaterial( { color:0xff0000 } ));
 			//add(points);
 		}
 		

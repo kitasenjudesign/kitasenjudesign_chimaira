@@ -7,13 +7,16 @@ function $extend(from, fields) {
 }
 var FontShapeMaker = function() {
 };
+FontShapeMaker.__name__ = true;
 FontShapeMaker.main = function() {
 	new FontShapeMaker();
 };
 FontShapeMaker.prototype = {
 	add: function(m) {
+		console.log("このメソッドはdebugじゃないと動作しないよ");
 	}
 	,remove: function(m) {
+		console.log("このメソッドはdebugじゃないと動作しないよ");
 	}
 	,init: function(json,callback) {
 		FontShapeMaker.font = new net.badimon.five3D.typography.GenTypography3D();
@@ -64,8 +67,10 @@ FontShapeMaker.prototype = {
 		}
 		return shapes;
 	}
+	,__class__: FontShapeMaker
 };
 var HxOverrides = function() { };
+HxOverrides.__name__ = true;
 HxOverrides.cca = function(s,index) {
 	var x = s.charCodeAt(index);
 	if(x != x) return undefined;
@@ -81,6 +86,7 @@ HxOverrides.substr = function(s,pos,len) {
 	return s.substr(pos,len);
 };
 var Lambda = function() { };
+Lambda.__name__ = true;
 Lambda.exists = function(it,f) {
 	var $it0 = it.iterator();
 	while( $it0.hasNext() ) {
@@ -92,6 +98,7 @@ Lambda.exists = function(it,f) {
 var List = function() {
 	this.length = 0;
 };
+List.__name__ = true;
 List.prototype = {
 	iterator: function() {
 		return { h : this.h, hasNext : function() {
@@ -103,8 +110,10 @@ List.prototype = {
 			return x;
 		}};
 	}
+	,__class__: List
 };
 var Main = function() { };
+Main.__name__ = true;
 Main.main = function() {
 	window.onload = Main._init;
 };
@@ -114,10 +123,12 @@ Main._init = function() {
 };
 var Main3d = function() {
 };
+Main3d.__name__ = true;
 Main3d.prototype = {
 	init: function() {
 		this._renderer = new THREE.WebGLRenderer({ antialias : true, devicePixelRatio : 1});
 		this._renderer.domElement.id = "webgl";
+		materials.Textures.init();
 		common.Dat.init($bind(this,this._onInitA));
 	}
 	,_onInitA: function() {
@@ -238,9 +249,13 @@ Main3d.prototype = {
 	,fullscreen: function() {
 		this._renderer.domElement.requestFullscreen();
 	}
+	,__class__: Main3d
 };
 var IMap = function() { };
+IMap.__name__ = true;
+Math.__name__ = true;
 var Reflect = function() { };
+Reflect.__name__ = true;
 Reflect.getProperty = function(o,field) {
 	var tmp;
 	if(o == null) return null; else if(o.__properties__ && (tmp = o.__properties__["get_" + field])) return o[tmp](); else return o[field];
@@ -256,6 +271,7 @@ Reflect.fields = function(o) {
 	return a;
 };
 var Std = function() { };
+Std.__name__ = true;
 Std.parseInt = function(x) {
 	var v = parseInt(x,10);
 	if(v == 0 && (HxOverrides.cca(x,1) == 120 || HxOverrides.cca(x,1) == 88)) v = parseInt(x);
@@ -267,28 +283,92 @@ Std.parseFloat = function(x) {
 };
 var _Three = {};
 _Three.CullFace_Impl_ = function() { };
+_Three.CullFace_Impl_.__name__ = true;
 _Three.FrontFaceDirection_Impl_ = function() { };
+_Three.FrontFaceDirection_Impl_.__name__ = true;
 _Three.ShadowMapType_Impl_ = function() { };
+_Three.ShadowMapType_Impl_.__name__ = true;
 _Three.Side_Impl_ = function() { };
+_Three.Side_Impl_.__name__ = true;
 _Three.Shading_Impl_ = function() { };
+_Three.Shading_Impl_.__name__ = true;
 _Three.Colors_Impl_ = function() { };
+_Three.Colors_Impl_.__name__ = true;
 _Three.BlendMode_Impl_ = function() { };
+_Three.BlendMode_Impl_.__name__ = true;
 _Three.BlendingEquation_Impl_ = function() { };
+_Three.BlendingEquation_Impl_.__name__ = true;
 _Three.BlendingDestinationFactor_Impl_ = function() { };
+_Three.BlendingDestinationFactor_Impl_.__name__ = true;
 _Three.TextureConstant_Impl_ = function() { };
+_Three.TextureConstant_Impl_.__name__ = true;
 _Three.WrappingMode_Impl_ = function() { };
+_Three.WrappingMode_Impl_.__name__ = true;
 _Three.Filter_Impl_ = function() { };
+_Three.Filter_Impl_.__name__ = true;
 _Three.DataType_Impl_ = function() { };
+_Three.DataType_Impl_.__name__ = true;
 _Three.PixelType_Impl_ = function() { };
+_Three.PixelType_Impl_.__name__ = true;
 _Three.PixelFormat_Impl_ = function() { };
+_Three.PixelFormat_Impl_.__name__ = true;
 _Three.TextureFormat_Impl_ = function() { };
+_Three.TextureFormat_Impl_.__name__ = true;
 _Three.LineType_Impl_ = function() { };
+_Three.LineType_Impl_.__name__ = true;
 var Three = function() { };
+Three.__name__ = true;
 Three.requestAnimationFrame = function(f) {
 	return window.requestAnimationFrame(f);
 };
 Three.cancelAnimationFrame = function(f) {
 	window.cancelAnimationFrame(id);
+};
+var Tracer = function() {
+};
+Tracer.__name__ = true;
+Tracer.assert = function(condition,p1,p2,p3,p4,p5) {
+};
+Tracer.clear = function(p1,p2,p3,p4,p5) {
+};
+Tracer.count = function(p1,p2,p3,p4,p5) {
+};
+Tracer.debug = function(p1,p2,p3,p4,p5) {
+};
+Tracer.dir = function(p1,p2,p3,p4,p5) {
+};
+Tracer.dirxml = function(p1,p2,p3,p4,p5) {
+};
+Tracer.error = function(p1,p2,p3,p4,p5) {
+};
+Tracer.group = function(p1,p2,p3,p4,p5) {
+};
+Tracer.groupCollapsed = function(p1,p2,p3,p4,p5) {
+};
+Tracer.groupEnd = function() {
+};
+Tracer.info = function(p1,p2,p3,p4,p5) {
+};
+Tracer.log = function(p1,p2,p3,p4,p5) {
+};
+Tracer.markTimeline = function(p1,p2,p3,p4,p5) {
+};
+Tracer.profile = function(title) {
+};
+Tracer.profileEnd = function(title) {
+};
+Tracer.time = function(title) {
+};
+Tracer.timeEnd = function(title,p1,p2,p3,p4,p5) {
+};
+Tracer.timeStamp = function(p1,p2,p3,p4,p5) {
+};
+Tracer.trace = function(p1,p2,p3,p4,p5) {
+};
+Tracer.warn = function(p1,p2,p3,p4,p5) {
+};
+Tracer.prototype = {
+	__class__: Tracer
 };
 var camera = {};
 camera.ExCamera = function(fov,aspect,near,far) {
@@ -312,6 +392,7 @@ camera.ExCamera = function(fov,aspect,near,far) {
 	this._down = false;
 	THREE.PerspectiveCamera.call(this,fov,aspect,near,far);
 };
+camera.ExCamera.__name__ = true;
 camera.ExCamera.__super__ = THREE.PerspectiveCamera;
 camera.ExCamera.prototype = $extend(THREE.PerspectiveCamera.prototype,{
 	init: function(dom) {
@@ -418,17 +499,23 @@ camera.ExCamera.prototype = $extend(THREE.PerspectiveCamera.prototype,{
 		this.target2 = t;
 		this._camera.lookAt(t);
 	}
+	,__class__: camera.ExCamera
 });
 var common = {};
 common.Callback = function() {
 };
+common.Callback.__name__ = true;
 common.Callback.create = function(scope,func,args) {
 	return function() {
 		func.apply(scope,args);
 	};
 };
+common.Callback.prototype = {
+	__class__: common.Callback
+};
 common.Config = function() {
 };
+common.Config.__name__ = true;
 common.Config.prototype = {
 	load: function(callback) {
 		this._callback = callback;
@@ -448,9 +535,11 @@ common.Config.prototype = {
 		common.Config.bgLight = data.bgLight;
 		if(this._callback != null) this._callback();
 	}
+	,__class__: common.Config
 };
 common.Dat = function() {
 };
+common.Dat.__name__ = true;
 common.Dat.init = function(callback) {
 	common.StageRef.fadeIn();
 	common.Dat._callback = callback;
@@ -521,7 +610,7 @@ common.Dat._goURL6 = function() {
 	common.Dat._goURL("../../k01/bin/");
 };
 common.Dat._goURL = function(url) {
-	console.log("goURL " + url);
+	Tracer.log("goURL " + url);
 	window.location.href = url + window.location.hash;
 };
 common.Dat.show = function(isBorder) {
@@ -533,10 +622,14 @@ common.Dat.hide = function() {
 	common.StageRef.hideBorder();
 	common.Dat.gui.domElement.style.display = "none";
 };
+common.Dat.prototype = {
+	__class__: common.Dat
+};
 common.FadeSheet = function(ee) {
 	this.opacity = 1;
 	this.element = ee;
 };
+common.FadeSheet.__name__ = true;
 common.FadeSheet.prototype = {
 	fadeIn: function() {
 		if(this.element != null) {
@@ -553,10 +646,12 @@ common.FadeSheet.prototype = {
 	,_onUpdate: function() {
 		if(this.element != null) this.element.style.opacity = "" + this.opacity;
 	}
+	,__class__: common.FadeSheet
 };
 common.Key = function() {
 	THREE.EventDispatcher.call(this);
 };
+common.Key.__name__ = true;
 common.Key.init = function() {
 	if(common.Key.board == null) {
 		common.Key.board = new common.Key();
@@ -573,25 +668,31 @@ common.Key.prototype = $extend(THREE.EventDispatcher.prototype,{
 	}
 	,_onKeyDown: function(e) {
 		var n = Std.parseInt(e.keyCode);
-		console.debug("_onkeydown " + n);
+		Tracer.debug("_onkeydown " + n);
 		this._dispatch(n);
 	}
 	,_dispatch: function(n) {
 		if(!common.Dat.bg) this._socket.send(n);
 		this.dispatchEvent({ type : "keydown", keyCode : n});
 	}
+	,__class__: common.Key
 });
 common.Path = function() {
 };
+common.Path.__name__ = true;
+common.Path.prototype = {
+	__class__: common.Path
+};
 common.QueryGetter = function() {
 };
+common.QueryGetter.__name__ = true;
 common.QueryGetter.init = function() {
 	common.QueryGetter._map = new haxe.ds.StringMap();
 	var str = window.location.search;
-	if(str.indexOf("?") < 0) console.log("query nashi"); else {
+	if(str.indexOf("?") < 0) Tracer.log("query nashi"); else {
 		str = HxOverrides.substr(str,1,str.length - 1);
 		var list = str.split("&");
-		console.log(list);
+		Tracer.log(list);
 		var _g1 = 0;
 		var _g = list.length;
 		while(_g1 < _g) {
@@ -607,8 +708,42 @@ common.QueryGetter.getQuery = function(idd) {
 	if(!common.QueryGetter._isInit) common.QueryGetter.init();
 	return common.QueryGetter._map.get(idd);
 };
+common.QueryGetter.prototype = {
+	__class__: common.QueryGetter
+};
+common.SimpleDAELoader = function() {
+	THREE.Object3D.call(this);
+};
+common.SimpleDAELoader.__name__ = true;
+common.SimpleDAELoader.__super__ = THREE.Object3D;
+common.SimpleDAELoader.prototype = $extend(THREE.Object3D.prototype,{
+	load: function(filename,callback) {
+		this.meshes = [];
+		this._callback = callback;
+		var loader = new THREE.ColladaLoader();
+		loader.options.convertUpAxis = true;
+		loader.load(filename,$bind(this,this._onComplete));
+	}
+	,_onComplete: function(collada) {
+		this.dae = collada.scene;
+		this.dae.traverse($bind(this,this._getchild));
+		this.dae.scale.x = 50;
+		this.dae.scale.z = 50;
+		this.dae.scale.y = 50;
+		if(this._callback != null) this._callback();
+	}
+	,_getchild: function(child) {
+		if(js.Boot.__instanceof(child,THREE.Mesh)) {
+			var m = child;
+			m.material.side = 2;
+			this.meshes.push(child);
+		}
+	}
+	,__class__: common.SimpleDAELoader
+});
 common.SkyboxTexture = function() {
 };
+common.SkyboxTexture.__name__ = true;
 common.SkyboxTexture.prototype = {
 	init: function(texture) {
 		if(this._scene == null) {
@@ -627,9 +762,11 @@ common.SkyboxTexture.prototype = {
 	,update: function(renderer) {
 		this._cubeCam.updateCubeMap(renderer,this._scene);
 	}
+	,__class__: common.SkyboxTexture
 };
 common.StageRef = function() {
 };
+common.StageRef.__name__ = true;
 common.StageRef.__properties__ = {get_stageHeight:"get_stageHeight",get_stageWidth:"get_stageWidth"}
 common.StageRef.showBorder = function() {
 	var dom = window.document.getElementById("webgl");
@@ -661,8 +798,12 @@ common.StageRef.get_stageWidth = function() {
 common.StageRef.get_stageHeight = function() {
 	return window.innerHeight;
 };
+common.StageRef.prototype = {
+	__class__: common.StageRef
+};
 common.WSocket = function() {
 };
+common.WSocket.__name__ = true;
 common.WSocket.prototype = {
 	init: function() {
 		var win = window;
@@ -682,15 +823,20 @@ common.WSocket.prototype = {
 		data.keyCode = data.value;
 		if(this._callback != null) this._callback(data);
 	}
+	,__class__: common.WSocket
 };
 var data = {};
 data.TexLoader = function() {
 };
+data.TexLoader.__name__ = true;
 data.TexLoader.getNearestTexture = function(url) {
 	var t = THREE.ImageUtils.loadTexture(url);
 	t.minFilter = 1003;
 	t.magFilter = 1003;
 	return t;
+};
+data.TexLoader.prototype = {
+	__class__: data.TexLoader
 };
 var effect = {};
 effect.PostProcessing2 = function() {
@@ -699,6 +845,7 @@ effect.PostProcessing2 = function() {
 	this._mode = 0;
 	this._modeList = ["MODE_NORMAL","MODE_DISPLACEMENT_A","MODE_DISPLACEMENT_B","MODE_COLOR"];
 };
+effect.PostProcessing2.__name__ = true;
 effect.PostProcessing2.prototype = {
 	init: function(scene,camera,renderer,callback) {
 		this._callback = callback;
@@ -786,6 +933,7 @@ effect.PostProcessing2.prototype = {
 	,resize: function(w,h) {
 		this._composer.setSize(w,h);
 	}
+	,__class__: effect.PostProcessing2
 };
 effect.pass = {};
 effect.pass.ColorMapPass = function() {
@@ -801,6 +949,7 @@ effect.pass.ColorMapPass = function() {
 	this._textures.push(THREE.ImageUtils.loadTexture("../../assets/" + "grade/grade7.png"));
 	THREE.ShaderPass.call(this,{ uniforms : { tDiffuse : { type : "t", value : null}, texture : { type : "t", value : this._textures[0]}, strength : { type : "f", value : 0}, counter : { type : "f", value : 0}, mono : { type : "f", value : 1}}, vertexShader : this._vertex, fragmentShader : this._fragment});
 };
+effect.pass.ColorMapPass.__name__ = true;
 effect.pass.ColorMapPass.__super__ = THREE.ShaderPass;
 effect.pass.ColorMapPass.prototype = $extend(THREE.ShaderPass.prototype,{
 	update: function(audio) {
@@ -816,6 +965,7 @@ effect.pass.ColorMapPass.prototype = $extend(THREE.ShaderPass.prototype,{
 	,setMono: function(b) {
 		if(b) this.uniforms.mono.value = 1; else this.uniforms.mono.value = 0;
 	}
+	,__class__: effect.pass.ColorMapPass
 });
 effect.pass.DisplacementPass = function() {
 	this._dispY = 0.75;
@@ -833,6 +983,7 @@ effect.pass.DisplacementPass = function() {
 	common.Dat.gui.add(this,"_dispX",0,1).step(0.01).listen();
 	common.Dat.gui.add(this,"_dispY",0,1).step(0.01).listen();
 };
+effect.pass.DisplacementPass.__name__ = true;
 effect.pass.DisplacementPass.__super__ = THREE.ShaderPass;
 effect.pass.DisplacementPass.prototype = $extend(THREE.ShaderPass.prototype,{
 	update: function(audio) {
@@ -848,6 +999,7 @@ effect.pass.DisplacementPass.prototype = $extend(THREE.ShaderPass.prototype,{
 		this.uniforms.colTexture.value = this._colors[this._index % this._colors.length];
 		this._index++;
 	}
+	,__class__: effect.pass.DisplacementPass
 });
 effect.pass.XLoopPass = function() {
 	this._fragment = "\r\n\t\t\t\t\tuniform sampler2D tDiffuse;\r\n\t\t\t\t\t//uniform sampler2D disTexture;\r\n\t\t\t\t\t//uniform sampler2D colTexture;\r\n\t\t\t\t\tuniform float strength;\r\n\t\t\t\t\tuniform float counter;\r\n\t\t\t\t\tuniform float isDisplace;\r\n\t\t\t\t\tuniform float isColor;\r\n\t\t\t\t\tvarying vec2 vUv;\r\n\t\t\t\t\t\r\n\t\t\t\t\tfloat yama(float rr, float beki) {\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\tfloat hoge = 0.5 + 0.5 * sin(rr * 3.14 - 3.14 * 0.5);\r\n\t\t\t\t\t\t//out = pow(out, beki);\r\n\t\t\t\t\t\treturn hoge;// out;\r\n\t\t\t\t\t\r\n\t\t\t\t\t}\r\n\r\n\t\t\t\t\tfloat yama2(float rr, float beki) {\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\tfloat hoge = rr * 2.0;\r\n\t\t\t\t\t\tif ( hoge < 1.0) {\r\n\t\t\t\t\t\t\thoge = pow(hoge, 1./beki) * 0.5;\r\n\t\t\t\t\t\t}else {\r\n\t\t\t\t\t\t\thoge = pow(hoge-1.0, beki) * 0.5 + 0.5;\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t\t//out = pow(out, beki);\r\n\t\t\t\t\t\treturn hoge;// out;\r\n\t\t\t\t\t\r\n\t\t\t\t\t}\r\n\t\t\t\t\t\r\n\t\t\t\t\t\r\n\t\t\t\t\tvoid main() {\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t//dispace\r\n\t\t\t\t\t\tvec4 texel = vec4(0.0);\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t//0.4-0.6 no hani wo kurikaesu\r\n\t\t\t\t\t\tfloat minX = 0.45;\r\n\t\t\t\t\t\tfloat maxX = 0.55;\r\n\t\t\t\t\t\tfloat amp = maxX - minX;\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t//float xx = clamp( vUv.x, minX, maxX );\r\n\t\t\t\t\t\t//xx = (xx - minX) / len;//0-1\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\tfloat nn = 10. * sin( counter * 0.07 );\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\tfloat xx = minX + amp * (0.5 + 0.5 * sin(yama2(vUv.x, 2.0) * nn * 3.14 - 3.14 * 0.5));\r\n\t\t\t\t\t\tfloat minA = 0.3;// 1;\r\n\t\t\t\t\t\tfloat maxA = 0.7;// 9;\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\tif (vUv.x < minA) {\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\txx = xx * pow(vUv.x / minA, 0.2);\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t}else if (vUv.x > maxA) {\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t\txx = mix(xx, vUv.x, pow((vUv.x - maxA) / (1.0 - maxA), 7.0));\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\txx += 0.01 * sin(vUv.y * 2. * 3.14);\r\n\t\t\t\t\t\tfloat yy = vUv.y + 0.05 * sin(vUv.x * 6.0 * 3.14);\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\t//float ss = strength;\r\n\t\t\t\t\t\tfloat ss = 0.5 + 0.5 * sin(counter * 0.1);\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\tss = ss * strength * vUv.y;\r\n\t\t\t\t\t\txx = mix(vUv.x, xx, ss );\r\n\t\t\t\t\t\tyy = mix(vUv.y, yy, ss );\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t//xx = 0.5+0.5*sin( 2.*3.14*vUv.x -3.14/2.0);\r\n\t\t\t\t\t\t\t\r\n\t\t\t\t\t\t//xx = 0.5 + 0.5 * sin(xx * 2.0 * 3.14 * 5.0);\r\n\t\t\t\t\t\t//vUv.x\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\tvec2 axis = vec2( xx, yy );\r\n\t\t\t\t\t\ttexel = texture2D( tDiffuse, axis );\r\n\t\t\t\t\t\tvec4 out1 = texel;\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\tgl_FragColor = out1;\r\n\t\t\t\t\t\t//gl_FragColor =  out1;// texel;\r\n\t\t\t\t\t}\r\n\t";
@@ -855,6 +1007,7 @@ effect.pass.XLoopPass = function() {
 	this._textures = [];
 	THREE.ShaderPass.call(this,{ uniforms : { tDiffuse : { type : "t", value : null}, isDisplace : { type : "f", value : 1}, isColor : { type : "f", value : 1}, strength : { type : "f", value : 0}, counter : { type : "f", value : 0}}, vertexShader : this._vertex, fragmentShader : this._fragment});
 };
+effect.pass.XLoopPass.__name__ = true;
 effect.pass.XLoopPass.__super__ = THREE.ShaderPass;
 effect.pass.XLoopPass.prototype = $extend(THREE.ShaderPass.prototype,{
 	update: function(audio) {
@@ -866,23 +1019,36 @@ effect.pass.XLoopPass.prototype = $extend(THREE.ShaderPass.prototype,{
 		if(isColor) this.uniforms.isColor.value = 1; else this.uniforms.isColor.value = 0;
 		if(isDisplace) this.uniforms.isDisplace.value = 1; else this.uniforms.isDisplace.value = 0;
 	}
+	,__class__: effect.pass.XLoopPass
 });
 effect.shaders = {};
 effect.shaders.CopyShader = function() {
 };
+effect.shaders.CopyShader.__name__ = true;
 effect.shaders.CopyShader.getObject = function() {
 	var obj = { uniforms : { tDiffuse : { type : "t", value : null}, opacity : { type : "f", value : 1.0}}, vertexShader : "varying vec2 vUv;\r\n\r\n\t\t\t\tvoid main() {\r\n\r\n\t\t\t\t\tvUv = uv;\r\n\t\t\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\r\n\r\n\t\t\t\t}", fragmentShader : "uniform float opacity;\r\n\t\t\t\tuniform sampler2D tDiffuse;\r\n\r\n\t\t\t\tvarying vec2 vUv;\r\n\t\t\t\tvoid main() {\r\n\t\t\t\t\tvec4 texel = texture2D( tDiffuse, vUv );\r\n\t\t\t\t\tgl_FragColor = opacity * texel;\r\n\t\t\t\t}"};
 	return obj;
 };
+effect.shaders.CopyShader.prototype = {
+	__class__: effect.shaders.CopyShader
+};
 effect.shaders.MyTiltShiftShader = function() {
 };
+effect.shaders.MyTiltShiftShader.__name__ = true;
 effect.shaders.MyTiltShiftShader.getObject = function() {
-	return { uniforms : { tDiffuse : { type : "t", value : null}, v : { type : "f", value : 0.00234375}, r : { type : "f", value : 0.5}, k : { type : "fv1", value : [1.0,4.0,6.0,4.0,1.0,4.0,16.0,24.0,16.0,4.0,6.0,24.0,36.0,24.0,6.0,4.0,16.0,24.0,16.0,4.0,1.0,4.0,6.0,4.0,1.0]}}, vertexShader : "\r\n\t\t\t\tvarying vec2 vUv;\r\n\t\t\t\tvoid main() {\r\n\t\t\t\t\tvUv = uv;\r\n\t\t\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\r\n\t\t\t\t}", fragmentShader : "\r\n\t\t\t\tuniform sampler2D tDiffuse;\r\n\t\t\t\tuniform float v;\r\n\t\t\t\tuniform float r;\r\n\t\t\t\tuniform float k[25];\r\n\t\t\t\tvarying vec2 vUv;\r\n\r\n\t\t\t\tvoid main() {\r\n\r\n\t\t\t\t\tvec4 sum = vec4( 0.0 );\r\n\t\t\t\t\tfloat vv = v * abs( r - vUv.y );\r\n\t\t\t\t\t\r\n\t\t\t\t\tfor(float i=-1.0;i<=1.0;i++){\r\n\t\t\t\t\t\tfor(float j = -1.0; j <=1.0; j++) {\r\n\t\t\t\t\t\t\tsum += texture2D( tDiffuse, vec2( vUv.x + i * vv, vUv.y + j * vv ) ) / 9.0;\r\n\t\t\t\t\t\t\t//idx += 1;\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\t\t\t\t\t\r\n\t\t\t\t\tsum.x *= 1.2;\r\n\t\t\t\t\tsum.y *= 1.1;\r\n\t\t\t\t\tsum.z *= 1.0;\r\n\t\t\t\t\t\r\n\t\t\t\t\t\r\n\t\t\t\t\tgl_FragColor = sum;\r\n\r\n\t\t\t\t}"};
+	return { uniforms : { tDiffuse : { type : "t", value : null}, v : { type : "f", value : 0.00390625}, r : { type : "f", value : 0.5}, k : { type : "fv1", value : [1.0,4.0,6.0,4.0,1.0,4.0,16.0,24.0,16.0,4.0,6.0,24.0,36.0,24.0,6.0,4.0,16.0,24.0,16.0,4.0,1.0,4.0,6.0,4.0,1.0]}}, vertexShader : "\r\n\t\t\t\tvarying vec2 vUv;\r\n\t\t\t\tvoid main() {\r\n\t\t\t\t\tvUv = uv;\r\n\t\t\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\r\n\t\t\t\t}", fragmentShader : "\r\n\t\t\t\tuniform sampler2D tDiffuse;\r\n\t\t\t\tuniform float v;\r\n\t\t\t\tuniform float r;\r\n\t\t\t\tuniform float k[25];\r\n\t\t\t\tvarying vec2 vUv;\r\n\r\n\t\t\t\tvoid main() {\r\n\r\n\t\t\t\t\tvec4 sum = vec4( 0.0 );\r\n\t\t\t\t\tfloat vv = v * abs( r - vUv.y );\r\n\t\t\t\t\t\r\n\t\t\t\t\tfor(float i=-1.0;i<=1.0;i++){\r\n\t\t\t\t\t\tfor(float j = -1.0; j <=1.0; j++) {\r\n\t\t\t\t\t\t\tsum += texture2D( tDiffuse, vec2( vUv.x + i * vv, vUv.y + j * vv ) ) / 9.0;\r\n\t\t\t\t\t\t\t//idx += 1;\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\t\t\t\t\t\r\n\t\t\t\t\tsum.x *= 1.1;\r\n\t\t\t\t\tsum.y *= 1.05;\r\n\t\t\t\t\tsum.z *= 1.0;\r\n\t\t\t\t\t\r\n\t\t\t\t\t\r\n\t\t\t\t\tgl_FragColor = sum;\r\n\r\n\t\t\t\t}"};
+};
+effect.shaders.MyTiltShiftShader.prototype = {
+	__class__: effect.shaders.MyTiltShiftShader
 };
 effect.shaders.VignetteShader = function() {
 };
+effect.shaders.VignetteShader.__name__ = true;
 effect.shaders.VignetteShader.getObject = function() {
 	return { uniforms : { tDiffuse : { type : "t", value : null}, fl : { type : "f", value : 0.0}, offset : { type : "f", value : 1.0}, darkness : { type : "f", value : 1}, k : { type : "fv1", value : [1.0,4.0,6.0,4.0,1.0,4.0,16.0,24.0,16.0,4.0,6.0,24.0,36.0,24.0,6.0,4.0,16.0,24.0,16.0,4.0,1.0,4.0,6.0,4.0,1.0]}, mcolor : { type : "v3", value : new THREE.Vector3(1.1,1.05,1.0)}, ocolor : { type : "v3", value : new THREE.Vector3(-0.02,-0.04,-0.06)}}, vertexShader : "varying vec2 vUv;\r\n\t\t\t\tvoid main() {\r\n\t\t\t\t\tvUv = uv;\r\n\t\t\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\r\n\t\t\t\t}", fragmentShader : "uniform float offset;\r\n\t\t\t\tuniform float darkness;\r\n\t\t\t\tuniform float fl;\r\n\t\t\t\tuniform sampler2D tDiffuse;\r\n\t\t\t\tvarying vec2 vUv;\r\n\t\t\t\tuniform float k[25];\r\n\t\t\t\tuniform vec3 mcolor;\r\n\t\t\t\tuniform vec3 ocolor;\r\n\t\t\t\t\r\n\t\t\t\tvoid main() {\r\n\t\t\t\t\tvec4 texel = vec4( 0.0 );\r\n\t\t\t\t\t\r\n\t\t\t\t\tfloat vx = 1.0 / 1280.0;\r\n\t\t\t\t\tfloat vy = 1.0 / 720.0;\r\n\t\t\t\t\t\r\n\t\t\t\t\ttexel = texture2D( tDiffuse, vUv);\r\n\t\t\t\t\t//filter\r\n\t\t\t\t\t/*\r\n\t\t\t\t\ttexel += texture2D( tDiffuse, vec2( vUv.x - vx, vUv.y - vy ) ) * 1.0/16.0;\r\n\t\t\t\t\ttexel += texture2D( tDiffuse, vec2( vUv.x, vUv.y - vy ) ) * 2.0/16.0;\r\n\t\t\t\t\ttexel += texture2D( tDiffuse, vec2( vUv.x + vx, vUv.y - vy ) ) * 1.0/16.0;\r\n\t\t\t\t\t\r\n\t\t\t\t\ttexel += texture2D( tDiffuse, vec2( vUv.x - vx, vUv.y ) ) * 2.0 / 16.0;\r\n\t\t\t\t\ttexel += texture2D( tDiffuse, vec2( vUv.x, vUv.y ) ) * 4.0 / 16.0;\r\n\t\t\t\t\ttexel += texture2D( tDiffuse, vec2( vUv.x + vx, vUv.y ) ) * 2.0 / 16.0;\r\n\t\t\t\t\t\r\n\t\t\t\t\ttexel += texture2D( tDiffuse, vec2( vUv.x - vx, vUv.y + vy ) ) * 1.0/16.0;\r\n\t\t\t\t\ttexel += texture2D( tDiffuse, vec2( vUv.x, vUv.y + vy ) ) * 2.0/16.0;\r\n\t\t\t\t\ttexel += texture2D( tDiffuse, vec2( vUv.x + vx, vUv.y + vy ) ) * 1.0/16.0;\r\n\t\t\t\t\t*/\r\n\t\t\t\t\t\r\n\t\t\t\t\tvec2 uv = ( vUv - vec2( 0.5 ) ) * vec2( offset );\r\n\t\t\t\t\tfloat l = 1.0 - darkness;\r\n\t\t\t\t\t\r\n\t\t\t\t\t//float offset = \r\n\t\t\t\t\tvec3 col = mix( texel.rgb, vec3( l, l,l ), dot( uv, uv ) );\r\n\t\t\t\t\tcol = col + vec3(0.00, 0.06, 0.12);\r\n\t\t\t\t\tcol = col + vec3(fl, fl, fl);\r\n\t\t\t\t\t\r\n\t\t\t\t\tcol.x = col.x * mcolor.x + ocolor.x;// 2.0;\r\n\t\t\t\t\tcol.y = col.y * mcolor.y + ocolor.y;// 1.5;\r\n\t\t\t\t\tcol.z = col.z * mcolor.z + ocolor.z;// 1.0;\t\r\n\t\t\t\t\t\r\n\t\t\t\t\tgl_FragColor = vec4( col, texel.a );\r\n\t\t\t\t}"};
+};
+effect.shaders.VignetteShader.prototype = {
+	__class__: effect.shaders.VignetteShader
 };
 var haxe = {};
 haxe.Http = function(url) {
@@ -891,6 +1057,7 @@ haxe.Http = function(url) {
 	this.params = new List();
 	this.async = true;
 };
+haxe.Http.__name__ = true;
 haxe.Http.prototype = {
 	request: function(post) {
 		var me = this;
@@ -965,11 +1132,13 @@ haxe.Http.prototype = {
 	}
 	,onStatus: function(status) {
 	}
+	,__class__: haxe.Http
 };
 haxe.ds = {};
 haxe.ds.StringMap = function() {
 	this.h = { };
 };
+haxe.ds.StringMap.__name__ = true;
 haxe.ds.StringMap.__interfaces__ = [IMap];
 haxe.ds.StringMap.prototype = {
 	set: function(key,value) {
@@ -978,9 +1147,58 @@ haxe.ds.StringMap.prototype = {
 	,get: function(key) {
 		return this.h["$" + key];
 	}
+	,__class__: haxe.ds.StringMap
 };
 var js = {};
+js.Boot = function() { };
+js.Boot.__name__ = true;
+js.Boot.getClass = function(o) {
+	if((o instanceof Array) && o.__enum__ == null) return Array; else return o.__class__;
+};
+js.Boot.__interfLoop = function(cc,cl) {
+	if(cc == null) return false;
+	if(cc == cl) return true;
+	var intf = cc.__interfaces__;
+	if(intf != null) {
+		var _g1 = 0;
+		var _g = intf.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var i1 = intf[i];
+			if(i1 == cl || js.Boot.__interfLoop(i1,cl)) return true;
+		}
+	}
+	return js.Boot.__interfLoop(cc.__super__,cl);
+};
+js.Boot.__instanceof = function(o,cl) {
+	if(cl == null) return false;
+	switch(cl) {
+	case Int:
+		return (o|0) === o;
+	case Float:
+		return typeof(o) == "number";
+	case Bool:
+		return typeof(o) == "boolean";
+	case String:
+		return typeof(o) == "string";
+	case Array:
+		return (o instanceof Array) && o.__enum__ == null;
+	case Dynamic:
+		return true;
+	default:
+		if(o != null) {
+			if(typeof(cl) == "function") {
+				if(o instanceof cl) return true;
+				if(js.Boot.__interfLoop(js.Boot.getClass(o),cl)) return true;
+			}
+		} else return false;
+		if(cl == Class && o.__name__ != null) return true;
+		if(cl == Enum && o.__ename__ != null) return true;
+		return o.__enum__ == cl;
+	}
+};
 js.Browser = function() { };
+js.Browser.__name__ = true;
 js.Browser.createXMLHttpRequest = function() {
 	if(typeof XMLHttpRequest != "undefined") return new XMLHttpRequest();
 	if(typeof ActiveXObject != "undefined") return new ActiveXObject("Microsoft.XMLHTTP");
@@ -1005,6 +1223,7 @@ light.MySpotLight = function() {
 	this.lookAt(new THREE.Vector3());
 	light.MySpotLight.instance = this;
 };
+light.MySpotLight.__name__ = true;
 light.MySpotLight.__super__ = THREE.SpotLight;
 light.MySpotLight.prototype = $extend(THREE.SpotLight.prototype,{
 	setSize: function(f) {
@@ -1013,21 +1232,48 @@ light.MySpotLight.prototype = $extend(THREE.SpotLight.prototype,{
 		this.position.y *= 6000 * f;
 		this.position.z *= 6000 * f;
 	}
+	,__class__: light.MySpotLight
 });
 light.ShadowPlane = function() {
 	var mm = new THREE.ShadowMaterial();
-	mm.opacity = 0.5;
+	mm.opacity = 0.3;
 	THREE.Mesh.call(this,new THREE.PlaneGeometry(700,700,5,5),mm);
 	this.receiveShadow = true;
 	this.position.y = 0;
 	this.rotation.x = -Math.PI / 2;
 	light.ShadowPlane.instance = this;
 };
+light.ShadowPlane.__name__ = true;
 light.ShadowPlane.setScale = function(s) {
 };
 light.ShadowPlane.__super__ = THREE.Mesh;
 light.ShadowPlane.prototype = $extend(THREE.Mesh.prototype,{
+	__class__: light.ShadowPlane
 });
+var materials = {};
+materials.Textures = function() {
+};
+materials.Textures.__name__ = true;
+materials.Textures.init = function() {
+	materials.Textures.dedeColor = THREE.ImageUtils.loadTexture("../../assets/" + "face/dede_face_diff.png");
+	materials.Textures.meshMono = THREE.ImageUtils.loadTexture("mate.png");
+	materials.Textures.meshMono.wrapS = 1000;
+	materials.Textures.meshMono.wrapT = 1000;
+	materials.Textures.meshMono.repeat.set(1,1);
+	materials.Textures.meshRed = THREE.ImageUtils.loadTexture("mate3.png");
+	materials.Textures.colorWhite = THREE.ImageUtils.loadTexture("color/white.png");
+	materials.Textures.handColor = THREE.ImageUtils.loadTexture("dae/hand_color.png");
+	materials.Textures.handNormal = THREE.ImageUtils.loadTexture("dae/hand_normal.png");
+	materials.Textures.handColor = THREE.ImageUtils.loadTexture("dae/hand_color.png");
+	materials.Textures.handNormal = THREE.ImageUtils.loadTexture("dae/hand_normal.png");
+	materials.Textures.eyeColor = THREE.ImageUtils.loadTexture("../../assets/" + "eye/eye_color.jpg");
+	materials.Textures.eyeColor.wrapS = 1001;
+	materials.Textures.eyeColor.wrapT = 1001;
+	materials.Textures.eyeNormal = THREE.ImageUtils.loadTexture("../../assets/" + "eye/eye_normal.png");
+};
+materials.Textures.prototype = {
+	__class__: materials.Textures
+};
 var net = {};
 net.badimon = {};
 net.badimon.five3D = {};
@@ -1036,6 +1282,7 @@ net.badimon.five3D.typography.Typography3D = function() {
 	this.motifs = new haxe.ds.StringMap();
 	this.widths = new haxe.ds.StringMap();
 };
+net.badimon.five3D.typography.Typography3D.__name__ = true;
 net.badimon.five3D.typography.Typography3D.prototype = {
 	getMotif: function($char) {
 		return this.motifs.get($char);
@@ -1046,10 +1293,12 @@ net.badimon.five3D.typography.Typography3D.prototype = {
 	,getHeight: function() {
 		return this.height;
 	}
+	,__class__: net.badimon.five3D.typography.Typography3D
 };
 net.badimon.five3D.typography.GenTypography3D = function() {
 	net.badimon.five3D.typography.Typography3D.call(this);
 };
+net.badimon.five3D.typography.GenTypography3D.__name__ = true;
 net.badimon.five3D.typography.GenTypography3D.__super__ = net.badimon.five3D.typography.Typography3D;
 net.badimon.five3D.typography.GenTypography3D.prototype = $extend(net.badimon.five3D.typography.Typography3D.prototype,{
 	init: function(uri,callback) {
@@ -1090,11 +1339,13 @@ net.badimon.five3D.typography.GenTypography3D.prototype = $extend(net.badimon.fi
 		if(out[0] == "C") out[1] = [Std.parseFloat(list[1]),Std.parseFloat(list[2]),Std.parseFloat(list[3]),Std.parseFloat(list[4])]; else out[1] = [Std.parseFloat(list[1]),Std.parseFloat(list[2])];
 		return out;
 	}
+	,__class__: net.badimon.five3D.typography.GenTypography3D
 });
 var objects = {};
 objects.CgBg = function() {
 	THREE.Object3D.call(this);
 };
+objects.CgBg.__name__ = true;
 objects.CgBg.__super__ = THREE.Object3D;
 objects.CgBg.prototype = $extend(THREE.Object3D.prototype,{
 	init: function() {
@@ -1107,10 +1358,12 @@ objects.CgBg.prototype = $extend(THREE.Object3D.prototype,{
 	,hide: function() {
 		this.visible = false;
 	}
+	,__class__: objects.CgBg
 });
 objects.MatchMoveObects = function() {
 	THREE.Object3D.call(this);
 };
+objects.MatchMoveObects.__name__ = true;
 objects.MatchMoveObects.__super__ = THREE.Object3D;
 objects.MatchMoveObects.prototype = $extend(THREE.Object3D.prototype,{
 	init: function() {
@@ -1127,9 +1380,11 @@ objects.MatchMoveObects.prototype = $extend(THREE.Object3D.prototype,{
 	,update: function(a) {
 		if(!this.visible) return;
 	}
+	,__class__: objects.MatchMoveObects
 });
 objects.MyDAELoader = function() {
 };
+objects.MyDAELoader.__name__ = true;
 objects.MyDAELoader.getPosY = function(ratio) {
 	ratio = 1 - ratio;
 	var maxY = 1.36578;
@@ -1185,6 +1440,7 @@ objects.MyDAELoader.prototype = {
 	,changeMap: function(isWire) {
 		if(!isWire) this.material.map = this._texture1; else if(Math.random() < 0.5) this.material.map = this._texture2; else this.material.map = this._texture3;
 	}
+	,__class__: objects.MyDAELoader
 };
 objects.MyFaceSingle = function(idx) {
 	this._mode = "";
@@ -1221,6 +1477,7 @@ objects.MyFaceSingle = function(idx) {
 	this.index = idx;
 	THREE.Object3D.call(this);
 };
+objects.MyFaceSingle.__name__ = true;
 objects.MyFaceSingle.__super__ = THREE.Object3D;
 objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 	init: function(d,cubecam) {
@@ -1327,6 +1584,7 @@ objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 		vv.z = tgtZ * ratio;
 		vv.y = th - dy / 100;
 	}
+	,__class__: objects.MyFaceSingle
 });
 objects.data = {};
 objects.data.EffectData = function(o) {
@@ -1343,6 +1601,7 @@ objects.data.EffectData = function(o) {
 		this.wireframe = o.wireframe;
 	}
 };
+objects.data.EffectData.__name__ = true;
 objects.data.EffectData.getNext = function() {
 	objects.data.EffectData._count++;
 	objects.data.EffectData._count = objects.data.EffectData._count % objects.data.EffectData.effects.length;
@@ -1353,20 +1612,53 @@ objects.data.EffectData.getPrev = function() {
 	if(objects.data.EffectData._count < 0) objects.data.EffectData._count = objects.data.EffectData.effects.length - 1;
 	return objects.data.EffectData.effects[objects.data.EffectData._count];
 };
+objects.data.EffectData.prototype = {
+	__class__: objects.data.EffectData
+};
 objects.objs = {};
 objects.objs.Eyes = function() {
 	objects.MatchMoveObects.call(this);
 };
+objects.objs.Eyes.__name__ = true;
 objects.objs.Eyes.__super__ = objects.MatchMoveObects;
 objects.objs.Eyes.prototype = $extend(objects.MatchMoveObects.prototype,{
 	init: function() {
 	}
-	,update: function(a) {
+	,show: function(data) {
+		this._data = data;
+		this.visible = true;
+		if(this._mesh == null) {
+			this.m = new THREE.MeshPhongMaterial();
+			materials.Textures.eyeColor.offset.set(0,0.1);
+			this.m.map = materials.Textures.eyeColor;
+			this.m.normalMap = materials.Textures.eyeNormal;
+			this.m.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),1)];
+			this.m.clipShadows = true;
+			this.m.combine = 2;
+			this.m.reflectivity = 0.4;
+			this.m.refractionRatio = 0;
+			this._mesh = new THREE.Mesh(new THREE.SphereGeometry(50,50,10,10),this.m);
+			this._mesh.position.y = 100;
+			this._mesh.rotation.x = -Math.PI / 2;
+			this._mesh.material = this.m;
+			this._mesh.castShadow = true;
+			this.add(this._mesh);
+		}
 	}
+	,setEnvMap: function(texture) {
+		if(this.m != null) this.m.envMap = texture;
+	}
+	,update: function(a) {
+		this._mesh.rotation.z += 0.03;
+	}
+	,__class__: objects.objs.Eyes
 });
 objects.objs.Faces = function() {
+	this._offsetY = 0;
+	this._matIndex = 0;
 	objects.MatchMoveObects.call(this);
 };
+objects.objs.Faces.__name__ = true;
 objects.objs.Faces.__super__ = objects.MatchMoveObects;
 objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 	init: function() {
@@ -1374,15 +1666,16 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 		this._loader.load($bind(this,this._onInit0));
 	}
 	,_onInit0: function() {
-		this._texture = THREE.ImageUtils.loadTexture("../../assets/" + "face/dede_face_diff.png");
+		this._texture = materials.Textures.dedeColor;
 		this._material = new THREE.MeshPhongMaterial({ color : 16777215, map : this._texture});
 		this._material.refractionRatio = 0.1;
 		this._material.reflectivity = 0.1;
 		this._material.shininess = 0.01;
-		this._material.wireframe = false;
+		this._material.alphaTest = 0.5;
+		this._material.transparent = true;
 		this._material.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),1)];
 		this._material.clipShadows = true;
-		this._material.side = 0;
+		this._material.side = 2;
 		this._faces = [];
 		var _g = 0;
 		while(_g < 5) {
@@ -1400,14 +1693,13 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 			this._faces.push(face);
 		}
 	}
-	,_changeMat: function() {
-	}
 	,show: function(data) {
 		this._data = data;
 		this.visible = true;
 		var pos = this._data.camData.positions;
 		var ss = this._data.size;
 		var yy = this._data.offsetY;
+		if(Math.random() < 0.1) ss = ss * 2.2;
 		var _g1 = 0;
 		var _g = this._faces.length;
 		while(_g1 < _g) {
@@ -1422,12 +1714,64 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 				this._faces[i].visible = true;
 			} else this._faces[i].visible = false;
 		}
+		this._changeMat();
+	}
+	,_changeMat: function() {
+		this._matIndex++;
+		this._matIndex = this._matIndex % 5;
+		var _g = this._matIndex;
+		switch(_g) {
+		case 0:
+			this._material.map = materials.Textures.colorWhite;
+			if(Math.random() < 0.5) this._material.color = new THREE.Color(16777215); else this._material.color = new THREE.Color(13369344);
+			this._material.refractionRatio = 0.7;
+			this._material.reflectivity = 0.7;
+			this._material.wireframe = true;
+			this._material.transparent = false;
+			break;
+		case 1:
+			this._material.map = materials.Textures.colorWhite;
+			this._material.transparent = false;
+			this._material.refractionRatio = 1;
+			this._material.reflectivity = 1;
+			this._material.wireframe = false;
+			break;
+		case 2:
+			this._material.map = materials.Textures.dedeColor;
+			if(Math.random() < 0.5) this._material.color = new THREE.Color(16777215); else this._material.color = new THREE.Color(13378082);
+			this._material.transparent = false;
+			this._material.refractionRatio = 0.1;
+			this._material.reflectivity = 0.1;
+			this._material.wireframe = false;
+			break;
+		case 3:
+			window.alert("net!! " + this._matIndex);
+			this._material.transparent = true;
+			this._material.alphaTest = 0.5;
+			this._material.alphaMap = materials.Textures.meshMono;
+			this._material.wireframe = false;
+			break;
+		case 4:
+			window.alert("red!! " + this._matIndex);
+			this._material.wireframe = false;
+			this._material.map = materials.Textures.meshRed;
+			this._material.alphaMap = materials.Textures.colorWhite;
+			this._material.refractionRatio = 1;
+			this._material.reflectivity = 1;
+			this._material.side = 2;
+			break;
+		}
+		this._material.needsUpdate = true;
 	}
 	,setEnvMap: function(texture) {
 		this._material.envMap = texture;
 	}
 	,update: function(a) {
 		if(!this.visible) return;
+		if(this._matIndex == 3 || this._matIndex == 4) {
+			this._offsetY += 0.01;
+			materials.Textures.meshMono.offset.set(0,this._offsetY);
+		}
 		if(this._faces.length > 0) {
 			var _g1 = 0;
 			var _g = this._faces.length;
@@ -1444,12 +1788,77 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 			}
 		}
 	}
+	,__class__: objects.objs.Faces
 });
+objects.objs.Hands = function() {
+	objects.MatchMoveObects.call(this);
+};
+objects.objs.Hands.__name__ = true;
+objects.objs.Hands.__super__ = objects.MatchMoveObects;
+objects.objs.Hands.prototype = $extend(objects.MatchMoveObects.prototype,{
+	init: function() {
+		this._loader = new common.SimpleDAELoader();
+		this._loader.load("dae/hand.dae",null);
+	}
+	,show: function(data) {
+		this._data = data;
+		this.visible = true;
+		var m = new THREE.MeshPhongMaterial();
+		m.map = materials.Textures.handColor;
+		m.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),1)];
+		m.clipShadows = true;
+		this._mesh = this._loader.meshes[0];
+		this._mesh.scale.set(300,300,300);
+		this._mesh.position.y = -50;
+		this._mesh.rotation.x = -Math.PI / 2;
+		this._mesh.material = m;
+		this._mesh.castShadow = true;
+		this.add(this._mesh);
+	}
+	,update: function(a) {
+		this._mesh.rotation.z += 0.03;
+	}
+	,__class__: objects.objs.Hands
+});
+objects.objs.MojiMaker = function() {
+};
+objects.objs.MojiMaker.__name__ = true;
+objects.objs.MojiMaker.init = function(shape) {
+	objects.objs.MojiMaker._shape = shape;
+	if(objects.objs.MojiMaker.dedemouse == null) {
+		objects.objs.MojiMaker.dedemouse = objects.objs.MojiMaker.getGeo("デデマウス");
+		objects.objs.MojiMaker.hexpixels = objects.objs.MojiMaker.getGeo("ヘックスピクセルズ");
+		objects.objs.MojiMaker.kitasenju = objects.objs.MojiMaker.getGeo("北千住デザイン");
+	}
+};
+objects.objs.MojiMaker.getGeo = function(src) {
+	var space = 230;
+	var spaceY = 250;
+	var nn = src.length;
+	var g = new THREE.Geometry();
+	var _g1 = 0;
+	var _g = src.length;
+	while(_g1 < _g) {
+		var j = _g1++;
+		var shapes = objects.objs.MojiMaker._shape.getShapes(HxOverrides.substr(src,j,1),true);
+		var geo = new THREE.ExtrudeGeometry(shapes,{ bevelEnabled : true, amount : 30});
+		var mat4 = new THREE.Matrix4();
+		mat4.multiply(new THREE.Matrix4().makeScale(2,2,2));
+		var vv = new THREE.Vector3((j * space - (nn - 1) / 2 * space) * 0.5,0,0);
+		mat4.multiply(new THREE.Matrix4().makeTranslation(vv.x,vv.y,vv.z));
+		g.merge(geo,mat4);
+	}
+	return g;
+};
+objects.objs.MojiMaker.prototype = {
+	__class__: objects.objs.MojiMaker
+};
 objects.objs.Mojis = function() {
 	this._offsetY = 0;
 	this._rad = 0;
 	objects.MatchMoveObects.call(this);
 };
+objects.objs.Mojis.__name__ = true;
 objects.objs.Mojis.__super__ = objects.MatchMoveObects;
 objects.objs.Mojis.prototype = $extend(objects.MatchMoveObects.prototype,{
 	init: function() {
@@ -1462,43 +1871,16 @@ objects.objs.Mojis.prototype = $extend(objects.MatchMoveObects.prototype,{
 	}
 	,_onInit0: function() {
 		var all = "デデマウス";
-		var list = [];
-		var nn = all.length;
-		var _g1 = 0;
-		var _g = Math.floor(all.length / nn + 1);
-		while(_g1 < _g) {
-			var i = _g1++;
-			list.push(HxOverrides.substr(all,i * nn,nn));
-		}
-		var space = 230;
-		var spaceY = 250;
-		var g = new THREE.Geometry();
-		var _g11 = 0;
-		var _g2 = list.length;
-		while(_g11 < _g2) {
-			var i1 = _g11++;
-			var src = list[i1];
-			var _g3 = 0;
-			var _g21 = src.length;
-			while(_g3 < _g21) {
-				var j = _g3++;
-				var shapes = this._shape.getShapes(HxOverrides.substr(src,j,1),true);
-				var geo = new THREE.ExtrudeGeometry(shapes,{ bevelEnabled : true, amount : 30});
-				var mat4 = new THREE.Matrix4();
-				mat4.multiply(new THREE.Matrix4().makeScale(2,2,2));
-				var vv = new THREE.Vector3((j * space - (nn - 1) / 2 * space) * 0.5,-i1 * spaceY * 0.5,0);
-				mat4.multiply(new THREE.Matrix4().makeTranslation(vv.x,vv.y,vv.z));
-				g.merge(geo,mat4);
-			}
-		}
+		objects.objs.MojiMaker.init(this._shape);
+		var g = objects.objs.MojiMaker.hexpixels;
 		this._material = new THREE.MeshPhongMaterial({ color : 16777215});
 		this._material.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),0.8)];
 		this._material.clipShadows = true;
 		this._material.side = 0;
 		this._meshes = [];
-		var _g4 = 0;
-		while(_g4 < 5) {
-			var i2 = _g4++;
+		var _g = 0;
+		while(_g < 5) {
+			var i = _g++;
 			var m = new THREE.Mesh(g,this._material);
 			m.scale.set(0.1,0.1,0.1);
 			m.castShadow = true;
@@ -1540,11 +1922,13 @@ objects.objs.Mojis.prototype = $extend(objects.MatchMoveObects.prototype,{
 			this._meshes[i].rotation.z += 0.004 * (i + 1);
 		}
 	}
+	,__class__: objects.objs.Mojis
 });
 objects.objs.Objs = function() {
 	this._index = 0;
 	THREE.Object3D.call(this);
 };
+objects.objs.Objs.__name__ = true;
 objects.objs.Objs.__super__ = THREE.Object3D;
 objects.objs.Objs.prototype = $extend(THREE.Object3D.prototype,{
 	init: function(callback) {
@@ -1580,6 +1964,7 @@ objects.objs.Objs.prototype = $extend(THREE.Object3D.prototype,{
 	,update: function(a) {
 		if(this._currentObj != null) this._currentObj.update(a);
 	}
+	,__class__: objects.objs.Objs
 });
 var sound = {};
 sound.MyAudio = function() {
@@ -1588,6 +1973,7 @@ sound.MyAudio = function() {
 	this.freqByteDataAryEase = [];
 	this._impulse = [];
 };
+sound.MyAudio.__name__ = true;
 sound.MyAudio.prototype = {
 	init: function(callback) {
 		this.globalVolume = common.Config.globalVol;
@@ -1690,14 +2076,29 @@ sound.MyAudio.prototype = {
 	,tweenVol: function(tgt) {
 		TweenMax.to(this,0.2,{ globalVolume : tgt});
 	}
+	,__class__: sound.MyAudio
 };
 var three = {};
 three.Face = function() { };
+three.Face.__name__ = true;
+three.Face.prototype = {
+	__class__: three.Face
+};
 three.IFog = function() { };
+three.IFog.__name__ = true;
+three.IFog.prototype = {
+	__class__: three.IFog
+};
 three.Mapping = function() { };
+three.Mapping.__name__ = true;
 three.Renderer = function() { };
+three.Renderer.__name__ = true;
+three.Renderer.prototype = {
+	__class__: three.Renderer
+};
 three._WebGLRenderer = {};
 three._WebGLRenderer.RenderPrecision_Impl_ = function() { };
+three._WebGLRenderer.RenderPrecision_Impl_.__name__ = true;
 var video = {};
 video.CameraData = function() {
 	this._fov = 0;
@@ -1709,6 +2110,7 @@ video.CameraData = function() {
 	this._ry = 0.001;
 	this._rx = 0.001;
 };
+video.CameraData.__name__ = true;
 video.CameraData.prototype = {
 	load: function(filename,callback) {
 		this._callback = callback;
@@ -1745,7 +2147,7 @@ video.CameraData.prototype = {
 		return this._frameData[frame];
 	}
 	,update: function(f,cam) {
-		console.debug("F" + f + " " + this._frameData.length);
+		Tracer.debug("F" + f + " " + this._frameData.length);
 		if(f >= this._frameData.length) return;
 		var q = this._frameData[f].q;
 		var qtn = new THREE.Quaternion(q[0],q[1],q[2],q[3]);
@@ -1775,9 +2177,11 @@ video.CameraData.prototype = {
 		m.set(a[0],a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11],a[12],a[13],a[14],a[15]);
 		return m;
 	}
+	,__class__: video.CameraData
 };
 video.Config = function() {
 };
+video.Config.__name__ = true;
 video.Config.prototype = {
 	load: function(filename,callback) {
 		this._callback = callback;
@@ -1796,6 +2200,7 @@ video.Config.prototype = {
 		}
 		if(this._callback != null) this._callback();
 	}
+	,__class__: video.Config
 };
 video.MovieData = function(o) {
 	this.size = 0;
@@ -1809,6 +2214,7 @@ video.MovieData = function(o) {
 		this.offsetY = o.y;
 	}
 };
+video.MovieData.__name__ = true;
 video.MovieData.prototype = {
 	loadCamData: function(callback) {
 		if(this.camData != null) {
@@ -1818,6 +2224,7 @@ video.MovieData.prototype = {
 		this.camData = new video.CameraData();
 		this.camData.load(this.pathCam,callback);
 	}
+	,__class__: video.MovieData
 };
 video.VideoPlane = function() {
 	this._geo = new THREE.PlaneBufferGeometry(2,2,10,10);
@@ -1825,6 +2232,7 @@ video.VideoPlane = function() {
 	THREE.Mesh.call(this,this._geo,this._mat);
 	this.frustumCulled = false;
 };
+video.VideoPlane.__name__ = true;
 video.VideoPlane.__super__ = THREE.Mesh;
 video.VideoPlane.prototype = $extend(THREE.Mesh.prototype,{
 	init: function(vi) {
@@ -1842,6 +2250,7 @@ video.VideoPlane.prototype = $extend(THREE.Mesh.prototype,{
 		if(!this.visible) return;
 		this._mat.update(this._vi);
 	}
+	,__class__: video.VideoPlane
 });
 video.VideoPlayer = function() {
 	this._videoMode = "MODE_3D";
@@ -1851,6 +2260,7 @@ video.VideoPlayer = function() {
 	this._index = 0;
 	THREE.Object3D.call(this);
 };
+video.VideoPlayer.__name__ = true;
 video.VideoPlayer.__super__ = THREE.Object3D;
 video.VideoPlayer.prototype = $extend(THREE.Object3D.prototype,{
 	init: function(camera,callback) {
@@ -1974,6 +2384,7 @@ video.VideoPlayer.prototype = $extend(THREE.Object3D.prototype,{
 	,getMovieData: function() {
 		return this._movieData;
 	}
+	,__class__: video.VideoPlayer
 });
 video.VideoShader = function() {
 	this.ff = "\r\n\t\r\n\t\tuniform sampler2D texture;\r\n\t\tvarying vec2 vUv;                                             \r\n\t\tvoid main()\r\n\t\t{\r\n\t\t\tgl_FragColor = texture2D(texture, vUv);\r\n\t\t}\t\r\n\t\r\n\t";
@@ -1987,6 +2398,7 @@ video.VideoShader = function() {
 	this._texture.needsUpdate = true;
 	THREE.ShaderMaterial.call(this,{ vertexShader : this.vv, fragmentShader : this.ff, uniforms : { texture : { type : "t", value : this._texture}}});
 };
+video.VideoShader.__name__ = true;
 video.VideoShader.__super__ = THREE.ShaderMaterial;
 video.VideoShader.prototype = $extend(THREE.ShaderMaterial.prototype,{
 	update: function(vi) {
@@ -1995,6 +2407,7 @@ video.VideoShader.prototype = $extend(THREE.ShaderMaterial.prototype,{
 			this._texture.needsUpdate = true;
 		}
 	}
+	,__class__: video.VideoShader
 });
 var $_, $fid = 0;
 function $bind(o,m) { if( m == null ) return null; if( m.__id__ == null ) m.__id__ = $fid++; var f; if( o.hx__closures__ == null ) o.hx__closures__ = {}; else f = o.hx__closures__[m.__id__]; if( f == null ) { f = function(){ return f.method.apply(f.scope, arguments); }; f.scope = o; f.method = m; o.hx__closures__[m.__id__] = f; } return f; }
@@ -2007,6 +2420,17 @@ Math.isFinite = function(i) {
 Math.isNaN = function(i1) {
 	return isNaN(i1);
 };
+String.prototype.__class__ = String;
+String.__name__ = true;
+Array.__name__ = true;
+var Int = { __name__ : ["Int"]};
+var Dynamic = { __name__ : ["Dynamic"]};
+var Float = Number;
+Float.__name__ = ["Float"];
+var Bool = Boolean;
+Bool.__ename__ = ["Bool"];
+var Class = { __name__ : ["Class"]};
+var Enum = { };
 Main3d.W = 960;
 Main3d.H = 540;
 _Three.CullFace_Impl_.None = 0;
@@ -2223,6 +2647,12 @@ objects.data.EffectData.EFFECT_COLOR = new objects.data.EffectData({ name : "EFF
 objects.data.EffectData.EFFECT_COLOR_WIRE = new objects.data.EffectData({ name : "EFFECT_COLOR_WIRE", colorType : 1, displaceType : 0, strength : 1, wireframe : true});
 objects.data.EffectData.effects = [objects.data.EffectData.EFFECT_NORMAL,objects.data.EffectData.EFFECT_DISPLACE_X,objects.data.EffectData.EFFECT_DISPLACE_MAP];
 objects.data.EffectData._count = -1;
+objects.objs.Faces.MAT_WIREFRAME = 0;
+objects.objs.Faces.MAT_MIRROR = 1;
+objects.objs.Faces.MAT_COLOR = 2;
+objects.objs.Faces.MAT_NET = 3;
+objects.objs.Faces.MAT_NET_RED = 4;
+objects.objs.Faces.MAT_NUM = 5;
 sound.MyAudio.FFTSIZE = 64;
 three._WebGLRenderer.RenderPrecision_Impl_.highp = "highp";
 three._WebGLRenderer.RenderPrecision_Impl_.mediump = "mediump";
@@ -2231,5 +2661,3 @@ video.VideoPlayer.MODE_VIDEO = "MODE_VIDEO";
 video.VideoPlayer.MODE_3D = "MODE_3D";
 Main.main();
 })();
-
-//# sourceMappingURL=haxetest.js.map

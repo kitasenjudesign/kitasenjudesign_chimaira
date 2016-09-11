@@ -18,7 +18,7 @@ class ShadowPlane extends Mesh
 	public function new() 
 	{
 		var mm:ShadowMaterial = new ShadowMaterial();
-		mm.opacity = 0.5;
+		mm.opacity = 0.3;
 		
 		//var mm:MeshBasicMaterial = new MeshBasicMaterial( { color:0xff0000 } );
 		//shadow no ookisa

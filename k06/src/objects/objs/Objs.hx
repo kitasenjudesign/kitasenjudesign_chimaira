@@ -21,6 +21,7 @@ class Objs extends Object3D
 	private var _mojis	:Mojis;
 	private var _eyes	:Eyes;
 	private var _faces	:Faces;
+	private var _hand	:Hands;
 	private var _index	:Int = 0;
 	private var _objects:Array<MatchMoveObects>;
 	
@@ -49,6 +50,9 @@ class Objs extends Object3D
 		_faces = new Faces();
 		_faces.init();
 		//add(_faces);
+		
+		//_hand = new Hands();
+		//_hand.init();
 		
 		_objects = [
 			_faces,

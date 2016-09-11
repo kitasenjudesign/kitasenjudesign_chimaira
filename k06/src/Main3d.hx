@@ -10,6 +10,7 @@ import haxe.Http;
 import js.Browser;
 import light.MySpotLight;
 import light.ShadowPlane;
+import materials.Textures;
 import objects.CgBg;
 import objects.objs.Mojis;
 import objects.MyDAELoader;
@@ -76,6 +77,8 @@ class Main3d
 			devicePixelRatio:1	
 		});
 		_renderer.domElement.id = StageRef.name;		
+		
+		Textures.init();
 		
 		Dat.init(_onInitA);
 		
