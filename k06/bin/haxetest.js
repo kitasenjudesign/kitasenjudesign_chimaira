@@ -13,10 +13,8 @@ FontShapeMaker.main = function() {
 };
 FontShapeMaker.prototype = {
 	add: function(m) {
-		console.log("このメソッドはdebugじゃないと動作しないよ");
 	}
 	,remove: function(m) {
-		console.log("このメソッドはdebugじゃないと動作しないよ");
 	}
 	,init: function(json,callback) {
 		FontShapeMaker.font = new net.badimon.five3D.typography.GenTypography3D();
@@ -214,7 +212,7 @@ Main3d.prototype = {
 	}
 	,_updateTexture: function() {
 		window.document.getElementById("loading").style.display = "none";
-		this._skyboxMat.init(this._video.getTexture());
+		this._skyboxMat.init(materials.Textures.parkBg);
 		this._skyboxMat.update(this._renderer);
 	}
 	,_update: function() {
@@ -323,52 +321,6 @@ Three.requestAnimationFrame = function(f) {
 };
 Three.cancelAnimationFrame = function(f) {
 	window.cancelAnimationFrame(id);
-};
-var Tracer = function() {
-};
-Tracer.__name__ = true;
-Tracer.assert = function(condition,p1,p2,p3,p4,p5) {
-};
-Tracer.clear = function(p1,p2,p3,p4,p5) {
-};
-Tracer.count = function(p1,p2,p3,p4,p5) {
-};
-Tracer.debug = function(p1,p2,p3,p4,p5) {
-};
-Tracer.dir = function(p1,p2,p3,p4,p5) {
-};
-Tracer.dirxml = function(p1,p2,p3,p4,p5) {
-};
-Tracer.error = function(p1,p2,p3,p4,p5) {
-};
-Tracer.group = function(p1,p2,p3,p4,p5) {
-};
-Tracer.groupCollapsed = function(p1,p2,p3,p4,p5) {
-};
-Tracer.groupEnd = function() {
-};
-Tracer.info = function(p1,p2,p3,p4,p5) {
-};
-Tracer.log = function(p1,p2,p3,p4,p5) {
-};
-Tracer.markTimeline = function(p1,p2,p3,p4,p5) {
-};
-Tracer.profile = function(title) {
-};
-Tracer.profileEnd = function(title) {
-};
-Tracer.time = function(title) {
-};
-Tracer.timeEnd = function(title,p1,p2,p3,p4,p5) {
-};
-Tracer.timeStamp = function(p1,p2,p3,p4,p5) {
-};
-Tracer.trace = function(p1,p2,p3,p4,p5) {
-};
-Tracer.warn = function(p1,p2,p3,p4,p5) {
-};
-Tracer.prototype = {
-	__class__: Tracer
 };
 var camera = {};
 camera.ExCamera = function(fov,aspect,near,far) {
@@ -610,7 +562,7 @@ common.Dat._goURL6 = function() {
 	common.Dat._goURL("../../k01/bin/");
 };
 common.Dat._goURL = function(url) {
-	Tracer.log("goURL " + url);
+	console.log("goURL " + url);
 	window.location.href = url + window.location.hash;
 };
 common.Dat.show = function(isBorder) {
@@ -668,7 +620,7 @@ common.Key.prototype = $extend(THREE.EventDispatcher.prototype,{
 	}
 	,_onKeyDown: function(e) {
 		var n = Std.parseInt(e.keyCode);
-		Tracer.debug("_onkeydown " + n);
+		console.debug("_onkeydown " + n);
 		this._dispatch(n);
 	}
 	,_dispatch: function(n) {
@@ -689,10 +641,10 @@ common.QueryGetter.__name__ = true;
 common.QueryGetter.init = function() {
 	common.QueryGetter._map = new haxe.ds.StringMap();
 	var str = window.location.search;
-	if(str.indexOf("?") < 0) Tracer.log("query nashi"); else {
+	if(str.indexOf("?") < 0) console.log("query nashi"); else {
 		str = HxOverrides.substr(str,1,str.length - 1);
 		var list = str.split("&");
-		Tracer.log(list);
+		console.log(list);
 		var _g1 = 0;
 		var _g = list.length;
 		while(_g1 < _g) {
@@ -1235,9 +1187,8 @@ light.MySpotLight.prototype = $extend(THREE.SpotLight.prototype,{
 	,__class__: light.MySpotLight
 });
 light.ShadowPlane = function() {
-	var mm = new THREE.ShadowMaterial();
-	mm.opacity = 0.3;
-	THREE.Mesh.call(this,new THREE.PlaneGeometry(700,700,5,5),mm);
+	var mm = new THREE.MeshLambertMaterial({ color : 16711680});
+	THREE.Mesh.call(this,new THREE.PlaneGeometry(1000,1000,5,5),mm);
 	this.receiveShadow = true;
 	this.position.y = 0;
 	this.rotation.x = -Math.PI / 2;
@@ -1257,18 +1208,23 @@ materials.Textures.__name__ = true;
 materials.Textures.init = function() {
 	materials.Textures.dedeColor = THREE.ImageUtils.loadTexture("../../assets/" + "face/dede_face_diff.png");
 	materials.Textures.meshMono = THREE.ImageUtils.loadTexture("mate.png");
-	materials.Textures.meshMono.wrapS = 1000;
-	materials.Textures.meshMono.wrapT = 1000;
-	materials.Textures.meshMono.repeat.set(1,1);
+	materials.Textures.meshMono.wrapS = 1002;
+	materials.Textures.meshMono.wrapT = 1002;
+	materials.Textures.meshMono.repeat.set(5,5);
 	materials.Textures.meshRed = THREE.ImageUtils.loadTexture("mate3.png");
+	materials.Textures.meshRed.wrapS = 1002;
+	materials.Textures.meshRed.wrapT = 1002;
+	materials.Textures.meshRed.repeat.set(1.5,1.5);
 	materials.Textures.colorWhite = THREE.ImageUtils.loadTexture("color/white.png");
 	materials.Textures.handColor = THREE.ImageUtils.loadTexture("dae/hand_color.png");
 	materials.Textures.handNormal = THREE.ImageUtils.loadTexture("dae/hand_normal.png");
 	materials.Textures.handColor = THREE.ImageUtils.loadTexture("dae/hand_color.png");
 	materials.Textures.handNormal = THREE.ImageUtils.loadTexture("dae/hand_normal.png");
-	materials.Textures.eyeColor = THREE.ImageUtils.loadTexture("../../assets/" + "eye/eye_color.jpg");
-	materials.Textures.eyeColor.wrapS = 1001;
-	materials.Textures.eyeColor.wrapT = 1001;
+	materials.Textures.eyeColor = THREE.ImageUtils.loadTexture("../../assets/" + "eye/eye_color2.png");
+	materials.Textures.meshMono.wrapS = 1002;
+	materials.Textures.meshMono.wrapT = 1002;
+	materials.Textures.meshMono.repeat.set(5,5);
+	materials.Textures.parkBg = THREE.ImageUtils.loadTexture("bg/bg.jpg");
 	materials.Textures.eyeNormal = THREE.ImageUtils.loadTexture("../../assets/" + "eye/eye_normal.png");
 };
 materials.Textures.prototype = {
@@ -1443,6 +1399,9 @@ objects.MyDAELoader.prototype = {
 	,__class__: objects.MyDAELoader
 };
 objects.MyFaceSingle = function(idx) {
+	this._vz = 0;
+	this._vy = 0;
+	this._vx = 0;
 	this._mode = "";
 	this.index = 0;
 	this.isActive = true;
@@ -1567,6 +1526,12 @@ objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 			g.vertices[i].z += (tgtZ - g.vertices[i].z) / 2;
 			if(this.isSplit) this._splitSpirit(g.vertices[i],tgtX,tgtY,tgtZ);
 		}
+		this.rotation.x += this._vx;
+		this.rotation.y += this._vy;
+		this.rotation.z += this._vz;
+		this._vx *= 0.6;
+		this._vy *= 0.6;
+		this._vz *= 0.6;
 	}
 	,_splitSpirit: function(vv,tgtX,tgtY,tgtZ) {
 		var border1 = this.border + this.borderHeight / 2;
@@ -1583,6 +1548,19 @@ objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 		vv.x = tgtX * ratio;
 		vv.z = tgtZ * ratio;
 		vv.y = th - dy / 100;
+	}
+	,resetRot: function() {
+		this._vx = 0;
+		this._vy = 0;
+		this._vz = 0;
+		this.rotation.x = 0;
+		this.rotation.y = 0;
+		this.rotation.z = 0;
+	}
+	,addRot: function(vx,vy,vz) {
+		this._vx = vx;
+		this._vy = vy;
+		this._vz = vz;
 	}
 	,__class__: objects.MyFaceSingle
 });
@@ -1617,6 +1595,7 @@ objects.data.EffectData.prototype = {
 };
 objects.objs = {};
 objects.objs.Eyes = function() {
+	this._rad = 0;
 	objects.MatchMoveObects.call(this);
 };
 objects.objs.Eyes.__name__ = true;
@@ -1629,14 +1608,13 @@ objects.objs.Eyes.prototype = $extend(objects.MatchMoveObects.prototype,{
 		this.visible = true;
 		if(this._mesh == null) {
 			this.m = new THREE.MeshPhongMaterial();
-			materials.Textures.eyeColor.offset.set(0,0.1);
 			this.m.map = materials.Textures.eyeColor;
 			this.m.normalMap = materials.Textures.eyeNormal;
 			this.m.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),1)];
 			this.m.clipShadows = true;
 			this.m.combine = 2;
-			this.m.reflectivity = 0.4;
-			this.m.refractionRatio = 0;
+			this.m.reflectivity = 0.1;
+			this.m.refractionRatio = 0.1;
 			this._mesh = new THREE.Mesh(new THREE.SphereGeometry(50,50,10,10),this.m);
 			this._mesh.position.y = 100;
 			this._mesh.rotation.x = -Math.PI / 2;
@@ -1644,11 +1622,18 @@ objects.objs.Eyes.prototype = $extend(objects.MatchMoveObects.prototype,{
 			this._mesh.castShadow = true;
 			this.add(this._mesh);
 		}
+		var geo = this._data.camData.getPointsGeo();
+		if(geo != null) {
+			var points = new THREE.PointCloud(geo,new THREE.PointCloudMaterial({ color : 16777215, size : 4}));
+			this.add(points);
+		}
 	}
 	,setEnvMap: function(texture) {
 		if(this.m != null) this.m.envMap = texture;
 	}
 	,update: function(a) {
+		this._rad += 0.1;
+		materials.Textures.eyeColor.offset.set(0,0.2 * a.freqByteData[3] / 255);
 		this._mesh.rotation.z += 0.03;
 	}
 	,__class__: objects.objs.Eyes
@@ -1662,6 +1647,7 @@ objects.objs.Faces.__name__ = true;
 objects.objs.Faces.__super__ = objects.MatchMoveObects;
 objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 	init: function() {
+		this._motion = new objects.objs.motion.FaceMotion();
 		this._loader = new objects.MyDAELoader();
 		this._loader.load($bind(this,this._onInit0));
 	}
@@ -1692,28 +1678,12 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 			this.add(face);
 			this._faces.push(face);
 		}
+		this._motion.init(this._faces);
 	}
 	,show: function(data) {
 		this._data = data;
 		this.visible = true;
-		var pos = this._data.camData.positions;
-		var ss = this._data.size;
-		var yy = this._data.offsetY;
-		if(Math.random() < 0.1) ss = ss * 2.2;
-		var _g1 = 0;
-		var _g = this._faces.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			if(i < pos.length) {
-				var p = pos[i];
-				this._faces[i].scale.set(ss,ss,ss);
-				this._faces[i].position.x = p.x;
-				this._faces[i].position.y = p.y + yy;
-				this._faces[i].position.z = p.z;
-				this._faces[i].changeIndex(i);
-				this._faces[i].visible = true;
-			} else this._faces[i].visible = false;
-		}
+		this._motion.start(data,10,1);
 		this._changeMat();
 	}
 	,_changeMat: function() {
@@ -1745,14 +1715,12 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 			this._material.wireframe = false;
 			break;
 		case 3:
-			window.alert("net!! " + this._matIndex);
 			this._material.transparent = true;
 			this._material.alphaTest = 0.5;
 			this._material.alphaMap = materials.Textures.meshMono;
 			this._material.wireframe = false;
 			break;
 		case 4:
-			window.alert("red!! " + this._matIndex);
 			this._material.wireframe = false;
 			this._material.map = materials.Textures.meshRed;
 			this._material.alphaMap = materials.Textures.colorWhite;
@@ -1768,25 +1736,13 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 	}
 	,update: function(a) {
 		if(!this.visible) return;
-		if(this._matIndex == 3 || this._matIndex == 4) {
-			this._offsetY += 0.01;
-			materials.Textures.meshMono.offset.set(0,this._offsetY);
+		if(this._matIndex == 3) {
+		} else if(this._matIndex == 4) {
+			this._offsetY += a.freqByteData[7] / 255 * 0.5;
+			materials.Textures.meshRed.offset.set(0,this._offsetY);
+			this._material.needsUpdate = true;
 		}
-		if(this._faces.length > 0) {
-			var _g1 = 0;
-			var _g = this._faces.length;
-			while(_g1 < _g) {
-				var i = _g1++;
-				this._faces[i].rotation.y += 0.03 + i / 340;
-				this._faces[i].updateSingle(a);
-				if(this._faces[i].position.y > 500) {
-					this._faces[i].position.y = -500;
-					this._faces[i].rotation.set(0,Math.random() * 2 * Math.PI,0);
-					var ss = 50 + 30 * Math.random();
-					this._faces[i].scale.set(ss,ss,ss);
-				}
-			}
-		}
+		if(this._faces.length > 0) this._motion.update(a);
 	}
 	,__class__: objects.objs.Faces
 });
@@ -1829,10 +1785,15 @@ objects.objs.MojiMaker.init = function(shape) {
 		objects.objs.MojiMaker.dedemouse = objects.objs.MojiMaker.getGeo("デデマウス");
 		objects.objs.MojiMaker.hexpixels = objects.objs.MojiMaker.getGeo("ヘックスピクセルズ");
 		objects.objs.MojiMaker.kitasenju = objects.objs.MojiMaker.getGeo("北千住デザイン");
+		objects.objs.MojiMaker.kimaira = objects.objs.MojiMaker.getGeo("キマイラ");
+		objects.objs.MojiMaker.geos = [objects.objs.MojiMaker.dedemouse,objects.objs.MojiMaker.hexpixels,objects.objs.MojiMaker.kitasenju,objects.objs.MojiMaker.kimaira];
 	}
 };
+objects.objs.MojiMaker.getRandomGeo = function() {
+	return objects.objs.MojiMaker.geos[Math.floor(objects.objs.MojiMaker.geos.length * Math.random())];
+};
 objects.objs.MojiMaker.getGeo = function(src) {
-	var space = 230;
+	var space = 210;
 	var spaceY = 250;
 	var nn = src.length;
 	var g = new THREE.Geometry();
@@ -1848,6 +1809,13 @@ objects.objs.MojiMaker.getGeo = function(src) {
 		mat4.multiply(new THREE.Matrix4().makeTranslation(vv.x,vv.y,vv.z));
 		g.merge(geo,mat4);
 	}
+	var _g11 = 0;
+	var _g2 = g.vertices.length;
+	while(_g11 < _g2) {
+		var i = _g11++;
+		g.colors[i] = new THREE.Color(Math.floor(Math.random() * 16777215));
+	}
+	g.colorsNeedUpdate = true;
 	return g;
 };
 objects.objs.MojiMaker.prototype = {
@@ -1874,6 +1842,7 @@ objects.objs.Mojis.prototype = $extend(objects.MatchMoveObects.prototype,{
 		objects.objs.MojiMaker.init(this._shape);
 		var g = objects.objs.MojiMaker.hexpixels;
 		this._material = new THREE.MeshPhongMaterial({ color : 16777215});
+		this._material.vertexColors = true;
 		this._material.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),0.8)];
 		this._material.clipShadows = true;
 		this._material.side = 0;
@@ -1900,6 +1869,7 @@ objects.objs.Mojis.prototype = $extend(objects.MatchMoveObects.prototype,{
 			var i = _g1++;
 			if(i < pos.length) {
 				var p = pos[i];
+				this._meshes[i].geometry = objects.objs.MojiMaker.getRandomGeo();
 				this._meshes[i].scale.set(0.2,0.2,0.2);
 				this._meshes[i].position.x = p.x;
 				this._meshes[i].position.y = p.y + yy;
@@ -1938,7 +1908,7 @@ objects.objs.Objs.prototype = $extend(THREE.Object3D.prototype,{
 		this._eyes.init();
 		this._faces = new objects.objs.Faces();
 		this._faces.init();
-		this._objects = [this._faces,this._mojis,this._eyes];
+		this._objects = [this._faces,this._mojis,this._eyes,this._faces];
 		TweenMax.delayedCall(0.1,callback);
 	}
 	,start: function(data) {
@@ -1966,6 +1936,94 @@ objects.objs.Objs.prototype = $extend(THREE.Object3D.prototype,{
 	}
 	,__class__: objects.objs.Objs
 });
+objects.objs.motion = {};
+objects.objs.motion.FaceMotion = function() {
+	this._modePos = 0;
+	this._modeRot = 0;
+};
+objects.objs.motion.FaceMotion.__name__ = true;
+objects.objs.motion.FaceMotion.prototype = {
+	init: function(faces) {
+		this._faces = faces;
+	}
+	,start: function(data,posMode,rotMode) {
+		this._data = data;
+		this._modeRot = rotMode;
+		this._modePos = posMode;
+		var pos = this._data.camData.positions;
+		var ss = this._data.size;
+		var yy = this._data.offsetY;
+		if(Math.random() < 0.1) ss = ss * 2.2;
+		var _g1 = 0;
+		var _g = this._faces.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			if(i < pos.length) {
+				var p = pos[i];
+				this._faces[i].scale.set(ss,ss,ss);
+				this._faces[i].position.x = p.x;
+				this._faces[i].position.y = p.y + yy;
+				this._faces[i].position.z = p.z;
+				this._faces[i].changeIndex(i);
+				this._faces[i].visible = true;
+			} else this._faces[i].visible = false;
+		}
+		var _g11 = 0;
+		var _g2 = this._faces.length;
+		while(_g11 < _g2) {
+			var i1 = _g11++;
+			this._faces[i1].resetRot();
+		}
+	}
+	,update: function(a) {
+		var _g1 = 0;
+		var _g = this._faces.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			this._faces[i].updateSingle(a);
+		}
+		this._updateRot(a);
+		this._updatePos(a);
+	}
+	,_updatePos: function(a) {
+		var _g = this._modePos;
+		switch(_g) {
+		case 10:
+			break;
+		case 11:
+			var _g2 = 0;
+			var _g1 = this._faces.length;
+			while(_g2 < _g1) {
+				var i = _g2++;
+				this._faces[i].position.y += 1;
+				if(this._faces[i].position.y > 500) this._faces[i].position.y = -500;
+			}
+			break;
+		}
+	}
+	,_updateRot: function(a) {
+		var _g = this._modeRot;
+		switch(_g) {
+		case 0:
+			var _g2 = 0;
+			var _g1 = this._faces.length;
+			while(_g2 < _g1) {
+				var i = _g2++;
+				this._faces[i].rotation.y += 0.03 + i / 340;
+			}
+			break;
+		case 1:
+			var _g21 = 0;
+			var _g11 = this._faces.length;
+			while(_g21 < _g11) {
+				var i1 = _g21++;
+				this._faces[i1].addRot(Math.pow(a.freqByteData[3] / 255,3),Math.pow(a.freqByteData[2] / 255,3),Math.pow(a.freqByteData[1] / 255,3));
+			}
+			break;
+		}
+	}
+	,__class__: objects.objs.motion.FaceMotion
+};
 var sound = {};
 sound.MyAudio = function() {
 	this.globalVolume = 0.897;
@@ -2139,7 +2197,7 @@ video.CameraData.prototype = {
 		var _g = this._points.length;
 		while(_g1 < _g) {
 			var i = _g1++;
-			g.vertices.push(new THREE.Vector3(this._points[i][0],this._points[i][1],-this._points[i][2]));
+			if(this._points[i][1] > -1 && this._points[i][1] < 1) g.vertices.push(new THREE.Vector3(this._points[i][0],this._points[i][1],-this._points[i][2]));
 		}
 		return g;
 	}
@@ -2147,7 +2205,7 @@ video.CameraData.prototype = {
 		return this._frameData[frame];
 	}
 	,update: function(f,cam) {
-		Tracer.debug("F" + f + " " + this._frameData.length);
+		console.debug("F" + f + " " + this._frameData.length);
 		if(f >= this._frameData.length) return;
 		var q = this._frameData[f].q;
 		var qtn = new THREE.Quaternion(q[0],q[1],q[2],q[3]);
@@ -2653,6 +2711,11 @@ objects.objs.Faces.MAT_COLOR = 2;
 objects.objs.Faces.MAT_NET = 3;
 objects.objs.Faces.MAT_NET_RED = 4;
 objects.objs.Faces.MAT_NUM = 5;
+objects.objs.MojiMaker.geos = [];
+objects.objs.motion.FaceMotion.MODE_ROT_Y = 0;
+objects.objs.motion.FaceMotion.MODE_ROT_XYZ = 1;
+objects.objs.motion.FaceMotion.MODE_POS_FIX = 10;
+objects.objs.motion.FaceMotion.MODE_POS_MOVE_Y = 11;
 sound.MyAudio.FFTSIZE = 64;
 three._WebGLRenderer.RenderPrecision_Impl_.highp = "highp";
 three._WebGLRenderer.RenderPrecision_Impl_.mediump = "mediump";
@@ -2661,3 +2724,5 @@ video.VideoPlayer.MODE_VIDEO = "MODE_VIDEO";
 video.VideoPlayer.MODE_3D = "MODE_3D";
 Main.main();
 })();
+
+//# sourceMappingURL=haxetest.js.map

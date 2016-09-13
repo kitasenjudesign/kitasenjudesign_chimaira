@@ -3,6 +3,7 @@ import common.Path;
 import js.Browser;
 import materials.Textures;
 import objects.MyDAELoader;
+import objects.objs.motion.FaceMotion;
 import sound.MyAudio;
 import three.Color;
 import three.ImageUtils;
@@ -35,6 +36,7 @@ class Faces extends MatchMoveObects
 	private var _loader:MyDAELoader;
 	private var _matIndex:Int = 0;
 	private var _offsetY:Float = 0;
+	private var _motion:FaceMotion;
 	
 	public function new() 
 	{
@@ -46,6 +48,7 @@ class Faces extends MatchMoveObects
 	 */
 	override public function init():Void {
 
+		_motion = new FaceMotion();
 		_loader = new MyDAELoader();
 		_loader.load(_onInit0);
 		
@@ -96,6 +99,9 @@ class Faces extends MatchMoveObects
 			_faces.push(face);
 			
 		}		
+		
+		_motion.init( _faces );
+		
 			
 	}
 	
@@ -110,6 +116,9 @@ class Faces extends MatchMoveObects
 		_data = data;		
 		this.visible = true;
 		
+		_motion.start(data, FaceMotion.MODE_POS_FIX, FaceMotion.MODE_ROT_XYZ);
+		
+		/*
 		var pos:Array<Vector3> = _data.camData.positions;
 		var ss:Float = _data.size;
 		var yy:Float = _data.offsetY;
@@ -135,7 +144,7 @@ class Faces extends MatchMoveObects
 				
 			}
 			
-		}
+		}*/
 		
 		_changeMat();
 		
@@ -186,17 +195,16 @@ class Faces extends MatchMoveObects
 				_material.wireframe = false;
 			
 			case MAT_NET://3
-				Browser.window.alert("net!! " + _matIndex);
+				//Browser.window.alert("net!! " + _matIndex);
 				//_material.map = Textures.dedeColor;
 				_material.transparent = true;
 				_material.alphaTest = 0.5;				
 				_material.alphaMap = Textures.meshMono;				
 				_material.wireframe = false;
 			
-				
-				
+					
 			case MAT_NET_RED:
-				Browser.window.alert("red!! " + _matIndex);
+				//Browser.window.alert("red!! " + _matIndex);
 				//_material.map = ImageUtils.loadTexture("mate3.png");
 				_material.wireframe = false;
 				_material.map = Textures.meshRed;
@@ -231,22 +239,34 @@ class Faces extends MatchMoveObects
 		
 		
 		//update
-		if ( _matIndex == MAT_NET || _matIndex == MAT_NET_RED ) {
+		if ( _matIndex == MAT_NET ) {
+			/*
+			Tracer.debug("yy>>>"+_offsetY);
 			_offsetY += 0.01;
-			Textures.meshMono.offset.set(0, _offsetY);
-		}		
+			Textures.meshMono.offset.set(_offsetY, 0);
+			Textures.meshMono.repeat.set(1 + _offsetY/2, 1 + _offsetY/2);
+			_material.needsUpdate = true;
+			Textures.meshMono.needsUpdate = true;
+			*/
+		
+		}else if ( _matIndex == MAT_NET_RED ) {
+			_offsetY += a.freqByteData[7] / 255 * 0.5;
+			Textures.meshRed.offset.set(0, _offsetY);	
+			_material.needsUpdate = true;
+		
+		}
 		
 		
 		if (_faces.length > 0) {
 			
+			_motion.update(a);
+			
+			/*
 			for(i in 0..._faces.length){
 				
-				//_faces[i].dae.rotation.x += 0.001 + i / 2350;
 				_faces[i].rotation.y += 0.03 + i / 340;
-				//_faces[i].dae.rotation.z += 0.0015 + i / 2300;
-				
 				_faces[i].updateSingle(a);
-				//_faces[i].dae.position.y += 0.4;
+				
 				if (_faces[i].position.y > 500) {
 					_faces[i].position.y = -500;
 					
@@ -258,6 +278,7 @@ class Faces extends MatchMoveObects
 					//_faces[i]
 				}
 			}
+			*/
 		}		
 		
 		

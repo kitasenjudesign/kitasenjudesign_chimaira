@@ -117,11 +117,16 @@ class CameraData
 		if (_points == null) return null;
 		
 		for ( i in 0..._points.length) {
-			g.vertices.push(new Vector3(
-				_points[i][0],
-				_points[i][1],
-				-_points[i][2]				
-			));
+			
+			if( _points[i][1]>-1 && _points[i][1]<1 ){
+			
+				g.vertices.push(new Vector3(
+					_points[i][0],
+					_points[i][1],
+					-_points[i][2]				
+				));
+			
+			}
 		}
 		return g;
 	}

@@ -232,7 +232,9 @@ class Main3d
 	public function _updateTexture():Void {
 		
 		Browser.document.getElementById("loading").style.display = "none";
-		_skyboxMat.init(_video.getTexture());
+		
+		_skyboxMat.init( Textures.parkBg );// _video.getTexture());
+		
 		_skyboxMat.update( _renderer );
 		
 	}

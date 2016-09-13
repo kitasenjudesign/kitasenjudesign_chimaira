@@ -17,6 +17,7 @@ import three.Shape;
 import three.SphereGeometry;
 import three.Texture;
 import three.Vector3;
+import three.WebGLShaders.ShaderLib;
 import video.MovieData;
 import video.VideoPlane;
 
@@ -70,6 +71,7 @@ class Mojis extends MatchMoveObects
 		////material
 		//_texture = ImageUtils.loadTexture( Path.assets + "face/dede_face_diff.png" );
 		_material = new MeshPhongMaterial( { color:0xffffff } );
+		_material.vertexColors = true;
 		//_material.map = Textures.meshRed;
 		//_material.wireframe = true;
 		//_material.alphaMap = _texture;
@@ -101,6 +103,8 @@ class Mojis extends MatchMoveObects
 	override public function show(data:MovieData):Void {
 		_data = data;		
 		this.visible = true;
+		
+		
 		var pos:Array<Vector3> = _data.camData.positions;
 		var ss:Float = _data.size;
 		var yy:Float = _data.offsetY;
@@ -109,6 +113,7 @@ class Mojis extends MatchMoveObects
 			
 			if (i < pos.length) {
 				var p:Vector3 = pos[i];
+				_meshes[i].geometry = MojiMaker.getRandomGeo();
 				_meshes[i].scale.set(0.2, 0.2, 0.2);
 				_meshes[i].position.x = p.x;
 				_meshes[i].position.y = p.y + yy;

@@ -78,6 +78,10 @@ class MyFaceSingle extends Object3D
 	var _baseRadX:Array<Float>;
 	var _baseRadY:Array<Float>;
 	
+	private var _vx:Float = 0;
+	private var _vy:Float = 0;
+	private var _vz:Float = 0;
+	
 	public function new(idx:Int) 
 	{
 		index = idx;
@@ -272,6 +276,12 @@ class MyFaceSingle extends Object3D
 		//g.colorsNeedUpdate = true;
 		//g.computeVertexNormals();
 		
+		rotation.x += _vx;
+		rotation.y += _vy;
+		rotation.z += _vz;
+		_vx *= 0.6;
+		_vy *= 0.6;
+		_vz *= 0.6;
 		
 	}
 	
@@ -308,6 +318,29 @@ class MyFaceSingle extends Object3D
 			vv.y = th - dy /100;
 		
 	}
+	
+	
+	public function resetRot():Void {
+		
+		_vx = 0;
+		_vy = 0;
+		_vz = 0;
+		rotation.x = 0;
+		rotation.y = 0;
+		rotation.z = 0;
+		
+	}
+	
+	
+	public function addRot(vx:Float, vy:Float, vz:Float):Void {
+		
+		_vx = vx;
+		_vy = vy;
+		_vz = vz;
+		
+	}
+	
+	//public 
 	
 	
 

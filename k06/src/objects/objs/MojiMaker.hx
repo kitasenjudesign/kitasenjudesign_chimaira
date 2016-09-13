@@ -1,4 +1,5 @@
 package objects.objs;
+import three.Color;
 import three.ExtrudeGeometry;
 import three.Geometry;
 import three.Matrix4;
@@ -15,6 +16,11 @@ class MojiMaker
 	public static var dedemouse:Geometry;
 	public static var kitasenju:Geometry;
 	public static var hexpixels:Geometry;
+	public static var kimaira:Geometry;
+	
+	private static var geos:Array<Geometry> = [];
+	
+	
 	static private var _shape:FontShapeMaker;
 	
 	
@@ -31,7 +37,24 @@ class MojiMaker
 			dedemouse = getGeo("デデマウス");
 			hexpixels = getGeo("ヘックスピクセルズ");
 			kitasenju = getGeo("北千住デザイン");
+			kimaira = getGeo("キマイラ");
+			
+			geos = [
+				dedemouse,
+				hexpixels,
+				kitasenju,
+				kimaira
+			];
+			
 		}
+	}
+	
+	
+	public static function getRandomGeo():Geometry {
+		
+		
+		return geos[ Math.floor(geos.length * Math.random()) ];
+		
 	}
 	
 	/**
@@ -42,7 +65,7 @@ class MojiMaker
 	 */
 	public static function getGeo(src:String):Geometry {
 		
-		var space:Float = 230;
+		var space:Float = 210;
 		var spaceY:Float = 250;//
 		var nn:Int = src.length;
 		var g:Geometry = new Geometry();
@@ -66,6 +89,12 @@ class MojiMaker
 				g.merge(geo, mat4);
 			
 		}
+		
+		//color
+		for (i in 0...g.vertices.length) {
+			g.colors[i] = new Color(Math.floor(Math.random() * 0xffffff));
+		}
+		g.colorsNeedUpdate = true;
 		
 		return g;
 	}

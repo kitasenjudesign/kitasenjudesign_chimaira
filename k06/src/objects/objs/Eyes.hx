@@ -22,6 +22,7 @@ class Eyes extends MatchMoveObects
 
 	private var _mesh:Mesh;
 	var m:MeshPhongMaterial;
+	private var _rad:Float = 0;
 	
 	public function new() 
 	{
@@ -42,18 +43,15 @@ class Eyes extends MatchMoveObects
 			
 			m = new MeshPhongMaterial();
 			
-			Textures.eyeColor.offset.set(0, 0.1);
-			
-			m.map = Textures.eyeColor;
-			
+			m.map = Textures.eyeColor;			
 			m.normalMap = Textures.eyeNormal;
 			
 			//m.normalMap = Textures.handNormal;		
 			m.clippingPlanes = [new Plane(new Vector3( 0, 1, 0 ), 1)];//0.8 )];//
 			m.clipShadows = true;		
 			m.combine = Three.AddOperation;// Three.MultiplyOperation;
-			m.reflectivity = 0.4;
-			m.refractionRatio = 0;
+			m.reflectivity = 0.1;
+			m.refractionRatio = 0.1;
 		
 			_mesh = new Mesh(new SphereGeometry(50,50,10,10),	m);
 			_mesh.position.y = 100;
@@ -64,7 +62,7 @@ class Eyes extends MatchMoveObects
 			add(_mesh);
 		}
 		
-		/*
+		
 		var geo:Geometry = _data.camData.getPointsGeo();
 		if (geo != null) {
 			
@@ -73,7 +71,7 @@ class Eyes extends MatchMoveObects
 			);
 			//var points:Line = new Line(geo, new LineBasicMaterial( { color:0xff0000 } ));
 			add(points);
-		}*/
+		}
 		
 		
 	}
@@ -90,7 +88,8 @@ class Eyes extends MatchMoveObects
 	
 	override public function update(a:MyAudio):Void {
 		
-		
+		_rad += 0.1;
+		Textures.eyeColor.offset.set(0, 0.2 * a.freqByteData[3]/255 );
 		_mesh.rotation.z += 0.03;
 		
 	}	

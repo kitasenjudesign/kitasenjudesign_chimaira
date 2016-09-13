@@ -1,6 +1,7 @@
 package light;
 import three.Mesh;
 import three.MeshBasicMaterial;
+import three.MeshLambertMaterial;
 import three.PlaneGeometry;
 import three.Scene;
 import three.ShadowMaterial;
@@ -17,13 +18,13 @@ class ShadowPlane extends Mesh
 	
 	public function new() 
 	{
-		var mm:ShadowMaterial = new ShadowMaterial();
-		mm.opacity = 0.3;
+		//var mm:ShadowMaterial = new ShadowMaterial();
+		//mm.opacity = 0.3;
 		
-		//var mm:MeshBasicMaterial = new MeshBasicMaterial( { color:0xff0000 } );
+		var mm:MeshLambertMaterial = new MeshLambertMaterial( { color:0xff0000 } );
 		//shadow no ookisa
 		super(
-			new PlaneGeometry(700, 700, 5, 5),
+			new PlaneGeometry(1000, 1000, 5, 5),
 			mm
 		);
 		receiveShadow = true;

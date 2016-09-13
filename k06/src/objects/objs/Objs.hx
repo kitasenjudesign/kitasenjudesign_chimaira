@@ -57,7 +57,8 @@ class Objs extends Object3D
 		_objects = [
 			_faces,
 			_mojis,
-			_eyes
+			_eyes,
+			_faces
 		];
 		
 		TweenMax.delayedCall(0.1, callback);

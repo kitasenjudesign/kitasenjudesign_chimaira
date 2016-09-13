@@ -1,5 +1,12 @@
 {
 	"data":[
+			{
+			"cam":"mov2/cam_osho.json",
+			"mov":"mov2/07_osho.mp4",
+			"size":0.3,
+			"y":10,
+			"offsetFrame":0
+		},		
 		{
 			"cam":"mov2/cam_fukan.json",
 			"mov":"mov2/04_fukan.mp4",
@@ -34,7 +41,14 @@
 			"size":0.3,
 			"y":2,
 			"offsetFrame":0
-		}
+		},
+		{
+			"cam":"mov2/cam_koka.json",
+			"mov":"mov2/05_koka.mp4",
+			"size":0.3,
+			"y":2,
+			"offsetFrame":0
+		}		
 	]
 
 }
