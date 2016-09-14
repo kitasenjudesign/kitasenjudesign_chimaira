@@ -1,9 +1,11 @@
 package objects.objs;
 
 import common.Path;
+import materials.MyPhongMaterial;
 import materials.Textures;
 import objects.MyDAELoader;
 import objects.MyFaceSingle;
+import objects.objs.moji.MojiMaker;
 import sound.MyAudio;
 import three.ExtrudeGeometry;
 import three.Geometry;
@@ -68,10 +70,14 @@ class Mojis extends MatchMoveObects
 		
 		MojiMaker.init(_shape);
 		var g:Geometry = MojiMaker.hexpixels;
+		
+		
+		
 		////material
 		//_texture = ImageUtils.loadTexture( Path.assets + "face/dede_face_diff.png" );
 		_material = new MeshPhongMaterial( { color:0xffffff } );
-		_material.vertexColors = true;
+		//cast new MyPhongMaterial(null);//
+		//_material.vertexColors = true;
 		//_material.map = Textures.meshRed;
 		//_material.wireframe = true;
 		//_material.alphaMap = _texture;
@@ -118,9 +124,9 @@ class Mojis extends MatchMoveObects
 				_meshes[i].position.x = p.x;
 				_meshes[i].position.y = p.y + yy;
 				_meshes[i].position.z = p.z;
+				
 			}else {
 				_meshes[i].visible = false;				
-				
 			}
 
 			

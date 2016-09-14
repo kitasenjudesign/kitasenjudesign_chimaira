@@ -1004,8 +1004,6 @@ canvas.primitives.Primitives.prototype = $extend(THREE.Object3D.prototype,{
 		this._spheres.init(null);
 		this._torus = new canvas.primitives.Torus();
 		this._torus.init(null);
-		this._logo = new canvas.primitives.VrdgLogo();
-		this._logo.init(null);
 		this._octa = new canvas.primitives.Octa();
 		this._octa.init(null);
 		this._mouse = new canvas.primitives.DeDeLogo();
@@ -1017,8 +1015,6 @@ canvas.primitives.Primitives.prototype = $extend(THREE.Object3D.prototype,{
 		this._fireworks.init({ pixelType : 1, dynamicScale : false, isDepth : false});
 		this._two = new canvas.primitives.Two();
 		this._two.init(null);
-		this._hachi = new canvas.primitives.Hachigatsu();
-		this._hachi.init(null);
 		this._chochin = new canvas.primitives.Chochin();
 		this._chochin.init({ pixelType : 1, isDepth : false});
 		this._chochins = new canvas.primitives.Chochins();
@@ -1027,7 +1023,7 @@ canvas.primitives.Primitives.prototype = $extend(THREE.Object3D.prototype,{
 		this._ices.init(null);
 		this._katoris = new canvas.primitives.Katoris();
 		this._katoris.init({ dynamicScale : false});
-		this._primitives = [this._chochin,this._hachi,this._katoris,this._two,this._ices,this._walker,this._chochins,this._sphere,this._katori,this._fireworks,this._ice,this._mouse,this._spheres,this._torus,this._octa,this._logo];
+		this._primitives = [this._chochin,this._katoris,this._two,this._ices,this._walker,this._chochins,this._sphere,this._katori,this._fireworks,this._ice,this._mouse,this._spheres,this._torus,this._octa];
 		var _g1 = 0;
 		var _g = this._primitives.length;
 		while(_g1 < _g) {
@@ -1165,7 +1161,7 @@ canvas.primitives.Two.__super__ = canvas.primitives.PrimitiveBase;
 canvas.primitives.Two.prototype = $extend(canvas.primitives.PrimitiveBase.prototype,{
 	init: function(o) {
 		canvas.primitives.PrimitiveBase.prototype.init.call(this,o);
-		var s = "3";
+		var s = "7";
 		var _g1 = 0;
 		var _g = s.length;
 		while(_g1 < _g) {
@@ -1392,9 +1388,9 @@ common.Dat._onInit = function() {
 	common.Dat.gui.domElement.style.position = "absolute";
 	common.Dat.gui.domElement.style.right = "0px";
 	var yy = window.innerHeight / 2 + common.StageRef.get_stageHeight() / 2 + common.Config.canvasOffsetY;
-	common.Dat.gui.domElement.style.top = yy + "px";
+	common.Dat.gui.domElement.style.top = Math.floor(yy / 2) + "px";
 	common.Dat.gui.domElement.style.opacity = 1;
-	common.Dat.gui.domElement.style.zIndex = 10;
+	common.Dat.gui.domElement.style.zIndex = 1000;
 	common.Dat.gui.domElement.style.transformOrigin = "1 0";
 	common.Dat.gui.domElement.style.transform = "scale(0.8,0.8)";
 	common.Key.init();
@@ -1431,22 +1427,22 @@ common.Dat._onKeyDown = function(e) {
 	}
 };
 common.Dat._goURL1 = function() {
-	common.Dat._goURL("../../04/bin/");
+	common.Dat._goURL("../../k04/bin/");
 };
 common.Dat._goURL2 = function() {
-	common.Dat._goURL("../../05/bin/");
+	common.Dat._goURL("../../k05/bin/");
 };
 common.Dat._goURL3 = function() {
-	common.Dat._goURL("../../02/bin/");
+	common.Dat._goURL("../../k02/bin/");
 };
 common.Dat._goURL4 = function() {
-	common.Dat._goURL("../../03/bin/");
+	common.Dat._goURL("../../k03/bin/");
 };
 common.Dat._goURL5 = function() {
-	common.Dat._goURL("../../00/bin/");
+	common.Dat._goURL("../../k00/bin/");
 };
 common.Dat._goURL6 = function() {
-	common.Dat._goURL("../../01/bin/");
+	common.Dat._goURL("../../k01/bin/");
 };
 common.Dat._goURL = function(url) {
 	Tracer.log("goURL " + url);

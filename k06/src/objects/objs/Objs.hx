@@ -22,6 +22,7 @@ class Objs extends Object3D
 	private var _eyes	:Eyes;
 	private var _faces	:Faces;
 	private var _hand	:Hands;
+	private var _logos	:Dedes;
 	private var _index	:Int = 0;
 	private var _objects:Array<MatchMoveObects>;
 	
@@ -50,11 +51,13 @@ class Objs extends Object3D
 		_faces = new Faces();
 		_faces.init();
 		//add(_faces);
-		
+		_logos = new Dedes();
+		_logos.init();
 		//_hand = new Hands();
 		//_hand.init();
 		
 		_objects = [
+			_logos,
 			_faces,
 			_mojis,
 			_eyes,
@@ -73,9 +76,11 @@ class Objs extends Object3D
 		
 		_currentData = data;
 		hideAll();
-		//Browser.window.alert("next " + _index);
+		//Browser.window.alert("next " + _index);		
 		
 		_currentObj = _objects[_index%_objects.length];
+		
+		
 		_currentObj.show( data );
 		add(_currentObj);
 		

@@ -82,6 +82,9 @@ class MyFaceSingle extends Object3D
 	private var _vy:Float = 0;
 	private var _vz:Float = 0;
 	
+	public static var geometries:Array<Geometry> = [];
+	public static inline var MAX:Int = 3;
+	
 	public function new(idx:Int) 
 	{
 		index = idx;
@@ -96,23 +99,16 @@ class MyFaceSingle extends Object3D
 		
 		_daeLoader = d;
 		
-		/*
-		_idxNejireX = Math.floor(Math.random() * 20 );
-		_idxNejireY = Math.floor(Math.random() * 20 );
-		_idxNejireNoise = Math.floor(Math.random() * 20 );
-		_idxSphereNoise = Math.floor(Math.random() * 20 );
-		_idxNoiseSpeed = Math.floor(Math.random() * 20 );
-		_idxSpeedNoise = Math.floor(Math.random() * 20 );
-		*/
-		
-		//d.material.envMap = untyped cubecam.renderTarget;		
-		//dae = new Mesh( d.geometry.clone(), d.material);
-		dae = new Mesh( _daeLoader.geometry.clone(), new MeshDepthMaterial());
-		
-		//dae.rotation.y = Math.PI / 2;
-		if (index == 0) {
-			dae.castShadow = true;
+		var gg:Geometry;
+		if (index < MAX) {
+			gg = _daeLoader.geometry.clone();
+			geometries[index] = gg;
+		}else {
+			gg = geometries[index%MAX];
 		}
+		
+		dae = new Mesh( gg, new MeshDepthMaterial());
+		dae.castShadow = true;
 		dae.scale.set(70, 70, 70);
 		add(dae);
 		
@@ -134,7 +130,7 @@ class MyFaceSingle extends Object3D
 	 */
 	public function changeIndex(idx:Int=0):Void {
 		
-		if (idx%2==0) {
+		if (idx%3==0) {
 			
 				_idxNejireX = 16;
 				_idxNejireY = 18;
@@ -189,6 +185,7 @@ class MyFaceSingle extends Object3D
 		if (Dat.bg) return;
 		if (dae == null) return;
 		if (!this.visible) return;
+		if (index >= MAX) return;
 		
 		_audio = audio;
 		var g:Geometry = untyped dae.geometry;
@@ -279,9 +276,9 @@ class MyFaceSingle extends Object3D
 		rotation.x += _vx;
 		rotation.y += _vy;
 		rotation.z += _vz;
-		_vx *= 0.6;
-		_vy *= 0.6;
-		_vz *= 0.6;
+		_vx *= 0.9;
+		_vy *= 0.9;
+		_vz *= 0.9;
 		
 	}
 	

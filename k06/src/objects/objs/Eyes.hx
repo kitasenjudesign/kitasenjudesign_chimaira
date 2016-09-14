@@ -2,6 +2,9 @@ package objects.objs;
 import materials.Textures;
 import sound.MyAudio;
 import three.Geometry;
+import three.Line;
+import three.LineBasicMaterial;
+import three.LineSegments;
 import three.Mesh;
 import three.MeshPhongMaterial;
 import three.Object3D;
@@ -21,7 +24,8 @@ class Eyes extends MatchMoveObects
 {
 
 	private var _mesh:Mesh;
-	var m:MeshPhongMaterial;
+	private var _meshes:Array<Mesh>;
+	private var m:MeshPhongMaterial;
 	private var _rad:Float = 0;
 	
 	public function new() 
@@ -35,17 +39,20 @@ class Eyes extends MatchMoveObects
 		
 	}
 	
+	/**
+	 * 
+	 * @param	data
+	 */
 	override public function show(data:MovieData):Void {
 		_data = data;		
 		this.visible = true;
 		
 		if(_mesh==null){
 			
-			m = new MeshPhongMaterial();
+			m = new MeshPhongMaterial({color:0xff0000});
 			
 			m.map = Textures.eyeColor;			
 			m.normalMap = Textures.eyeNormal;
-			
 			//m.normalMap = Textures.handNormal;		
 			m.clippingPlanes = [new Plane(new Vector3( 0, 1, 0 ), 1)];//0.8 )];//
 			m.clipShadows = true;		
@@ -64,13 +71,32 @@ class Eyes extends MatchMoveObects
 		
 		
 		var geo:Geometry = _data.camData.getPointsGeo();
+		var geo2:Geometry = new Geometry();
 		if (geo != null) {
-			
+			/*
 			var points:PointCloud = new PointCloud(
 				geo, new PointCloudMaterial( { color:0xffffff, size:4 } )
-			);
+			);*/
 			//var points:Line = new Line(geo, new LineBasicMaterial( { color:0xff0000 } ));
+			
+			for (i in 0...geo.vertices.length) {
+				
+				var vv:Vector3 = geo.vertices[i].clone();
+				geo2.vertices.push(vv);
+				
+				var vv2:Vector3 = geo.vertices[i].clone();
+				vv2.y += 10;
+				geo2.vertices.push(vv2);
+				
+			}
+			geo2.verticesNeedUpdate = true;
+			
+			var points:LineSegments = new LineSegments(
+				geo2,
+				new LineBasicMaterial( { color:0xff0000 } )
+			);
 			add(points);
+			
 		}
 		
 		

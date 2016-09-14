@@ -80,9 +80,9 @@ class Faces extends MatchMoveObects
 		//faces
 		_faces = [];
 		
-		for(i in 0...5){ 
+		for(i in 0...6){ 
 			
-			var face:MyFaceSingle = new MyFaceSingle(0);
+			var face:MyFaceSingle = new MyFaceSingle(i);
 			face.init( _loader, null );
 			face.dae.material = _material;	
 			face.dae.castShadow = true;
@@ -116,7 +116,11 @@ class Faces extends MatchMoveObects
 		_data = data;		
 		this.visible = true;
 		
-		_motion.start(data, FaceMotion.MODE_POS_FIX, FaceMotion.MODE_ROT_XYZ);
+		_motion.start(
+			data,
+			Math.random()<0.5 ? FaceMotion.MODE_POS_FIX : FaceMotion.MODE_POS_MOVE_Y,
+			Math.random()<0.5 ? FaceMotion.MODE_ROT_XYZ : FaceMotion.MODE_ROT_Y
+		);
 		
 		/*
 		var pos:Array<Vector3> = _data.camData.positions;
@@ -170,7 +174,7 @@ class Faces extends MatchMoveObects
 			case MAT_WIREFRAME://0
 				//normal
 				_material.map = Textures.colorWhite;
-				_material.color = (Math.random() < 0.5) ? new Color(0xffffff) : new Color(0xcc0000); 
+				_material.color = (Math.random() < 0.5) ? new Color(0xffffff) : new Color(0xee0000); 
 				_material.refractionRatio = 0.7;
 				_material.reflectivity = 0.7;				
 				_material.wireframe = true;
@@ -179,8 +183,8 @@ class Faces extends MatchMoveObects
 			case MAT_MIRROR://1
 				_material.map = Textures.colorWhite;
 				_material.transparent = false;				
-				_material.refractionRatio = 1;
-				_material.reflectivity = 1;
+				_material.refractionRatio = 0.7;
+				_material.reflectivity = 0.7;
 				//_material.shininess = 0.01;				
 				_material.wireframe = false;
 				
@@ -188,7 +192,7 @@ class Faces extends MatchMoveObects
 			case MAT_COLOR://2
 				
 				_material.map = Textures.dedeColor;
-				_material.color = Math.random()<0.5 ? new Color(0xffffff) : new Color(0xcc2222); 
+				_material.color = Math.random()<0.5 ? new Color(0xffffff) : new Color(0xee4444); 
 				_material.transparent = false;
 				_material.refractionRatio = 0.1;
 				_material.reflectivity = 0.1;
@@ -207,10 +211,10 @@ class Faces extends MatchMoveObects
 				//Browser.window.alert("red!! " + _matIndex);
 				//_material.map = ImageUtils.loadTexture("mate3.png");
 				_material.wireframe = false;
-				_material.map = Textures.meshRed;
+				_material.map = Textures.moji1;// Textures.meshRed;
 				_material.alphaMap = Textures.colorWhite;
-				_material.refractionRatio = 1;
-				_material.reflectivity = 1;				
+				_material.refractionRatio = 0.7;
+				_material.reflectivity = 0.7;				
 				_material.side = Three.DoubleSide;
 				
 		}
@@ -254,8 +258,7 @@ class Faces extends MatchMoveObects
 			Textures.meshRed.offset.set(0, _offsetY);	
 			_material.needsUpdate = true;
 		
-		}
-		
+		}		
 		
 		if (_faces.length > 0) {
 			

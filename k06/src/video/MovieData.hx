@@ -8,6 +8,8 @@ import video.CameraData;
 class MovieData
 {
 
+	public var id			:String;
+
 	public var pathMov		:String;
 	public var pathCam		:String;
 	public var offsetFrame		:Int = 0;//frame
@@ -20,6 +22,7 @@ class MovieData
 	{
 		if (o != null) {
 			
+			id = o.id;
 			pathCam = o.cam;
 			pathMov = o.mov;
 			offsetFrame = o.offsetFrame;

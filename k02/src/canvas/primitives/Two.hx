@@ -25,7 +25,7 @@ class Two extends PrimitiveBase
 	override public function init(o:Dynamic):Void {
 		super.init(o);
 		
-		var s:String = "3";
+		var s:String = "7";
 		
 		for(i in 0...s.length){
 			

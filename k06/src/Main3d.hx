@@ -29,6 +29,7 @@ import three.ShadowMaterial;
 import three.SpotLight;
 import three.Vector3;
 import three.WebGLRenderer;
+import video.MovieData;
 import video.VideoPlayer;
 //import effect.PostProcessing2;
 /**
@@ -146,7 +147,7 @@ class Main3d
 
 		_video.setStartCallback(_onStartVideo);
 		_video.start();
-		_updateTexture();
+		//_updateTexture();
 		
 		_shadowGround = new ShadowPlane();
 		_scene.add(_shadowGround);
@@ -219,21 +220,25 @@ class Main3d
 	
 	
 	private function _onStartVideo():Void {
-		//startVideo
 		
-		_objects.start( _video.getMovieData() );
-		_updateTexture();
+		var data:MovieData = _video.getMovieData();
+		_objects.start( data );
+		_updateTexture( data );
 		
 	}
 	
 	/**
 	 * 	updateTexture
 	 */
-	public function _updateTexture():Void {
+	public function _updateTexture(data:MovieData):Void {
 		
 		Browser.document.getElementById("loading").style.display = "none";
 		
-		_skyboxMat.init( Textures.parkBg );// _video.getTexture());
+		if( data.id == "FUKAN" ){
+			_skyboxMat.init( Textures.parkBg );// );
+		}else {
+			_skyboxMat.init( _video.getTexture() );
+		}
 		
 		_skyboxMat.update( _renderer );
 		

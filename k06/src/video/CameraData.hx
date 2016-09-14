@@ -118,7 +118,7 @@ class CameraData
 		
 		for ( i in 0..._points.length) {
 			
-			if( _points[i][1]>-1 && _points[i][1]<1 ){
+			if( _points[i][1]>-2 && _points[i][1]<2 ){
 			
 				g.vertices.push(new Vector3(
 					_points[i][0],
@@ -138,7 +138,7 @@ class CameraData
 	
 	public function update(f:Int,cam:ExCamera):Void {
 		
-		Tracer.debug("F"+f +" "+_frameData.length);
+		//Tracer.debug("F"+f +" "+_frameData.length);
 		
 		if (f >= _frameData.length) {
 			return;

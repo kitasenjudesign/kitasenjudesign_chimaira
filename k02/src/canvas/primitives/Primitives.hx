@@ -97,8 +97,8 @@ class Primitives extends Object3D
 		_torus = new Torus();
 		_torus.init(null);
 		
-		_logo = new VrdgLogo();
-		_logo.init(null);
+		//_logo = new VrdgLogo();
+		//_logo.init(null);
 		
 		_octa = new Octa();//tetra
 		_octa.init(null);
@@ -131,8 +131,8 @@ class Primitives extends Object3D
 			//_face
 		];*/
 		
-		_hachi = new Hachigatsu();
-		_hachi.init(null);
+		//_hachi = new Hachigatsu();
+		//_hachi.init(null);
 		
 		_chochin = new Chochin();
 		_chochin.init({pixelType:EffectData.BLACK_TRUE, isDepth:false});
@@ -150,7 +150,7 @@ class Primitives extends Object3D
 		_primitives = [
 
 			_chochin,
-			_hachi,
+			//_hachi,
 			_katoris,//
 			_two,
 			_ices,//
@@ -164,8 +164,9 @@ class Primitives extends Object3D
 			_spheres,//
 			_torus,
 			_octa,
-			_logo
+			//_logo
 		];
+		
 		for (i in 0..._primitives.length) {
 			//add(_primitives[i]);
 		}

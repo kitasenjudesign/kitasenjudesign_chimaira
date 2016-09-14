@@ -21,6 +21,8 @@ class Textures
 	public static var eyeColor:Texture;
 	public static var eyeNormal:Texture;
 	
+	public static var moji1:Texture;
+	
 	public static var parkBg:Texture;
 	
 	public function new() 
@@ -59,6 +61,11 @@ class Textures
 		
 		parkBg = ImageUtils.loadTexture( "bg/bg.jpg" );
 		
+		moji1 = ImageUtils.loadTexture( Path.assets + "face/bg.png" );
+		
+		meshMono.wrapS = Three.RepeatWrapping; 
+		meshMono.wrapT = Three.RepeatWrapping; 
+		meshMono.repeat.set(10, 10);
 		
 		eyeNormal = ImageUtils.loadTexture( Path.assets + "eye/eye_normal.png");
 		

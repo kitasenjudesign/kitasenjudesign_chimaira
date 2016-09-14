@@ -55,27 +55,60 @@ class FaceMotion
 		
 		//shokichi set
 		if (Math.random() < 0.1) {
-			ss = ss * 2.2;
+			ss = ss * 2;
 		}
 		
-		for (i in 0..._faces.length) {
+		switch(posMode) {
+			case MODE_POS_MOVE_Y:
+				
+				////mendoi
+				for (i in 0..._faces.length) {
 			
-			if (i < pos.length) {
-				var p:Vector3 = pos[i];
+					if (i < pos.length) {
+						var p:Vector3 = pos[i];
+						_faces[i].scale.set(ss, ss, ss);
+						
+						_faces[i].position.x = p.x;
+						_faces[i].position.y = p.y + yy;
+						_faces[i].position.z = p.z;
+						
+						_faces[i].changeIndex(Math.floor(Math.random()*3));		
+						_faces[i].visible = true;
+						
+					}else {
+						
+						_faces[i].visible = false;				
+						
+					}
+				}
 				
-				_faces[i].scale.set(ss, ss, ss);
-				_faces[i].position.x = p.x;
-				_faces[i].position.y = p.y + yy;
-				_faces[i].position.z = p.z;
-				_faces[i].changeIndex(i);		
-				_faces[i].visible = true;
 				
-			}else {
-				_faces[i].visible = false;				
-				
-			}
+			case MODE_POS_FIX:
+				for (i in 0..._faces.length) {
 			
-		}		
+					if (i < pos.length) {
+						var p:Vector3 = pos[i];
+						
+						_faces[i].scale.set(ss, ss, ss);
+						
+						_faces[i].position.x = p.x;
+						_faces[i].position.y = p.y + yy;
+						_faces[i].position.z = p.z;
+						
+						_faces[i].changeIndex(i);		
+						_faces[i].visible = true;
+						
+					}else {
+						
+						_faces[i].visible = false;				
+						
+				}
+			
+		}	
+			
+		}
+		
+	
 		
 		for (i in 0..._faces.length) {
 			//reset
@@ -113,14 +146,13 @@ class FaceMotion
 			case MODE_POS_FIX:
 				//Y wa ugokasanai
 				
-				
 			case MODE_POS_MOVE_Y:
 				//y wo ugokasu		
 				for(i in 0..._faces.length){
-					
-					_faces[i].position.y+=1;
-					if (_faces[i].position.y > 500) {
-						_faces[i].position.y = -500;
+					//1
+					_faces[i].position.y+=0.1;
+					if (_faces[i].position.y > 100) {
+						_faces[i].position.y = -100;
 					}
 					
 				}
@@ -128,6 +160,7 @@ class FaceMotion
 		}		
 		
 	}
+	
 	
 	/**
 	 * _updatePos
@@ -141,24 +174,24 @@ class FaceMotion
 			case MODE_ROT_Y:
 				//y dake rot
 				for(i in 0..._faces.length){
-					
 					_faces[i].rotation.y += 0.03 + i / 340;
-					
 				}
 				
 			case MODE_ROT_XYZ:
 				//xyz rot
 				for(i in 0..._faces.length){
 					//
-					_faces[i].addRot(
-						Math.pow( a.freqByteData[3] / 255, 3),
-						Math.pow( a.freqByteData[2] / 255, 3),
-						Math.pow( a.freqByteData[1] / 255, 3)
-					);
-					
+					if( a.subFreqByteData[3] > 6){
+						_faces[i].addRot(
+							Math.random() - 0.5,
+							Math.random() - 0.5,
+							Math.random() - 0.5
+						);
+					}
+					_faces[i].rotation.y += 0.01;
 				}
 				
-		}	
+		}
 	}
 
 		

@@ -169,7 +169,6 @@ Main3d.prototype = {
 		this._skyboxMat.update(this._renderer);
 		this._video.setStartCallback($bind(this,this._onStartVideo));
 		this._video.start();
-		this._updateTexture();
 		this._shadowGround = new light.ShadowPlane();
 		this._scene.add(this._shadowGround);
 		this._pp = new effect.PostProcessing2();
@@ -207,12 +206,13 @@ Main3d.prototype = {
 		this._bg.show();
 	}
 	,_onStartVideo: function() {
-		this._objects.start(this._video.getMovieData());
-		this._updateTexture();
+		var data = this._video.getMovieData();
+		this._objects.start(data);
+		this._updateTexture(data);
 	}
-	,_updateTexture: function() {
+	,_updateTexture: function(data) {
 		window.document.getElementById("loading").style.display = "none";
-		this._skyboxMat.init(materials.Textures.parkBg);
+		if(data.id == "FUKAN") this._skyboxMat.init(materials.Textures.parkBg); else this._skyboxMat.init(this._video.getTexture());
 		this._skyboxMat.update(this._renderer);
 	}
 	,_update: function() {
@@ -254,6 +254,13 @@ IMap.__name__ = true;
 Math.__name__ = true;
 var Reflect = function() { };
 Reflect.__name__ = true;
+Reflect.field = function(o,field) {
+	try {
+		return o[field];
+	} catch( e ) {
+		return null;
+	}
+};
 Reflect.getProperty = function(o,field) {
 	var tmp;
 	if(o == null) return null; else if(o.__properties__ && (tmp = o.__properties__["get_" + field])) return o[tmp](); else return o[field];
@@ -270,6 +277,9 @@ Reflect.fields = function(o) {
 };
 var Std = function() { };
 Std.__name__ = true;
+Std.string = function(s) {
+	return js.Boot.__string_rec(s,"");
+};
 Std.parseInt = function(x) {
 	var v = parseInt(x,10);
 	if(v == 0 && (HxOverrides.cca(x,1) == 120 || HxOverrides.cca(x,1) == 88)) v = parseInt(x);
@@ -1107,6 +1117,73 @@ js.Boot.__name__ = true;
 js.Boot.getClass = function(o) {
 	if((o instanceof Array) && o.__enum__ == null) return Array; else return o.__class__;
 };
+js.Boot.__string_rec = function(o,s) {
+	if(o == null) return "null";
+	if(s.length >= 5) return "<...>";
+	var t = typeof(o);
+	if(t == "function" && (o.__name__ || o.__ename__)) t = "object";
+	switch(t) {
+	case "object":
+		if(o instanceof Array) {
+			if(o.__enum__) {
+				if(o.length == 2) return o[0];
+				var str = o[0] + "(";
+				s += "\t";
+				var _g1 = 2;
+				var _g = o.length;
+				while(_g1 < _g) {
+					var i = _g1++;
+					if(i != 2) str += "," + js.Boot.__string_rec(o[i],s); else str += js.Boot.__string_rec(o[i],s);
+				}
+				return str + ")";
+			}
+			var l = o.length;
+			var i1;
+			var str1 = "[";
+			s += "\t";
+			var _g2 = 0;
+			while(_g2 < l) {
+				var i2 = _g2++;
+				str1 += (i2 > 0?",":"") + js.Boot.__string_rec(o[i2],s);
+			}
+			str1 += "]";
+			return str1;
+		}
+		var tostr;
+		try {
+			tostr = o.toString;
+		} catch( e ) {
+			return "???";
+		}
+		if(tostr != null && tostr != Object.toString) {
+			var s2 = o.toString();
+			if(s2 != "[object Object]") return s2;
+		}
+		var k = null;
+		var str2 = "{\n";
+		s += "\t";
+		var hasp = o.hasOwnProperty != null;
+		for( var k in o ) {
+		if(hasp && !o.hasOwnProperty(k)) {
+			continue;
+		}
+		if(k == "prototype" || k == "__class__" || k == "__super__" || k == "__interfaces__" || k == "__properties__") {
+			continue;
+		}
+		if(str2.length != 2) str2 += ", \n";
+		str2 += s + k + " : " + js.Boot.__string_rec(o[k],s);
+		}
+		s = s.substring(1);
+		str2 += "\n" + s + "}";
+		return str2;
+	case "function":
+		return "<function>";
+	case "string":
+		return o;
+	default:
+		return String(o);
+	}
+};
 js.Boot.__interfLoop = function(cc,cl) {
 	if(cc == null) return false;
 	if(cc == cl) return true;
@@ -1187,21 +1264,53 @@ light.MySpotLight.prototype = $extend(THREE.SpotLight.prototype,{
 	,__class__: light.MySpotLight
 });
 light.ShadowPlane = function() {
-	var mm = new THREE.MeshLambertMaterial({ color : 16711680});
-	THREE.Mesh.call(this,new THREE.PlaneGeometry(1000,1000,5,5),mm);
+	this._flag = false;
+	this._mat = new THREE.ShadowMaterial();
+	this._mat.opacity = 0.3;
+	this._mat2 = new THREE.MeshLambertMaterial({ color : 16711680});
+	THREE.Mesh.call(this,new THREE.PlaneGeometry(1000,1000,5,5),this._mat);
 	this.receiveShadow = true;
 	this.position.y = 0;
 	this.rotation.x = -Math.PI / 2;
 	light.ShadowPlane.instance = this;
+	common.Dat.gui.add(this,"_changeMat");
 };
 light.ShadowPlane.__name__ = true;
 light.ShadowPlane.setScale = function(s) {
 };
 light.ShadowPlane.__super__ = THREE.Mesh;
 light.ShadowPlane.prototype = $extend(THREE.Mesh.prototype,{
-	__class__: light.ShadowPlane
+	_changeMat: function() {
+		if(this._flag) this.material = this._mat; else this.material = this._mat2;
+		this._flag = !this._flag;
+	}
+	,__class__: light.ShadowPlane
 });
 var materials = {};
+materials.MyPhongMaterial = function(param) {
+	var defines = { USE_MAP : ""};
+	var uniforms = THREE.UniformsUtils .clone(THREE.ShaderLib.phong.uniforms);
+	uniforms.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),0.8)];
+	uniforms.clipShadows = true;
+	uniforms.diffuse.value.r = 1;
+	uniforms.diffuse.value.g = 1;
+	uniforms.diffuse.value.b = 1;
+	uniforms.ambientLightColor.value = [1,1,1];
+	var _g = 0;
+	var _g1 = Reflect.fields(uniforms);
+	while(_g < _g1.length) {
+		var key = _g1[_g];
+		++_g;
+		console.warn(key + " " + Std.string(Reflect.field(uniforms,key)));
+	}
+	var parameters = { fragmentShader : THREE.ShaderLib.phong.fragmentShader, vertexShader : THREE.ShaderLib.phong.vertexShader, defines : defines, uniforms : uniforms, lights : true, fog : false, side : 2, blending : 1, transparent : true};
+	THREE.ShaderMaterial.call(this,parameters);
+};
+materials.MyPhongMaterial.__name__ = true;
+materials.MyPhongMaterial.__super__ = THREE.ShaderMaterial;
+materials.MyPhongMaterial.prototype = $extend(THREE.ShaderMaterial.prototype,{
+	__class__: materials.MyPhongMaterial
+});
 materials.Textures = function() {
 };
 materials.Textures.__name__ = true;
@@ -1225,6 +1334,10 @@ materials.Textures.init = function() {
 	materials.Textures.meshMono.wrapT = 1002;
 	materials.Textures.meshMono.repeat.set(5,5);
 	materials.Textures.parkBg = THREE.ImageUtils.loadTexture("bg/bg.jpg");
+	materials.Textures.moji1 = THREE.ImageUtils.loadTexture("../../assets/" + "face/bg.png");
+	materials.Textures.meshMono.wrapS = 1000;
+	materials.Textures.meshMono.wrapT = 1000;
+	materials.Textures.meshMono.repeat.set(10,10);
 	materials.Textures.eyeNormal = THREE.ImageUtils.loadTexture("../../assets/" + "eye/eye_normal.png");
 };
 materials.Textures.prototype = {
@@ -1442,8 +1555,13 @@ objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 	init: function(d,cubecam) {
 		if(common.Dat.bg) return;
 		this._daeLoader = d;
-		this.dae = new THREE.Mesh(this._daeLoader.geometry.clone(),new THREE.MeshDepthMaterial());
-		if(this.index == 0) this.dae.castShadow = true;
+		var gg;
+		if(this.index < 3) {
+			gg = this._daeLoader.geometry.clone();
+			objects.MyFaceSingle.geometries[this.index] = gg;
+		} else gg = objects.MyFaceSingle.geometries[this.index % 3];
+		this.dae = new THREE.Mesh(gg,new THREE.MeshDepthMaterial());
+		this.dae.castShadow = true;
 		this.dae.scale.set(70,70,70);
 		this.add(this.dae);
 		this._base = d.baseGeo;
@@ -1454,7 +1572,7 @@ objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 	}
 	,changeIndex: function(idx) {
 		if(idx == null) idx = 0;
-		if(idx % 2 == 0) {
+		if(idx % 3 == 0) {
 			this._idxNejireX = 16;
 			this._idxNejireY = 18;
 			this._idxNoise = 12;
@@ -1487,6 +1605,7 @@ objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 		if(common.Dat.bg) return;
 		if(this.dae == null) return;
 		if(!this.visible) return;
+		if(this.index >= 3) return;
 		this._audio = audio;
 		var g = this.dae.geometry;
 		g.verticesNeedUpdate = true;
@@ -1529,9 +1648,9 @@ objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 		this.rotation.x += this._vx;
 		this.rotation.y += this._vy;
 		this.rotation.z += this._vz;
-		this._vx *= 0.6;
-		this._vy *= 0.6;
-		this._vz *= 0.6;
+		this._vx *= 0.9;
+		this._vy *= 0.9;
+		this._vz *= 0.9;
 	}
 	,_splitSpirit: function(vv,tgtX,tgtY,tgtZ) {
 		var border1 = this.border + this.borderHeight / 2;
@@ -1594,6 +1713,38 @@ objects.data.EffectData.prototype = {
 	__class__: objects.data.EffectData
 };
 objects.objs = {};
+objects.objs.Dedes = function() {
+	objects.MatchMoveObects.call(this);
+};
+objects.objs.Dedes.__name__ = true;
+objects.objs.Dedes.__super__ = objects.MatchMoveObects;
+objects.objs.Dedes.prototype = $extend(objects.MatchMoveObects.prototype,{
+	init: function() {
+		this._loader = new common.SimpleDAELoader();
+		this._loader.load("dae/mouse.dae",null);
+	}
+	,show: function(data) {
+		this._data = data;
+		this.visible = true;
+		var m = new THREE.MeshPhongMaterial({ color : 16777215});
+		m.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),1)];
+		m.clipShadows = true;
+		this._mesh = this._loader.meshes[0];
+		this._mesh.scale.set(0.2,0.2,0.2);
+		this._mesh.material = m;
+		this._mesh.castShadow = true;
+		this.add(this._mesh);
+	}
+	,setEnvMap: function(texture) {
+		if(this._mesh != null) this._mesh.material.envMap = texture;
+	}
+	,update: function(a) {
+		this._mesh.rotation.x += 0.005;
+		this._mesh.rotation.y += 0.012;
+		this._mesh.rotation.z += 0.018;
+	}
+	,__class__: objects.objs.Dedes
+});
 objects.objs.Eyes = function() {
 	this._rad = 0;
 	objects.MatchMoveObects.call(this);
@@ -1607,7 +1758,7 @@ objects.objs.Eyes.prototype = $extend(objects.MatchMoveObects.prototype,{
 		this._data = data;
 		this.visible = true;
 		if(this._mesh == null) {
-			this.m = new THREE.MeshPhongMaterial();
+			this.m = new THREE.MeshPhongMaterial({ color : 16711680});
 			this.m.map = materials.Textures.eyeColor;
 			this.m.normalMap = materials.Textures.eyeNormal;
 			this.m.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),1)];
@@ -1623,8 +1774,20 @@ objects.objs.Eyes.prototype = $extend(objects.MatchMoveObects.prototype,{
 			this.add(this._mesh);
 		}
 		var geo = this._data.camData.getPointsGeo();
+		var geo2 = new THREE.Geometry();
 		if(geo != null) {
-			var points = new THREE.PointCloud(geo,new THREE.PointCloudMaterial({ color : 16777215, size : 4}));
+			var _g1 = 0;
+			var _g = geo.vertices.length;
+			while(_g1 < _g) {
+				var i = _g1++;
+				var vv = geo.vertices[i].clone();
+				geo2.vertices.push(vv);
+				var vv2 = geo.vertices[i].clone();
+				vv2.y += 10;
+				geo2.vertices.push(vv2);
+			}
+			geo2.verticesNeedUpdate = true;
+			var points = new THREE.LineSegments(geo2,new THREE.LineBasicMaterial({ color : 16711680}));
 			this.add(points);
 		}
 	}
@@ -1664,9 +1827,9 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 		this._material.side = 2;
 		this._faces = [];
 		var _g = 0;
-		while(_g < 5) {
+		while(_g < 6) {
 			var i = _g++;
-			var face = new objects.MyFaceSingle(0);
+			var face = new objects.MyFaceSingle(i);
 			face.init(this._loader,null);
 			face.dae.material = this._material;
 			face.dae.castShadow = true;
@@ -1683,7 +1846,7 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 	,show: function(data) {
 		this._data = data;
 		this.visible = true;
-		this._motion.start(data,10,1);
+		this._motion.start(data,Math.random() < 0.5?10:11,Math.random() < 0.5?1:0);
 		this._changeMat();
 	}
 	,_changeMat: function() {
@@ -1693,7 +1856,7 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 		switch(_g) {
 		case 0:
 			this._material.map = materials.Textures.colorWhite;
-			if(Math.random() < 0.5) this._material.color = new THREE.Color(16777215); else this._material.color = new THREE.Color(13369344);
+			if(Math.random() < 0.5) this._material.color = new THREE.Color(16777215); else this._material.color = new THREE.Color(15597568);
 			this._material.refractionRatio = 0.7;
 			this._material.reflectivity = 0.7;
 			this._material.wireframe = true;
@@ -1702,13 +1865,13 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 		case 1:
 			this._material.map = materials.Textures.colorWhite;
 			this._material.transparent = false;
-			this._material.refractionRatio = 1;
-			this._material.reflectivity = 1;
+			this._material.refractionRatio = 0.7;
+			this._material.reflectivity = 0.7;
 			this._material.wireframe = false;
 			break;
 		case 2:
 			this._material.map = materials.Textures.dedeColor;
-			if(Math.random() < 0.5) this._material.color = new THREE.Color(16777215); else this._material.color = new THREE.Color(13378082);
+			if(Math.random() < 0.5) this._material.color = new THREE.Color(16777215); else this._material.color = new THREE.Color(15615044);
 			this._material.transparent = false;
 			this._material.refractionRatio = 0.1;
 			this._material.reflectivity = 0.1;
@@ -1722,10 +1885,10 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 			break;
 		case 4:
 			this._material.wireframe = false;
-			this._material.map = materials.Textures.meshRed;
+			this._material.map = materials.Textures.moji1;
 			this._material.alphaMap = materials.Textures.colorWhite;
-			this._material.refractionRatio = 1;
-			this._material.reflectivity = 1;
+			this._material.refractionRatio = 0.7;
+			this._material.reflectivity = 0.7;
 			this._material.side = 2;
 			break;
 		}
@@ -1776,51 +1939,6 @@ objects.objs.Hands.prototype = $extend(objects.MatchMoveObects.prototype,{
 	}
 	,__class__: objects.objs.Hands
 });
-objects.objs.MojiMaker = function() {
-};
-objects.objs.MojiMaker.__name__ = true;
-objects.objs.MojiMaker.init = function(shape) {
-	objects.objs.MojiMaker._shape = shape;
-	if(objects.objs.MojiMaker.dedemouse == null) {
-		objects.objs.MojiMaker.dedemouse = objects.objs.MojiMaker.getGeo("デデマウス");
-		objects.objs.MojiMaker.hexpixels = objects.objs.MojiMaker.getGeo("ヘックスピクセルズ");
-		objects.objs.MojiMaker.kitasenju = objects.objs.MojiMaker.getGeo("北千住デザイン");
-		objects.objs.MojiMaker.kimaira = objects.objs.MojiMaker.getGeo("キマイラ");
-		objects.objs.MojiMaker.geos = [objects.objs.MojiMaker.dedemouse,objects.objs.MojiMaker.hexpixels,objects.objs.MojiMaker.kitasenju,objects.objs.MojiMaker.kimaira];
-	}
-};
-objects.objs.MojiMaker.getRandomGeo = function() {
-	return objects.objs.MojiMaker.geos[Math.floor(objects.objs.MojiMaker.geos.length * Math.random())];
-};
-objects.objs.MojiMaker.getGeo = function(src) {
-	var space = 210;
-	var spaceY = 250;
-	var nn = src.length;
-	var g = new THREE.Geometry();
-	var _g1 = 0;
-	var _g = src.length;
-	while(_g1 < _g) {
-		var j = _g1++;
-		var shapes = objects.objs.MojiMaker._shape.getShapes(HxOverrides.substr(src,j,1),true);
-		var geo = new THREE.ExtrudeGeometry(shapes,{ bevelEnabled : true, amount : 30});
-		var mat4 = new THREE.Matrix4();
-		mat4.multiply(new THREE.Matrix4().makeScale(2,2,2));
-		var vv = new THREE.Vector3((j * space - (nn - 1) / 2 * space) * 0.5,0,0);
-		mat4.multiply(new THREE.Matrix4().makeTranslation(vv.x,vv.y,vv.z));
-		g.merge(geo,mat4);
-	}
-	var _g11 = 0;
-	var _g2 = g.vertices.length;
-	while(_g11 < _g2) {
-		var i = _g11++;
-		g.colors[i] = new THREE.Color(Math.floor(Math.random() * 16777215));
-	}
-	g.colorsNeedUpdate = true;
-	return g;
-};
-objects.objs.MojiMaker.prototype = {
-	__class__: objects.objs.MojiMaker
-};
 objects.objs.Mojis = function() {
 	this._offsetY = 0;
 	this._rad = 0;
@@ -1839,10 +1957,9 @@ objects.objs.Mojis.prototype = $extend(objects.MatchMoveObects.prototype,{
 	}
 	,_onInit0: function() {
 		var all = "デデマウス";
-		objects.objs.MojiMaker.init(this._shape);
-		var g = objects.objs.MojiMaker.hexpixels;
+		objects.objs.moji.MojiMaker.init(this._shape);
+		var g = objects.objs.moji.MojiMaker.hexpixels;
 		this._material = new THREE.MeshPhongMaterial({ color : 16777215});
-		this._material.vertexColors = true;
 		this._material.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),0.8)];
 		this._material.clipShadows = true;
 		this._material.side = 0;
@@ -1869,7 +1986,7 @@ objects.objs.Mojis.prototype = $extend(objects.MatchMoveObects.prototype,{
 			var i = _g1++;
 			if(i < pos.length) {
 				var p = pos[i];
-				this._meshes[i].geometry = objects.objs.MojiMaker.getRandomGeo();
+				this._meshes[i].geometry = objects.objs.moji.MojiMaker.getRandomGeo();
 				this._meshes[i].scale.set(0.2,0.2,0.2);
 				this._meshes[i].position.x = p.x;
 				this._meshes[i].position.y = p.y + yy;
@@ -1908,7 +2025,9 @@ objects.objs.Objs.prototype = $extend(THREE.Object3D.prototype,{
 		this._eyes.init();
 		this._faces = new objects.objs.Faces();
 		this._faces.init();
-		this._objects = [this._faces,this._mojis,this._eyes,this._faces];
+		this._logos = new objects.objs.Dedes();
+		this._logos.init();
+		this._objects = [this._logos,this._faces,this._mojis,this._eyes,this._faces];
 		TweenMax.delayedCall(0.1,callback);
 	}
 	,start: function(data) {
@@ -1936,6 +2055,45 @@ objects.objs.Objs.prototype = $extend(THREE.Object3D.prototype,{
 	}
 	,__class__: objects.objs.Objs
 });
+objects.objs.moji = {};
+objects.objs.moji.MojiMaker = function() {
+};
+objects.objs.moji.MojiMaker.__name__ = true;
+objects.objs.moji.MojiMaker.init = function(shape) {
+	objects.objs.moji.MojiMaker._shape = shape;
+	if(objects.objs.moji.MojiMaker.dedemouse == null) {
+		objects.objs.moji.MojiMaker.dedemouse = objects.objs.moji.MojiMaker.getGeo("デデマウス");
+		objects.objs.moji.MojiMaker.hexpixels = objects.objs.moji.MojiMaker.getGeo("ヘックスピクセルズ");
+		objects.objs.moji.MojiMaker.kitasenju = objects.objs.moji.MojiMaker.getGeo("北千住デザイン");
+		objects.objs.moji.MojiMaker.kimaira = objects.objs.moji.MojiMaker.getGeo("キマイラ");
+		objects.objs.moji.MojiMaker.geos = [objects.objs.moji.MojiMaker.dedemouse,objects.objs.moji.MojiMaker.hexpixels,objects.objs.moji.MojiMaker.kitasenju,objects.objs.moji.MojiMaker.kimaira];
+	}
+};
+objects.objs.moji.MojiMaker.getRandomGeo = function() {
+	return objects.objs.moji.MojiMaker.geos[Math.floor(objects.objs.moji.MojiMaker.geos.length * Math.random())];
+};
+objects.objs.moji.MojiMaker.getGeo = function(src) {
+	var space = 205;
+	var spaceY = 250;
+	var nn = src.length;
+	var g = new THREE.Geometry();
+	var _g1 = 0;
+	var _g = src.length;
+	while(_g1 < _g) {
+		var j = _g1++;
+		var shapes = objects.objs.moji.MojiMaker._shape.getShapes(HxOverrides.substr(src,j,1),true);
+		var geo = new THREE.ExtrudeGeometry(shapes,{ bevelEnabled : true, amount : 30});
+		var mat4 = new THREE.Matrix4();
+		mat4.multiply(new THREE.Matrix4().makeScale(2,2,2));
+		var vv = new THREE.Vector3((j * space - (nn - 1) / 2 * space) * 0.5,0,0);
+		mat4.multiply(new THREE.Matrix4().makeTranslation(vv.x,vv.y,vv.z));
+		g.merge(geo,mat4);
+	}
+	return g;
+};
+objects.objs.moji.MojiMaker.prototype = {
+	__class__: objects.objs.moji.MojiMaker
+};
 objects.objs.motion = {};
 objects.objs.motion.FaceMotion = function() {
 	this._modePos = 0;
@@ -1953,26 +2111,46 @@ objects.objs.motion.FaceMotion.prototype = {
 		var pos = this._data.camData.positions;
 		var ss = this._data.size;
 		var yy = this._data.offsetY;
-		if(Math.random() < 0.1) ss = ss * 2.2;
-		var _g1 = 0;
-		var _g = this._faces.length;
-		while(_g1 < _g) {
-			var i = _g1++;
-			if(i < pos.length) {
-				var p = pos[i];
-				this._faces[i].scale.set(ss,ss,ss);
-				this._faces[i].position.x = p.x;
-				this._faces[i].position.y = p.y + yy;
-				this._faces[i].position.z = p.z;
-				this._faces[i].changeIndex(i);
-				this._faces[i].visible = true;
-			} else this._faces[i].visible = false;
+		if(Math.random() < 0.1) ss = ss * 2;
+		switch(posMode) {
+		case 11:
+			var _g1 = 0;
+			var _g = this._faces.length;
+			while(_g1 < _g) {
+				var i = _g1++;
+				if(i < pos.length) {
+					var p = pos[i];
+					this._faces[i].scale.set(ss,ss,ss);
+					this._faces[i].position.x = p.x;
+					this._faces[i].position.y = p.y + yy;
+					this._faces[i].position.z = p.z;
+					this._faces[i].changeIndex(Math.floor(Math.random() * 3));
+					this._faces[i].visible = true;
+				} else this._faces[i].visible = false;
+			}
+			break;
+		case 10:
+			var _g11 = 0;
+			var _g2 = this._faces.length;
+			while(_g11 < _g2) {
+				var i1 = _g11++;
+				if(i1 < pos.length) {
+					var p1 = pos[i1];
+					this._faces[i1].scale.set(ss,ss,ss);
+					this._faces[i1].position.x = p1.x;
+					this._faces[i1].position.y = p1.y + yy;
+					this._faces[i1].position.z = p1.z;
+					this._faces[i1].changeIndex(i1);
+					this._faces[i1].visible = true;
+				} else this._faces[i1].visible = false;
+			}
+			break;
 		}
-		var _g11 = 0;
-		var _g2 = this._faces.length;
-		while(_g11 < _g2) {
-			var i1 = _g11++;
-			this._faces[i1].resetRot();
+		var _g12 = 0;
+		var _g3 = this._faces.length;
+		while(_g12 < _g3) {
+			var i2 = _g12++;
+			this._faces[i2].resetRot();
 		}
 	}
 	,update: function(a) {
@@ -1995,8 +2173,8 @@ objects.objs.motion.FaceMotion.prototype = {
 			var _g1 = this._faces.length;
 			while(_g2 < _g1) {
 				var i = _g2++;
-				this._faces[i].position.y += 1;
-				if(this._faces[i].position.y > 500) this._faces[i].position.y = -500;
+				this._faces[i].position.y += 0.1;
+				if(this._faces[i].position.y > 100) this._faces[i].position.y = -100;
 			}
 			break;
 		}
@@ -2017,7 +2195,8 @@ objects.objs.motion.FaceMotion.prototype = {
 			var _g11 = this._faces.length;
 			while(_g21 < _g11) {
 				var i1 = _g21++;
-				this._faces[i1].addRot(Math.pow(a.freqByteData[3] / 255,3),Math.pow(a.freqByteData[2] / 255,3),Math.pow(a.freqByteData[1] / 255,3));
+				if(a.subFreqByteData[3] > 6) this._faces[i1].addRot(Math.random() - 0.5,Math.random() - 0.5,Math.random() - 0.5);
+				this._faces[i1].rotation.y += 0.01;
 			}
 			break;
 		}
@@ -2197,7 +2376,7 @@ video.CameraData.prototype = {
 		var _g = this._points.length;
 		while(_g1 < _g) {
 			var i = _g1++;
-			if(this._points[i][1] > -1 && this._points[i][1] < 1) g.vertices.push(new THREE.Vector3(this._points[i][0],this._points[i][1],-this._points[i][2]));
+			if(this._points[i][1] > -2 && this._points[i][1] < 2) g.vertices.push(new THREE.Vector3(this._points[i][0],this._points[i][1],-this._points[i][2]));
 		}
 		return g;
 	}
@@ -2205,7 +2384,6 @@ video.CameraData.prototype = {
 		return this._frameData[frame];
 	}
 	,update: function(f,cam) {
-		console.debug("F" + f + " " + this._frameData.length);
 		if(f >= this._frameData.length) return;
 		var q = this._frameData[f].q;
 		var qtn = new THREE.Quaternion(q[0],q[1],q[2],q[3]);
@@ -2265,6 +2443,7 @@ video.MovieData = function(o) {
 	this.offsetY = 0;
 	this.offsetFrame = 0;
 	if(o != null) {
+		this.id = o.id;
 		this.pathCam = o.cam;
 		this.pathMov = o.mov;
 		this.offsetFrame = o.offsetFrame;
@@ -2691,6 +2870,8 @@ effect.PostProcessing2.MODE_DISPLACEMENT_B = "MODE_DISPLACEMENT_B";
 effect.PostProcessing2.MODE_COLOR = "MODE_COLOR";
 objects.MyDAELoader.MAX_Y = 1.36578;
 objects.MyDAELoader.MIN_Y = -1.13318;
+objects.MyFaceSingle.geometries = [];
+objects.MyFaceSingle.MAX = 3;
 objects.data.EffectData.COLOR_NONE = 0;
 objects.data.EffectData.COLOR_GRADE = 1;
 objects.data.EffectData.COLOR_MONO = 2;
@@ -2711,7 +2892,7 @@ objects.objs.Faces.MAT_COLOR = 2;
 objects.objs.Faces.MAT_NET = 3;
 objects.objs.Faces.MAT_NET_RED = 4;
 objects.objs.Faces.MAT_NUM = 5;
-objects.objs.MojiMaker.geos = [];
+objects.objs.moji.MojiMaker.geos = [];
 objects.objs.motion.FaceMotion.MODE_ROT_Y = 0;
 objects.objs.motion.FaceMotion.MODE_ROT_XYZ = 1;
 objects.objs.motion.FaceMotion.MODE_POS_FIX = 10;

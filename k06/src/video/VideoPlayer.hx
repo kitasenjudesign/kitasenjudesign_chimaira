@@ -175,6 +175,7 @@ class VideoPlayer extends Object3D
 		_video.volume = 0;
 		
 		_video.play();
+		//_video.seeking
 		
 		//
 		Browser.document.addEventListener("keydown" , _onKeyDown);
