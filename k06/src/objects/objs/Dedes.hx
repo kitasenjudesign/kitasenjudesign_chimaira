@@ -43,7 +43,8 @@ class Dedes extends MatchMoveObects
 		m.clipShadows = true;		
 		
 		_mesh = _loader.meshes[0];		
-		_mesh.scale.set(0.2, 0.2, 0.2);
+		_mesh.scale.set(0.1, 0.1, 0.1);
+		_mesh.position.y = _data.offsetY*3;
 		_mesh.material = cast m;
 		_mesh.castShadow = true;
 		add(_mesh);
@@ -80,9 +81,11 @@ class Dedes extends MatchMoveObects
 	 */
 	override public function update(a:MyAudio):Void {
 		
-		_mesh.rotation.x += 0.005;
-		_mesh.rotation.y += 0.012;		
-		_mesh.rotation.z += 0.018;
+		_mesh.rotation.y += 0.03;		
+		
+		//_mesh.position.x = _data.offsetY * Math.cos(_mesh.rotation.y*2); 
+		//_mesh.position.z = _data.offsetY * Math.sin(_mesh.rotation.y*2); 
+		
 		
 	}		
 	

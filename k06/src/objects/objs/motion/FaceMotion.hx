@@ -23,6 +23,7 @@ class FaceMotion
 	private var _modePos:Int = 0;
 	
 	private var _data:MovieData;
+	private var _spaceY:Float = 0;
 	
 	public function new() 
 	{
@@ -52,6 +53,7 @@ class FaceMotion
 		var pos:Array<Vector3> = _data.camData.positions;
 		var ss:Float = _data.size;
 		var yy:Float = _data.offsetY;
+		_spaceY = ss * 150;
 		
 		//shokichi set
 		if (Math.random() < 0.1) {
@@ -61,10 +63,33 @@ class FaceMotion
 		switch(posMode) {
 			case MODE_POS_MOVE_Y:
 				
-				////mendoi
+				//toriaezu yaru
 				for (i in 0..._faces.length) {
-			
+					
+					if(i<4){
+						var p:Vector3 = pos[0];
+						
+						_faces[i].scale.set(ss, ss, ss);
+						_faces[i].position.x = p.x;
+						_faces[i].position.y = p.y - _spaceY*i;//0,1,2
+						_faces[i].position.z = p.z;
+					
+						_faces[i].changeIndex(Math.floor(Math.random()*3));		
+						_faces[i].visible = true;
+						
+					}else {
+						_faces[i].visible = false;
+						
+					}
+					
+				}
+				
+				////mendoi
+				/*
+				for (i in 0..._faces.length) {
+					
 					if (i < pos.length) {
+						
 						var p:Vector3 = pos[i];
 						_faces[i].scale.set(ss, ss, ss);
 						
@@ -80,7 +105,7 @@ class FaceMotion
 						_faces[i].visible = false;				
 						
 					}
-				}
+				}*/
 				
 				
 			case MODE_POS_FIX:
@@ -95,7 +120,7 @@ class FaceMotion
 						_faces[i].position.y = p.y + yy;
 						_faces[i].position.z = p.z;
 						
-						_faces[i].changeIndex(i);		
+						_faces[i].changeIndex(Math.floor(Math.random()*3));			
 						_faces[i].visible = true;
 						
 					}else {
@@ -149,10 +174,12 @@ class FaceMotion
 			case MODE_POS_MOVE_Y:
 				//y wo ugokasu		
 				for(i in 0..._faces.length){
-					//1
+					
+					//_data.offsetY
+					
 					_faces[i].position.y+=0.1;
-					if (_faces[i].position.y > 100) {
-						_faces[i].position.y = -100;
+					if (_faces[i].position.y > _spaceY * 5) {
+						_faces[i].position.y = -_spaceY * 5;
 					}
 					
 				}

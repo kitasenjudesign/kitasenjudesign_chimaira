@@ -1730,7 +1730,8 @@ objects.objs.Dedes.prototype = $extend(objects.MatchMoveObects.prototype,{
 		m.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),1)];
 		m.clipShadows = true;
 		this._mesh = this._loader.meshes[0];
-		this._mesh.scale.set(0.2,0.2,0.2);
+		this._mesh.scale.set(0.1,0.1,0.1);
+		this._mesh.position.y = this._data.offsetY * 3;
 		this._mesh.material = m;
 		this._mesh.castShadow = true;
 		this.add(this._mesh);
@@ -1739,9 +1740,7 @@ objects.objs.Dedes.prototype = $extend(objects.MatchMoveObects.prototype,{
 		if(this._mesh != null) this._mesh.material.envMap = texture;
 	}
 	,update: function(a) {
-		this._mesh.rotation.x += 0.005;
-		this._mesh.rotation.y += 0.012;
-		this._mesh.rotation.z += 0.018;
+		this._mesh.rotation.y += 0.03;
 	}
 	,__class__: objects.objs.Dedes
 });
@@ -1781,13 +1780,11 @@ objects.objs.Eyes.prototype = $extend(objects.MatchMoveObects.prototype,{
 			while(_g1 < _g) {
 				var i = _g1++;
 				var vv = geo.vertices[i].clone();
+				vv.y = 100 * Math.random();
 				geo2.vertices.push(vv);
-				var vv2 = geo.vertices[i].clone();
-				vv2.y += 10;
-				geo2.vertices.push(vv2);
 			}
 			geo2.verticesNeedUpdate = true;
-			var points = new THREE.LineSegments(geo2,new THREE.LineBasicMaterial({ color : 16711680}));
+			var points = new THREE.Line(geo2,new THREE.LineBasicMaterial({ color : 16711680}));
 			this.add(points);
 		}
 	}
@@ -2096,6 +2093,7 @@ objects.objs.moji.MojiMaker.prototype = {
 };
 objects.objs.motion = {};
 objects.objs.motion.FaceMotion = function() {
+	this._spaceY = 0;
 	this._modePos = 0;
 	this._modeRot = 0;
 };
@@ -2111,6 +2109,7 @@ objects.objs.motion.FaceMotion.prototype = {
 		var pos = this._data.camData.positions;
 		var ss = this._data.size;
 		var yy = this._data.offsetY;
+		this._spaceY = ss * 150;
 		if(Math.random() < 0.1) ss = ss * 2;
 		switch(posMode) {
 		case 11:
@@ -2118,11 +2117,11 @@ objects.objs.motion.FaceMotion.prototype = {
 			var _g = this._faces.length;
 			while(_g1 < _g) {
 				var i = _g1++;
-				if(i < pos.length) {
-					var p = pos[i];
+				if(i < 4) {
+					var p = pos[0];
 					this._faces[i].scale.set(ss,ss,ss);
 					this._faces[i].position.x = p.x;
-					this._faces[i].position.y = p.y + yy;
+					this._faces[i].position.y = p.y - this._spaceY * i;
 					this._faces[i].position.z = p.z;
 					this._faces[i].changeIndex(Math.floor(Math.random() * 3));
 					this._faces[i].visible = true;
@@ -2140,7 +2139,7 @@ objects.objs.motion.FaceMotion.prototype = {
 					this._faces[i1].position.x = p1.x;
 					this._faces[i1].position.y = p1.y + yy;
 					this._faces[i1].position.z = p1.z;
-					this._faces[i1].changeIndex(i1);
+					this._faces[i1].changeIndex(Math.floor(Math.random() * 3));
 					this._faces[i1].visible = true;
 				} else this._faces[i1].visible = false;
 			}
@@ -2174,7 +2173,7 @@ objects.objs.motion.FaceMotion.prototype = {
 			while(_g2 < _g1) {
 				var i = _g2++;
 				this._faces[i].position.y += 0.1;
-				if(this._faces[i].position.y > 100) this._faces[i].position.y = -100;
+				if(this._faces[i].position.y > this._spaceY * 5) this._faces[i].position.y = -this._spaceY * 5;
 			}
 			break;
 		}

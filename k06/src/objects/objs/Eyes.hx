@@ -82,16 +82,18 @@ class Eyes extends MatchMoveObects
 			for (i in 0...geo.vertices.length) {
 				
 				var vv:Vector3 = geo.vertices[i].clone();
+				vv.y = 100 * Math.random();
 				geo2.vertices.push(vv);
 				
+				/*
 				var vv2:Vector3 = geo.vertices[i].clone();
-				vv2.y += 10;
+				vv2.y += 100*Math.random();
 				geo2.vertices.push(vv2);
-				
+				*/
 			}
 			geo2.verticesNeedUpdate = true;
 			
-			var points:LineSegments = new LineSegments(
+			var points:Line = new Line(
 				geo2,
 				new LineBasicMaterial( { color:0xff0000 } )
 			);
