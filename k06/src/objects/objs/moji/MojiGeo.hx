@@ -1,6 +1,8 @@
 package objects.objs.moji;
+import objects.objs.line.GeoBase;
 import sound.MyAudio;
 import three.Geometry;
+import three.Line;
 import three.Vector3;
 
 /**
@@ -10,30 +12,31 @@ import three.Vector3;
 class MojiGeo
 {
 
-	public var geometry:Geometry;
-	public var base:Array<Vector3>;
-	
-	public function new(g:Geometry) 
-	{
-		
-	}
+	private var _line:Line;
 
-	public function init():Void {
+	public function new() 
+	{
+		super();
+	}
+	
+	/**
+	 * 
+	 * @param	base
+	 * @param	m
+	 */
+	public function init(base:Geometry):Void {
+		
 		
 	}
 	
-	
+	/**
+	 * update
+	 * @param	a
+	 */
 	public function update(a:MyAudio):Void {
 		
-		//
-		var len:Int = geometry.vertices.length;
-		for(i in 0...len){
-			var v:Vector3 = geometry.vertices[i];
-			var b:Vector3 = base[i];
-			v.x = b.x + 10 * (Math.random() - 0.5);
-			v.y = b.y + 10 * (Math.random() - 0.5);
-			v.z = b.z + 10 * (Math.random() - 0.5); 
-		}
-	}
+	
+		
+	}	
 	
 }

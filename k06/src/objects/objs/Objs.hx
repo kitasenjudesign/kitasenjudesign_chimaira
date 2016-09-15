@@ -58,9 +58,9 @@ class Objs extends Object3D
 		
 		_objects = [
 			//_logos,
-			_faces
-			//_mojis,
-			//_eyes,
+			_faces,
+			_mojis,
+			_eyes
 			//_faces
 		];
 		

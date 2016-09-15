@@ -1,5 +1,6 @@
 package objects.objs;
 import materials.Textures;
+import objects.objs.line.HattoriLine;
 import sound.MyAudio;
 import three.Geometry;
 import three.Line;
@@ -27,6 +28,7 @@ class Eyes extends MatchMoveObects
 	private var _meshes:Array<Mesh>;
 	private var m:MeshPhongMaterial;
 	private var _rad:Float = 0;
+	private var _line:HattoriLine;
 	
 	public function new() 
 	{
@@ -70,26 +72,21 @@ class Eyes extends MatchMoveObects
 		}
 		
 		
+		/*
 		var geo:Geometry = _data.camData.getPointsGeo();
+		_line = new HattoriLine();
+		_line.init( geo,m );
+		add(_line);
+		*/
+		/*
 		var geo2:Geometry = new Geometry();
 		if (geo != null) {
-			/*
-			var points:PointCloud = new PointCloud(
-				geo, new PointCloudMaterial( { color:0xffffff, size:4 } )
-			);*/
-			//var points:Line = new Line(geo, new LineBasicMaterial( { color:0xff0000 } ));
 			
 			for (i in 0...geo.vertices.length) {
 				
 				var vv:Vector3 = geo.vertices[i].clone();
 				vv.y = 100 * Math.random();
 				geo2.vertices.push(vv);
-				
-				/*
-				var vv2:Vector3 = geo.vertices[i].clone();
-				vv2.y += 100*Math.random();
-				geo2.vertices.push(vv2);
-				*/
 			}
 			geo2.verticesNeedUpdate = true;
 			
@@ -99,7 +96,7 @@ class Eyes extends MatchMoveObects
 			);
 			add(points);
 			
-		}
+		}*/
 		
 		
 	}
@@ -120,6 +117,9 @@ class Eyes extends MatchMoveObects
 		Textures.eyeColor.offset.set(0, 0.2 * a.freqByteData[3]/255 );
 		_mesh.rotation.z += 0.03;
 		
+		//if (_line != null) {
+		//	_line.update(a);
+		//}
 	}	
 	
 	

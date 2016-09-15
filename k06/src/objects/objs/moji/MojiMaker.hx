@@ -13,10 +13,10 @@ import three.Vector3;
 class MojiMaker
 {
 
-	public static var dedemouse:Geometry;
-	public static var kitasenju:Geometry;
-	public static var hexpixels:Geometry;
-	public static var kimaira:Geometry;
+	public static var dedemouse	:Geometry;
+	public static var kitasenju	:Geometry;
+	public static var hexpixels	:Geometry;
+	public static var kimaira	:Geometry;
 	
 	private static var geos:Array<Geometry> = [];
 	

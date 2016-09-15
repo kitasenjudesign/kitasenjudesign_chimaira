@@ -40,6 +40,10 @@ class MojiMesh extends Mesh
 		
 		this.geometry = g;
 		
+		rotation.x = Math.random() * 2 * Math.PI;
+		rotation.y = Math.random() * 2 * Math.PI;
+		rotation.z = Math.random() * 2 * Math.PI;
+		
 	}
 	
 	public function update(a:MyAudio):Void {

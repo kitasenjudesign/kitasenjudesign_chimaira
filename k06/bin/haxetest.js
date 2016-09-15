@@ -120,6 +120,7 @@ Main._init = function() {
 	Main._main.init();
 };
 var Main3d = function() {
+	this._isPP = true;
 };
 Main3d.__name__ = true;
 Main3d.prototype = {
@@ -199,10 +200,12 @@ Main3d.prototype = {
 		}
 	}
 	,_showVideo: function() {
+		this._isPP = true;
 		this._video.show();
 		this._bg.hide();
 	}
 	,_hideVideo: function() {
+		this._isPP = false;
 		this._video.hide();
 		this._bg.show();
 	}
@@ -227,7 +230,7 @@ Main3d.prototype = {
 			this._objects.setEnvMap(this._skyboxMat.getTexture());
 			this._objects.update(this._audio);
 		}
-		this._pp.update(this._audio);
+		if(this._isPP) this._pp.update(this._audio); else this._renderer.render(this._scene,this._camera);
 		var vv = new THREE.Vector3(1,0.3,0);
 		vv.applyQuaternion(this._camera.quaternion.clone());
 		this._light.position.copy(vv);
@@ -1420,8 +1423,9 @@ objects.CgBg.__name__ = true;
 objects.CgBg.__super__ = THREE.Object3D;
 objects.CgBg.prototype = $extend(THREE.Object3D.prototype,{
 	init: function() {
-		this._ground = new THREE.Mesh(new THREE.PlaneBufferGeometry(2000,2000,10,10),new THREE.MeshBasicMaterial({ color : 16776960, wireframe : true}));
-		this._ground.rotation.x = Math.PI / 2;
+		var p = new objects.bg.GridPoints();
+		this.add(p);
+		this.hide();
 	}
 	,show: function() {
 		this.visible = true;
@@ -1687,6 +1691,43 @@ objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 	}
 	,__class__: objects.MyFaceSingle
 });
+objects.bg = {};
+objects.bg.GridPoints = function() {
+	var ww = 50;
+	var hh = 1;
+	var dd = 50;
+	var l = ww * hh * dd;
+	var space = 80;
+	var idx = 0;
+	var vertices = new Float32Array(l * 3);
+	var _g = 0;
+	while(_g < ww) {
+		var i = _g++;
+		var _g1 = 0;
+		while(_g1 < hh) {
+			var j = _g1++;
+			var _g2 = 0;
+			while(_g2 < dd) {
+				var k = _g2++;
+				var i3 = idx * 3;
+				vertices[i3] = (i - (ww - 1) / 2) * space;
+				vertices[i3 + 1] = (j - (hh - 1) / 2) * space;
+				vertices[i3 + 2] = (k - (dd - 1) / 2) * space;
+				idx++;
+			}
+		}
+	}
+	var g = new THREE.BufferGeometry();
+	g.addAttribute("position",new THREE.BufferAttribute(vertices,3));
+	var mat = new THREE.PointsMaterial({ size : 2, color : 16777215});
+	mat.sizeAttenuation = false;
+	THREE.Points.call(this,g,mat);
+};
+objects.bg.GridPoints.__name__ = true;
+objects.bg.GridPoints.__super__ = THREE.Points;
+objects.bg.GridPoints.prototype = $extend(THREE.Points.prototype,{
+	__class__: objects.bg.GridPoints
+});
 objects.data = {};
 objects.data.EffectData = function(o) {
 	this.wireframe = false;
@@ -1779,21 +1820,6 @@ objects.objs.Eyes.prototype = $extend(objects.MatchMoveObects.prototype,{
 			this._mesh.material = this.m;
 			this._mesh.castShadow = true;
 			this.add(this._mesh);
-		}
-		var geo = this._data.camData.getPointsGeo();
-		var geo2 = new THREE.Geometry();
-		if(geo != null) {
-			var _g1 = 0;
-			var _g = geo.vertices.length;
-			while(_g1 < _g) {
-				var i = _g1++;
-				var vv = geo.vertices[i].clone();
-				vv.y = 100 * Math.random();
-				geo2.vertices.push(vv);
-			}
-			geo2.verticesNeedUpdate = true;
-			var points = new THREE.Line(geo2,new THREE.LineBasicMaterial({ color : 16711680}));
-			this.add(points);
 		}
 	}
 	,setEnvMap: function(texture) {
@@ -1898,7 +1924,7 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 			this._material.reflectivity = 0.7;
 			this._material.wireframe = false;
 			break;
-		case 0:case 2:
+		case 0:
 			this._material.map = materials.Textures.dedeColor;
 			this._material.color = new THREE.Color(16777215);
 			this._material.transparent = false;
@@ -1911,6 +1937,15 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 			this._material.alphaTest = 0.5;
 			this._material.alphaMap = materials.Textures.meshMono;
 			this._material.wireframe = false;
+			break;
+		case 2:
+			this._redTexture = materials.Textures.moji1;
+			this._material.wireframe = false;
+			this._material.map = this._redTexture;
+			this._material.alphaMap = materials.Textures.colorWhite;
+			this._material.refractionRatio = 0.7;
+			this._material.reflectivity = 0.7;
+			this._material.side = 2;
 			break;
 		}
 		this._material.needsUpdate = true;
@@ -2046,7 +2081,7 @@ objects.objs.Objs.prototype = $extend(THREE.Object3D.prototype,{
 		this._faces.init();
 		this._logos = new objects.objs.Dedes();
 		this._logos.init();
-		this._objects = [this._faces];
+		this._objects = [this._faces,this._mojis,this._eyes];
 		TweenMax.delayedCall(0.1,callback);
 	}
 	,start: function(data) {
@@ -2121,6 +2156,33 @@ objects.objs.line.DeDeLine.prototype = $extend(objects.objs.line.GeoBase.prototy
 	}
 	,__class__: objects.objs.line.DeDeLine
 });
+objects.objs.line.HattoriLine = function() {
+	objects.objs.line.GeoBase.call(this);
+};
+objects.objs.line.HattoriLine.__name__ = true;
+objects.objs.line.HattoriLine.__super__ = objects.objs.line.GeoBase;
+objects.objs.line.HattoriLine.prototype = $extend(objects.objs.line.GeoBase.prototype,{
+	init: function(base,m) {
+		if(this._base == null) {
+			objects.objs.line.GeoBase.prototype.init.call(this,base,m);
+			this._line = new THREE.Line(this._geo,m);
+			this.add(this._line);
+		}
+	}
+	,update: function(a) {
+		var len = this._base.vertices.length;
+		var _g = 0;
+		while(_g < len) {
+			var i = _g++;
+			var v = this._geo.vertices[i];
+			var base = this._base.vertices[Math.floor(Math.random() * len)];
+			base.y = 100 * Math.random();
+			v.copy(base);
+		}
+		this._geo.verticesNeedUpdate = true;
+	}
+	,__class__: objects.objs.line.HattoriLine
+});
 objects.objs.moji = {};
 objects.objs.moji.MojiMaker = function() {
 };
@@ -2185,6 +2247,9 @@ objects.objs.moji.MojiMesh.prototype = $extend(THREE.Mesh.prototype,{
 		this.ovy = (Math.random() - 0.5) * 0.01;
 		this.ovz = (Math.random() - 0.5) * 0.01;
 		this.geometry = g;
+		this.rotation.x = Math.random() * 2 * Math.PI;
+		this.rotation.y = Math.random() * 2 * Math.PI;
+		this.rotation.z = Math.random() * 2 * Math.PI;
 	}
 	,update: function(a) {
 		if(a.subFreqByteData[3] > 9 && this._count++ > 30) {
@@ -2555,7 +2620,7 @@ video.Config.__name__ = true;
 video.Config.prototype = {
 	load: function(filename,callback) {
 		this._callback = callback;
-		var d = { data : [{ id : "HACHI", cam : "mov2/cam_hachi.json", mov : "mov2/03_hachi.mp4", size : 0.3, y : 2, offsetFrame : 0},{ id : "WWW", cam : "mov2/cam_www.json", mov : "mov2/00_www.mp4", size : 0.5, y : 50, offsetFrame : 0},{ id : "SCRAMBLE", cam : "mov2/cam_scramble.json", mov : "mov2/01_scramble.mp4", size : 0.8, y : 50, offsetFrame : 0}]};
+		var d = { data : [{ id : "HACHI", cam : "mov2/cam_hachi.json", mov : "mov2/03_hachi.mp4", size : 0.3, y : 2, offsetFrame : 0},{ id : "WWW", cam : "mov2/cam_www.json", mov : "mov2/00_www.mp4", size : 0.5, y : 50, offsetFrame : 0},{ id : "SCRAMBLE", cam : "mov2/cam_scramble.json", mov : "mov2/01_scramble.mp4", size : 0.8, y : 50, offsetFrame : 0},{ id : "OSHO", cam : "mov2/cam_osho.json", mov : "mov2/07_osho.mp4", size : 0.3, y : 10, offsetFrame : 0},{ id : "FUKAN", cam : "mov2/cam_fukan.json", mov : "mov2/04_fukan.mp4", size : 0.25, y : 10, offsetFrame : 0},{ id : "STATION", cam : "mov2/cam_station.json", mov : "mov2/02_station.mp4", size : 0.6, y : 50, offsetFrame : 0},{ id : "HACHI", cam : "mov2/cam_hachi.json", mov : "mov2/03_hachi.mp4", size : 0.3, y : 2, offsetFrame : 0},{ id : "KOKA", cam : "mov2/cam_koka.json", mov : "mov2/05_koka.mp4", size : 0.3, y : 2, offsetFrame : 0},{ id : "WWW3", cam : "mov2/cam_www3.json", mov : "mov2/08_www3.mp4", size : 0.4, y : 50, offsetFrame : 0}]};
 		this.list = [];
 		var _g1 = 0;
 		var _g = d.data.length;

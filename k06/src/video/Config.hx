@@ -64,9 +64,7 @@ class Config
 					"size":0.8,
 					"y":50,
 					"offsetFrame":0
-				}				
-				
-				/*,
+				},
 				{
 					"id":"OSHO",
 					"cam":"mov2/cam_osho.json",
@@ -118,7 +116,6 @@ class Config
 					"offsetFrame":0
 				}				
 				
-				*/
 			]
 		};
 		

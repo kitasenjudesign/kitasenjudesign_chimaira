@@ -58,6 +58,7 @@ class Main3d
 	private var _dae:MyDAELoader;
 	private var _pp:PostProcessing2;
 	private var _bg:CgBg;
+	private var _isPP:Bool = true;
 	
 	
 	///loader wo kaku
@@ -212,11 +213,13 @@ class Main3d
 	}
 	
 	private function _showVideo():Void {
+		_isPP = true;
 		_video.show();
 		_bg.hide();
 	}
 	
 	private function _hideVideo():Void {
+		_isPP = false;		
 		_video.hide();		
 		_bg.show();		
 	}
@@ -269,8 +272,11 @@ class Main3d
 			//_objects.visible = true;
 		}
 		
-		_pp.update(_audio);
-		//_renderer.render(_scene, _camera);
+		if(_isPP){
+			_pp.update(_audio);
+		}else {
+			_renderer.render(_scene, _camera);
+		}
 		
 		var vv:Vector3 = new Vector3(1, 0.3, 0);
 		vv.applyQuaternion(_camera.quaternion.clone());

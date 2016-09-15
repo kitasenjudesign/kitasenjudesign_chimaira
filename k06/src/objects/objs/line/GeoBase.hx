@@ -20,6 +20,7 @@ class GeoBase extends Object3D
 		super();
 	}
 	
+	
 	public function init(base:Geometry,m:Material):Void {
 		
 		if (_base != null) return;

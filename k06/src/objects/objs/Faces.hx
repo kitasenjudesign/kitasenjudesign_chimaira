@@ -182,7 +182,7 @@ class Faces extends MatchMoveObects
 				_material.wireframe = false;
 				
 				
-			case MAT_COLOR,MAT_NET_RED://2
+			case MAT_COLOR://2
 				
 				_material.map = Textures.dedeColor;
 				_material.color = new Color(0xffffff);// Math.random() < 0.5 ? new Color(0xffffff) : new Color(0xee4444); 
@@ -199,7 +199,7 @@ class Faces extends MatchMoveObects
 				_material.alphaMap = Textures.meshMono;				
 				_material.wireframe = false;
 			
-					/*
+					
 			case MAT_NET_RED:
 				//Browser.window.alert("red!! " + _matIndex);
 				//_material.map = ImageUtils.loadTexture("mate3.png");
@@ -209,7 +209,7 @@ class Faces extends MatchMoveObects
 				_material.alphaMap = Textures.colorWhite;
 				_material.refractionRatio = 0.7;
 				_material.reflectivity = 0.7;				
-				_material.side = Three.DoubleSide;*/
+				_material.side = Three.DoubleSide;
 				
 		}
 	
