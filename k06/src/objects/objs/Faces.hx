@@ -21,11 +21,11 @@ class Faces extends MatchMoveObects
 {
 
 	
-	public static inline var MAT_WIREFRAME	:Int = 0;
+	public static inline var MAT_WIREFRAME	:Int = 4;
 	public static inline var MAT_MIRROR		:Int = 1;
-	public static inline var MAT_COLOR		:Int = 2;
+	public static inline var MAT_COLOR		:Int = 0;
 	public static inline var MAT_NET		:Int = 3;
-	public static inline var MAT_NET_RED	:Int = 4;
+	public static inline var MAT_NET_RED	:Int = 2;
 	public static inline var MAT_NUM:Int = 5;
 	
 	//public static var MATERIALS
@@ -34,9 +34,12 @@ class Faces extends MatchMoveObects
 	private var _material	:MeshPhongMaterial;
 	private var _texture:Texture;
 	private var _loader:MyDAELoader;
-	private var _matIndex:Int = 0;
+	private var _matIndex:Int = -1;
 	private var _offsetY:Float = 0;
 	private var _motion:FaceMotion;
+	var _redTexture:Texture;
+	var _offsetX:Float=0;
+	var _count:Int = 0;
 	
 	public function new() 
 	{
@@ -61,12 +64,12 @@ class Faces extends MatchMoveObects
 		//_texture.wrapT = Three.RepeatWrapping;
 		//_texture.repeat.set(2, 2);
 		
-		
 		_material = new MeshPhongMaterial( { color:0xffffff, map:_texture } );
 		_material.refractionRatio = 0.1;
 		_material.reflectivity = 0.1;
 		_material.shininess = 0.01;
-		
+	
+		//_material.normalMap = Textures.eyeNormal;
 		//_material.wireframe = false;
 		//_material.alphaMap = Textures.meshMono;
 		_material.alphaTest = 0.5;
@@ -116,39 +119,29 @@ class Faces extends MatchMoveObects
 		_data = data;		
 		this.visible = true;
 		
-		_motion.start(
-			data,
-			Math.random()<0.5 ? FaceMotion.MODE_POS_FIX : FaceMotion.MODE_POS_MOVE_Y,
-			Math.random()<0.5 ? FaceMotion.MODE_ROT_XYZ : FaceMotion.MODE_ROT_Y
-		);
 		
-		/*
-		var pos:Array<Vector3> = _data.camData.positions;
-		var ss:Float = _data.size;
-		var yy:Float = _data.offsetY;
-		
-		if (Math.random() < 0.1) {
-			ss = ss * 2.2;
+		var rotMode:Int = 0;
+		var posMode:Int = 0;
+		switch(_count%4) {
+			case 0:
+				posMode = FaceMotion.MODE_POS_FIX;
+				rotMode = FaceMotion.MODE_ROT_Y;
+			case 1:
+				posMode = FaceMotion.MODE_POS_MOVE_Y;
+				rotMode = FaceMotion.MODE_ROT_XYZ;				
+			case 2:
+				posMode = FaceMotion.MODE_POS_FIX;
+				rotMode = FaceMotion.MODE_ROT_XYZ;			
+			case 3:
+				posMode = FaceMotion.MODE_POS_FIX;
+				rotMode = FaceMotion.MODE_ROT_XYZ;			
 		}
 		
-		for (i in 0..._faces.length) {
-			
-			if (i < pos.length) {
-				var p:Vector3 = pos[i];
-				
-				_faces[i].scale.set(ss, ss, ss);
-				_faces[i].position.x = p.x;
-				_faces[i].position.y = p.y + yy;
-				_faces[i].position.z = p.z;
-				_faces[i].changeIndex(i);		
-				_faces[i].visible = true;
-				
-			}else {
-				_faces[i].visible = false;				
-				
-			}
-			
-		}*/
+		_motion.start(
+			data,posMode,rotMode
+		);
+		_count++;
+		
 		
 		_changeMat();
 		
@@ -189,10 +182,10 @@ class Faces extends MatchMoveObects
 				_material.wireframe = false;
 				
 				
-			case MAT_COLOR://2
+			case MAT_COLOR,MAT_NET_RED://2
 				
 				_material.map = Textures.dedeColor;
-				_material.color = Math.random()<0.5 ? new Color(0xffffff) : new Color(0xee4444); 
+				_material.color = new Color(0xffffff);// Math.random() < 0.5 ? new Color(0xffffff) : new Color(0xee4444); 
 				_material.transparent = false;
 				_material.refractionRatio = 0.1;
 				_material.reflectivity = 0.1;
@@ -206,16 +199,17 @@ class Faces extends MatchMoveObects
 				_material.alphaMap = Textures.meshMono;				
 				_material.wireframe = false;
 			
-					
+					/*
 			case MAT_NET_RED:
 				//Browser.window.alert("red!! " + _matIndex);
 				//_material.map = ImageUtils.loadTexture("mate3.png");
+				_redTexture = Textures.moji1;// Math.random() < 0.5 ? Textures.moji1 : Textures.meshRed;
 				_material.wireframe = false;
-				_material.map = Textures.moji1;// Textures.meshRed;
+				_material.map = _redTexture;
 				_material.alphaMap = Textures.colorWhite;
 				_material.refractionRatio = 0.7;
 				_material.reflectivity = 0.7;				
-				_material.side = Three.DoubleSide;
+				_material.side = Three.DoubleSide;*/
 				
 		}
 	
@@ -254,9 +248,11 @@ class Faces extends MatchMoveObects
 			*/
 		
 		}else if ( _matIndex == MAT_NET_RED ) {
-			_offsetY += a.freqByteData[7] / 255 * 0.5;
-			Textures.meshRed.offset.set(0, _offsetY);	
-			_material.needsUpdate = true;
+			
+			//_offsetX += a.freqByteData[4] / 255 * 0.1;
+			//_offsetY += a.freqByteData[7] / 255 * 0.1;
+			//_redTexture.offset.set(_offsetX, _offsetY);	
+			//_material.needsUpdate = true;
 		
 		}		
 		

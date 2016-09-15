@@ -19,6 +19,7 @@ import sound.MyAudio;
 import three.AmbientLight;
 import three.Color;
 import three.DirectionalLight;
+import three.Fog;
 import three.ImageUtils;
 import three.Mesh;
 import three.MeshBasicMaterial;
@@ -135,7 +136,7 @@ class Main3d
 		var light:MySpotLight = new MySpotLight();
 		_scene.add(light);
 		
-		_light = new DirectionalLight(0x888888, 1);
+		_light = new DirectionalLight(0x998877, 1);
 		_scene.add(_light);
 		
 		var a:AmbientLight = new AmbientLight(0x888888);
@@ -151,6 +152,8 @@ class Main3d
 		
 		_shadowGround = new ShadowPlane();
 		_scene.add(_shadowGround);
+		
+		_scene.fog = new Fog(0xfff0e8, 100, 3000);
 		
 		//var mm:ShadowMaterial = new ShadowMaterial();
 		//mm.opacity = 0.5;

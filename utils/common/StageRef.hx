@@ -24,11 +24,11 @@ class StageRef
 
 	public static function showBorder():Void {
 		var dom:Element = Browser.document.getElementById(name);
-		dom.style.border = "solid 1px #cccccc";
+		if(dom!=null)dom.style.border = "solid 1px #cccccc";
 	}
 	public static function hideBorder():Void {
 		var dom:Element = Browser.document.getElementById(name);
-		dom.style.border = "solid 0px";
+		if(dom!=null)dom.style.border = "solid 0px";
 	}
 	
 	public static function fadeIn():Void {

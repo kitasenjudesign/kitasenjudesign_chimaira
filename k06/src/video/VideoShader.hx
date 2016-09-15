@@ -69,7 +69,7 @@ class VideoShader extends ShaderMaterial
 				texture: { type: 't', value: _texture }	
 			}			
 		});
-				
+		this.fog = false;
 	}
 
 	/**

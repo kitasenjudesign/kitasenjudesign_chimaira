@@ -35,10 +35,10 @@ class MojiMaker
 		_shape = shape;
 		if (dedemouse == null) {
 			
-			dedemouse = getGeo("デデマウス");
-			hexpixels = getGeo("ヘックスピクセルズ");
-			kitasenju = getGeo("北千住デザイン");
-			kimaira = getGeo("キマイラ");
+			dedemouse = getGeometry("デデマウス");
+			hexpixels = getGeometry("ヘックスピクセルズ");
+			kitasenju = getGeometry("北千住デザイン");
+			kimaira = getGeometry("キマイラ");
 			
 			geos = [
 				dedemouse,
@@ -58,15 +58,21 @@ class MojiMaker
 		
 	}
 	
+	
+	public static function getGeo(index:Int):Geometry {
+		return geos[index];
+	}
+	
+	
 	/**
 	 * 
 	 * @param	src
 	 * @param	shape
 	 * @return
 	 */
-	public static function getGeo(src:String):Geometry {
+	public static function getGeometry(src:String):Geometry {
 		
-		var space:Float = 205;
+		var space:Float = 215;
 		var spaceY:Float = 250;//
 		var nn:Int = src.length;
 		var g:Geometry = new Geometry();

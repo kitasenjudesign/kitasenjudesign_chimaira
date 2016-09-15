@@ -39,6 +39,7 @@ class CameraData
 	private var _area:Dynamic;
 
 	public var positions:Array<Vector3>;
+	public var scales:Array<Float>;
 	
 	public function new() 
 	{
@@ -54,6 +55,7 @@ class CameraData
 		_http.onData = _onData;
 		_http.request();
 		positions = [];
+		scales = [];
 		/*
 		Dat.gui.add(this, "_rx",0,6.288).listen();
 		Dat.gui.add(this, "_ry",0,6.288).listen();
@@ -80,6 +82,7 @@ class CameraData
 				p[i][1],
 				-p[i][2]
 			);
+			scales[i] = p[i][3] == null ? 1 : p[i][3];
 		}
 		
 		//area wo kuwaeru

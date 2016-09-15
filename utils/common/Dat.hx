@@ -113,6 +113,7 @@ class Dat
 		Key.init();
 		Key.board.addEventListener("keydown" , _onKeyDown);
 		show(false);
+		hide();
 		
 		if (_callback != null) {
 			_callback();

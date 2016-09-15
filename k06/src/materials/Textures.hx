@@ -62,10 +62,9 @@ class Textures
 		parkBg = ImageUtils.loadTexture( "bg/bg.jpg" );
 		
 		moji1 = ImageUtils.loadTexture( Path.assets + "face/bg.png" );
-		
-		meshMono.wrapS = Three.RepeatWrapping; 
-		meshMono.wrapT = Three.RepeatWrapping; 
-		meshMono.repeat.set(10, 10);
+		moji1.wrapS = Three.RepeatWrapping; 
+		moji1.wrapT = Three.RepeatWrapping; 
+		moji1.repeat.set(2, 2);
 		
 		eyeNormal = ImageUtils.loadTexture( Path.assets + "eye/eye_normal.png");
 		

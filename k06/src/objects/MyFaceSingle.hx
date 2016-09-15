@@ -84,6 +84,7 @@ class MyFaceSingle extends Object3D
 	
 	public static var geometries:Array<Geometry> = [];
 	public static inline var MAX:Int = 3;
+	public var baseY:Float=0;
 	
 	public function new(idx:Int) 
 	{
@@ -271,14 +272,14 @@ class MyFaceSingle extends Object3D
 			//g.computeVertexNormals();
 		
 		//g.colorsNeedUpdate = true;
-		//g.computeVertexNormals();
+		g.computeVertexNormals();
 		
 		rotation.x += _vx;
 		rotation.y += _vy;
 		rotation.z += _vz;
-		_vx *= 0.9;
-		_vy *= 0.9;
-		_vz *= 0.9;
+		_vx *= 0.95;
+		_vy *= 0.95;
+		_vz *= 0.95;
 		
 	}
 	
@@ -331,9 +332,9 @@ class MyFaceSingle extends Object3D
 	
 	public function addRot(vx:Float, vy:Float, vz:Float):Void {
 		
-		_vx = vx;
-		_vy = vy;
-		_vz = vz;
+		_vx += vx;
+		_vy += vy;
+		_vz += vz;
 		
 	}
 	

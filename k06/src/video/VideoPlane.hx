@@ -24,6 +24,7 @@ class VideoPlane extends Mesh
 		);
 	
 		this.frustumCulled = false;
+		
 		//hide();
 	}
 	

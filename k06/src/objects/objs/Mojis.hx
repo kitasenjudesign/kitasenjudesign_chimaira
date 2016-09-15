@@ -6,6 +6,7 @@ import materials.Textures;
 import objects.MyDAELoader;
 import objects.MyFaceSingle;
 import objects.objs.moji.MojiMaker;
+import objects.objs.moji.MojiMesh;
 import sound.MyAudio;
 import three.ExtrudeGeometry;
 import three.Geometry;
@@ -33,14 +34,15 @@ class Mojis extends MatchMoveObects
 	//private var _callback:Void->Void;
 	//private var _mesh:Mesh;
 	private var _material:MeshPhongMaterial;
-	private var _meshes:Array<Mesh>;
+	private var _meshes:Array<MojiMesh>;
 	private var _loader:MyDAELoader;
 	private var _rad:Float=0;
 	private var _videoPlane:VideoPlane;
 	private var _texture:Texture;
 	private var _offsetY:Float = 0;
 	private var _eyeball:Mesh;
-	
+	private var _index:Int = 0;
+	private var _getIndex:Int = 0;
 
 	public function new() 
 	{
@@ -91,7 +93,7 @@ class Mojis extends MatchMoveObects
 		_meshes = [];
 		
 		for (i in 0...5) {
-			var m:Mesh = new Mesh(g, _material);
+			var m:MojiMesh = new MojiMesh(g, _material);
 			
 			m.scale.set(0.1, 0.1, 0.1);
 			m.castShadow = true;
@@ -119,7 +121,9 @@ class Mojis extends MatchMoveObects
 			
 			if (i < pos.length) {
 				var p:Vector3 = pos[i];
-				_meshes[i].geometry = MojiMaker.getRandomGeo();
+				_meshes[i].visible = true;
+				_meshes[i].setGeo( MojiMaker.getGeo(_getIndex) );
+				//_meshes[i].geometry = MojiMaker.getGeo(_getIndex);
 				_meshes[i].scale.set(0.2, 0.2, 0.2);
 				_meshes[i].position.x = p.x;
 				_meshes[i].position.y = p.y + yy;
@@ -160,9 +164,11 @@ class Mojis extends MatchMoveObects
 		
 		
 		for(i in 0..._meshes.length){
-			_meshes[i].rotation.x += 0.001*(i+1); 
-			_meshes[i].rotation.y += 0.003*(i+1);
-			_meshes[i].rotation.z += 0.004*(i + 1);
+			//_meshes[i].rotation.x += 0.001*(i+1); 
+			//_meshes[i].rotation.y += 0.003*(i+1);
+			//_meshes[i].rotation.z += 0.004 * (i + 1);
+			_meshes[i].update(a);
+			
 		}
 		//cube.rotation.x += 0.016;
 

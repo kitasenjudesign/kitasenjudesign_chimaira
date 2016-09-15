@@ -31,7 +31,7 @@ class MySpotLight extends SpotLight
 		
 		var fuga:MySpotLight = this;
 		untyped __js__("
-			fuga.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 30, 16/9, 200, 4000 ) );
+			fuga.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 30, 16/9, 200, 6000 ) );
 			fuga.shadow.bias = 0;// 0.001;// -0.000222;
 			fuga.shadow.mapSize.width = 2048;
 			fuga.shadow.mapSize.height = 2048;		
