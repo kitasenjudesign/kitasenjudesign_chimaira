@@ -152,22 +152,36 @@ class Mojis extends MatchMoveObects
 		
 		_matIndex++;
 		
-		switch(_matIndex%3) {
+		switch(_matIndex%4) {
+
+			//wire
 			case 0:
+				_material.color = (Math.random() < 0.5) ? new Color(0xff0000) : new Color(0xffffff);
 				_material.wireframe = true;
-				_material.vertexColors = Three.VertexColors;
+				_material.vertexColors = Three.NoColors;
+				_material.reflectivity 		= 0;
+				_material.refractionRatio 	= 0;
 				
 			case 1:
 				_material.wireframe = false;
 				_material.vertexColors = Three.VertexColors;
+				_material.reflectivity 		= 0.8;
+				_material.refractionRatio 	= 0.8;
+				
 			case 2:
 				_material.wireframe = false;
 				_material.vertexColors = Three.NoColors;
+				_material.reflectivity 		= 0.8;
+				_material.refractionRatio 	= 0.8;
+				
 			case 3:
 				_material.color = (Math.random() < 0.5) ? new Color(0xff0000) : new Color(0xffffff);
 				_material.vertexColors = Three.NoColors;
+				_material.reflectivity 		= 0.8;
+				_material.refractionRatio 	= 0.8;
 			
 		}
+		
 		_material.needsUpdate = true;
 		
 	}

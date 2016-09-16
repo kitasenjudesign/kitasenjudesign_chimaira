@@ -1567,6 +1567,7 @@ objects.MyDAELoader.prototype = {
 };
 objects.MyFaceSingle = function(idx) {
 	this.baseY = 0;
+	this._pauseCount = 0;
 	this._vz = 0;
 	this._vy = 0;
 	this._vx = 0;
@@ -1661,6 +1662,7 @@ objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 		if(this.dae == null) return;
 		if(!this.visible) return;
 		if(this.index >= 3) return;
+		this._pauseCount++;
 		this._audio = audio;
 		var g = this.dae.geometry;
 		g.verticesNeedUpdate = true;
@@ -1757,7 +1759,7 @@ objects.bg.GridPoints = function() {
 			while(_g2 < dd) {
 				var k = _g2++;
 				var i3 = idx * 3;
-				vertices[i3] = (i - (ww - 1) / 2) * space;
+				vertices[i3] = (i - (ww - 1) / 2) * space + k % 2 * space / 2;
 				vertices[i3 + 1] = (j - (hh - 1) / 2) * space;
 				vertices[i3 + 2] = (k - (dd - 1) / 2) * space;
 				idx++;
@@ -2067,23 +2069,32 @@ objects.objs.Mojis.prototype = $extend(objects.MatchMoveObects.prototype,{
 	}
 	,_changeMat: function() {
 		this._matIndex++;
-		var _g = this._matIndex % 3;
+		var _g = this._matIndex % 4;
 		switch(_g) {
 		case 0:
+			if(Math.random() < 0.5) this._material.color = new THREE.Color(16711680); else this._material.color = new THREE.Color(16777215);
 			this._material.wireframe = true;
-			this._material.vertexColors = 2;
+			this._material.vertexColors = 0;
+			this._material.reflectivity = 0;
+			this._material.refractionRatio = 0;
 			break;
 		case 1:
 			this._material.wireframe = false;
 			this._material.vertexColors = 2;
+			this._material.reflectivity = 0.8;
+			this._material.refractionRatio = 0.8;
 			break;
 		case 2:
 			this._material.wireframe = false;
 			this._material.vertexColors = 0;
+			this._material.reflectivity = 0.8;
+			this._material.refractionRatio = 0.8;
 			break;
 		case 3:
 			if(Math.random() < 0.5) this._material.color = new THREE.Color(16711680); else this._material.color = new THREE.Color(16777215);
 			this._material.vertexColors = 0;
+			this._material.reflectivity = 0.8;
+			this._material.refractionRatio = 0.8;
 			break;
 		}
 		this._material.needsUpdate = true;
@@ -2120,7 +2131,7 @@ objects.objs.Objs.prototype = $extend(THREE.Object3D.prototype,{
 		this._faces.init();
 		this._logos = new objects.objs.Dedes();
 		this._logos.init();
-		this._objects = [this._faces,this._mojis,this._eyes];
+		this._objects = [this._faces,this._mojis];
 		TweenMax.delayedCall(0.1,callback);
 	}
 	,start: function(data) {
@@ -2228,30 +2239,9 @@ objects.objs.moji.MojiGeo = function() {
 	this.baseRadY = [];
 	this.baseRadX = [];
 	this.baseAmp = [];
+	this._mode = 1;
 };
 objects.objs.moji.MojiGeo.__name__ = true;
-objects.objs.moji.MojiGeo.updateColor = function(g) {
-	var faceIndices_0 = "a";
-	var faceIndices_1 = "b";
-	var faceIndices_2 = "c";
-	var faceIndices_3 = "d";
-	var _g1 = 0;
-	var _g = g.faces.length;
-	while(_g1 < _g) {
-		var i = _g1++;
-		var face = g.faces[i];
-		var numberOfSides;
-		if(js.Boot.__instanceof(face,THREE.Face3)) numberOfSides = 3; else numberOfSides = 4;
-		var _g2 = 0;
-		while(_g2 < numberOfSides) {
-			var j = _g2++;
-			var color = new THREE.Color(16777215);
-			color.setHex(Math.floor(Math.random() * 16777215));
-			face.vertexColors[j] = color;
-		}
-	}
-	g.colorsNeedUpdate = true;
-};
 objects.objs.moji.MojiGeo.prototype = {
 	init: function(base) {
 		this._base = base;
@@ -2267,9 +2257,12 @@ objects.objs.moji.MojiGeo.prototype = {
 			this.baseRadY.push(Math.asin(vv.y / a));
 		}
 	}
+	,setMode: function(mode) {
+		this._mode = mode;
+	}
 	,update: function(a) {
 		this._count++;
-		this._updateZ(a);
+		if(this._mode == 0) this._updateReset(); else this._updateZ(a);
 		this.geo.verticesNeedUpdate = true;
 	}
 	,_updatePolar: function(a) {
@@ -2294,6 +2287,9 @@ objects.objs.moji.MojiGeo.prototype = {
 		}
 	}
 	,_updateZ: function(a) {
+		var n = this._count % 60;
+		if(n == 0 && Math.random() < 0.5) this._updateReset();
+		if(n < 30) return;
 		var len = this._base.vertices.length;
 		var _g = 0;
 		while(_g < len) {
@@ -2304,8 +2300,43 @@ objects.objs.moji.MojiGeo.prototype = {
 				v.x = base.x + 100 * (Math.random() - 0.5);
 				v.y = base.y + 100 * (Math.random() - 0.5);
 			}
-			v.z = base.z + base.z * Math.pow(a.freqByteData[3] / 255,2) * 30 * Math.random();
+			v.z = base.z + base.z * Math.pow(a.freqByteData[3] / 255,2) * 70 * Math.random();
 		}
+	}
+	,_updateReset: function() {
+		var len = this._base.vertices.length;
+		var _g = 0;
+		while(_g < len) {
+			var i = _g++;
+			var v = this.geo.vertices[i];
+			var base = this._base.vertices[i];
+			v.x = base.x;
+			v.y = base.y;
+			v.z = base.z;
+		}
+	}
+	,updateColor: function() {
+		var g = this.geo;
+		var faceIndices_0 = "a";
+		var faceIndices_1 = "b";
+		var faceIndices_2 = "c";
+		var faceIndices_3 = "d";
+		var _g1 = 0;
+		var _g = g.faces.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var face = g.faces[i];
+			var numberOfSides;
+			if(js.Boot.__instanceof(face,THREE.Face3)) numberOfSides = 3; else numberOfSides = 4;
+			var _g2 = 0;
+			while(_g2 < numberOfSides) {
+				var j = _g2++;
+				var color = new THREE.Color(16777215);
+				color.setHex(Math.floor(Math.random() * 16777215));
+				face.vertexColors[j] = color;
+			}
+		}
+		g.colorsNeedUpdate = true;
 	}
 	,__class__: objects.objs.moji.MojiGeo
 };
@@ -2315,11 +2346,12 @@ objects.objs.moji.MojiMaker.__name__ = true;
 objects.objs.moji.MojiMaker.init = function(shape) {
 	objects.objs.moji.MojiMaker._shape = shape;
 	if(objects.objs.moji.MojiMaker.dedemouse == null) {
+		objects.objs.moji.MojiMaker.de = objects.objs.moji.MojiMaker.getGeometry("デ",4);
 		objects.objs.moji.MojiMaker.dedemouse = objects.objs.moji.MojiMaker.getGeometry("デデマウス");
 		objects.objs.moji.MojiMaker.hexpixels = objects.objs.moji.MojiMaker.getGeometry("ヘックスピクセルズ");
 		objects.objs.moji.MojiMaker.kitasenju = objects.objs.moji.MojiMaker.getGeometry("北千住デザイン");
 		objects.objs.moji.MojiMaker.kimaira = objects.objs.moji.MojiMaker.getGeometry("キマイラ");
-		objects.objs.moji.MojiMaker.geos = [objects.objs.moji.MojiMaker.dedemouse,objects.objs.moji.MojiMaker.hexpixels,objects.objs.moji.MojiMaker.kitasenju,objects.objs.moji.MojiMaker.kimaira];
+		objects.objs.moji.MojiMaker.geos = [objects.objs.moji.MojiMaker.de,objects.objs.moji.MojiMaker.dedemouse,objects.objs.moji.MojiMaker.hexpixels,objects.objs.moji.MojiMaker.kitasenju,objects.objs.moji.MojiMaker.kimaira];
 	}
 };
 objects.objs.moji.MojiMaker.getRandomGeo = function() {
@@ -2328,7 +2360,8 @@ objects.objs.moji.MojiMaker.getRandomGeo = function() {
 objects.objs.moji.MojiMaker.getGeo = function(index) {
 	return objects.objs.moji.MojiMaker.geos[index % objects.objs.moji.MojiMaker.geos.length];
 };
-objects.objs.moji.MojiMaker.getGeometry = function(src) {
+objects.objs.moji.MojiMaker.getGeometry = function(src,scl) {
+	if(scl == null) scl = 2;
 	var space = 215;
 	var spaceY = 250;
 	var nn = src.length;
@@ -2341,13 +2374,14 @@ objects.objs.moji.MojiMaker.getGeometry = function(src) {
 		var shapes = objects.objs.moji.MojiMaker._shape.getShapes(HxOverrides.substr(src,j,1),true);
 		var geo = new THREE.ExtrudeGeometry(shapes,{ bevelSize : 2, bevelEnabled : true, amount : amount, bevelSegments : 1});
 		var mat4 = new THREE.Matrix4();
-		mat4.multiply(new THREE.Matrix4().makeScale(2,2,2));
+		mat4.multiply(new THREE.Matrix4().makeScale(scl,scl,scl));
 		var vv = new THREE.Vector3((j * space - (nn - 1) / 2 * space) * 0.5,0,-amount / 2);
 		mat4.multiply(new THREE.Matrix4().makeTranslation(vv.x,vv.y,vv.z));
 		g.merge(geo,mat4);
 	}
 	var geo1 = new objects.objs.moji.MojiGeo();
 	geo1.init(g);
+	geo1.updateColor();
 	return geo1;
 };
 objects.objs.moji.MojiMaker.prototype = {
@@ -3215,6 +3249,8 @@ objects.data.EffectData.EFFECT_COLOR_WIRE = new objects.data.EffectData({ name :
 objects.data.EffectData.effects = [objects.data.EffectData.EFFECT_NORMAL,objects.data.EffectData.EFFECT_DISPLACE_X,objects.data.EffectData.EFFECT_DISPLACE_MAP];
 objects.data.EffectData._count = -1;
 objects.objs.Faces.MAT_NUM = 5;
+objects.objs.moji.MojiGeo.MODE_NORMAL = 0;
+objects.objs.moji.MojiGeo.MODE_GIZAGIZA = 1;
 objects.objs.moji.MojiMaker.geos = [];
 objects.objs.motion.FaceMotion.MODE_ROT_Y = 0;
 objects.objs.motion.FaceMotion.MODE_ROT_XYZ = 1;

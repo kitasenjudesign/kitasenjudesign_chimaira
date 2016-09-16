@@ -54,8 +54,6 @@ class Dedes extends MatchMoveObects
 		_data = data;		
 		this.visible = true;
 		
-
-		
 		/*
 		_mesh = _loader.meshes[0];		
 		_mesh.scale.set(0.1, 0.1, 0.1);
@@ -74,7 +72,6 @@ class Dedes extends MatchMoveObects
 			//var points:Line = new Line(geo, new LineBasicMaterial( { color:0xff0000 } ));
 			add(points);
 		}*/
-		
 		
 	}
 

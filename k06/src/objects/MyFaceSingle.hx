@@ -81,7 +81,7 @@ class MyFaceSingle extends Object3D
 	private var _vx:Float = 0;
 	private var _vy:Float = 0;
 	private var _vz:Float = 0;
-	
+	private var _pauseCount:Int = 0;
 	public static var geometries:Array<Geometry> = [];
 	public static inline var MAX:Int = 3;
 	public var baseY:Float=0;
@@ -180,13 +180,19 @@ class MyFaceSingle extends Object3D
 		return n;
 	}
 	
-	
+	/**
+	 * 
+	 * @param	audio
+	 */
 	public function updateSingle(audio:MyAudio):Void {
 		
 		if (Dat.bg) return;
 		if (dae == null) return;
 		if (!this.visible) return;
 		if (index >= MAX) return;
+		
+		_pauseCount++;
+		
 		
 		_audio = audio;
 		var g:Geometry = untyped dae.geometry;

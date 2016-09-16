@@ -15,6 +15,10 @@ import three.Vector3;
 class MojiGeo 
 {
 
+	public static inline var MODE_NORMAL:Int = 0;
+	public static inline var MODE_GIZAGIZA:Int = 1;
+	
+	private var _mode:Int = MODE_GIZAGIZA;
 	private var _base:Geometry;
 	
 	private var baseAmp:Array<Float> = [];
@@ -60,6 +64,15 @@ class MojiGeo
 		*/
 	}
 	
+	
+	public function setMode(mode:Int):Void {
+		
+		_mode = mode;
+		
+		
+	}
+	
+	
 	/**
 	 * update
 	 * @param	a
@@ -72,7 +85,15 @@ class MojiGeo
 		//_count = _count % 10;
 		
 		//_updatePolar();
-		_updateZ(a);
+		if ( _mode == MODE_NORMAL ) {
+			
+			_updateReset();
+			
+		}else{
+		
+			_updateZ(a);
+		
+		}
 		
 		geo.verticesNeedUpdate = true;		
 		
@@ -121,6 +142,14 @@ class MojiGeo
 	private function _updateZ(a:MyAudio):Void {
 		
 		//polar wo update
+		var n:Int = _count % 60;
+
+		if ( n == 0 && Math.random()<0.5 ) {
+			_updateReset();
+		}
+		
+		if (n < 30) return;
+		
 		var len:Int = _base.vertices.length;
 		for (i in 0...len) {
 			
@@ -131,7 +160,7 @@ class MojiGeo
 				v.x = base.x + 100 * (Math.random() - 0.5);// + Math.pow(a.freqByteData[5] / 255, 2) * 1200 * Math.random();//
 				v.y = base.y + 100 * (Math.random() - 0.5);// + Math.pow(a.freqByteData[7] / 255, 2) * 1200 * Math.random();//
 			}
-			v.z = base.z + base.z * Math.pow(a.freqByteData[3] / 255, 2) * 30 * Math.random();//
+			v.z = base.z + base.z * Math.pow(a.freqByteData[3] / 255, 2) * 70 * Math.random();//
 			
 			//var tgtX:Float = amp * Math.sin( radX ) * Math.cos(radY) + zengo;//横
 			//var tgtY:Float = amp * Math.sin( radY );//縦
@@ -146,12 +175,27 @@ class MojiGeo
 		
 	}
 	
+	private function _updateReset():Void {
+		
+		var len:Int = _base.vertices.length;
+		for (i in 0...len) {
+			
+			var v:Vector3 = geo.vertices[i];
+			var base:Vector3 = _base.vertices[i];
+			v.x = base.x;
+			v.y = base.y;
+			v.z = base.z;
+		}
+		
+	}
+	
 	/**
 	 * updateColor
 	 * @param	g
 	 */
-	public static function updateColor(g:Geometry):Void {
+	public function updateColor():Void {
 		
+		var g:Geometry = geo;
 		var faceIndices:Array<String> = [ 'a', 'b', 'c', 'd' ];
 		for ( i in 0...g.faces.length ) {
 	

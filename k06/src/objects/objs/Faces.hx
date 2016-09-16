@@ -147,71 +147,18 @@ class Faces extends MatchMoveObects
 	private function _changeMat():Void {
 		
 		/*
-
-	public static inline var MAT_WIREFRAME	:Int = 0;
-	public static inline var MAT_MIRROR		:Int = 1;
-	public static inline var MAT_COLOR		:Int = 2;
-	public static inline var MAT_MESH		:Int = 3;
-	public static inline var MAT_MESH_RED	:Int = 4;	
+			public static inline var MAT_WIREFRAME	:Int = 0;
+			public static inline var MAT_MIRROR		:Int = 1;
+			public static inline var MAT_COLOR		:Int = 2;
+			public static inline var MAT_MESH		:Int = 3;
+			public static inline var MAT_MESH_RED	:Int = 4;	
 		*/
 	
 		//3pattern
 		_matIndex++;
 		_matIndex = _matIndex % MAT_NUM;
-		
 		MaterialParams.setParam(_material, _matIndex);
 		
-		/*
-		switch(_matIndex) {
-			case MAT_WIREFRAME://0
-				//normal
-				_material.map = Textures.colorWhite;
-				_material.color = (Math.random() < 0.5) ? new Color(0xffffff) : new Color(0xee1111); 
-				_material.refractionRatio = 0.3;
-				_material.reflectivity = 0.3;				
-				_material.wireframe = true;
-				_material.transparent = false;
-				
-			case MAT_MIRROR://1
-				_material.map = Textures.colorWhite;
-				_material.transparent = false;				
-				_material.refractionRatio = 0.7;
-				_material.reflectivity = 0.7;
-				//_material.shininess = 0.01;				
-				_material.wireframe = false;
-				
-				
-			case MAT_COLOR://2
-				
-				_material.map = Textures.dedeColor;
-				_material.color = Math.random() < 0.5 ? new Color(0xffffff) : new Color(0xee1111); 
-				_material.transparent = false;
-				_material.refractionRatio = 0.1;
-				_material.reflectivity = 0.1;
-				_material.wireframe = false;
-			
-			case MAT_NET://3
-				//Browser.window.alert("net!! " + _matIndex);
-				_material.map = Textures.dedeColor;
-				_material.transparent = true;
-				_material.alphaTest = 0.5;				
-				_material.alphaMap = Math.random() < 0.5 ? Textures.moji1 : Textures.meshMono;				
-				_material.wireframe = false;
-			
-					
-			case MAT_NET_RED:
-				//Browser.window.alert("red!! " + _matIndex);
-				//_material.map = ImageUtils.loadTexture("mate3.png");
-				_redTexture = Math.random() < 0.5 ? Textures.moji1 : Textures.meshRed;
-				_material.wireframe = false;
-				_material.map = _redTexture;
-				_material.alphaMap = Textures.colorWhite;
-				_material.refractionRatio = 0.7;
-				_material.reflectivity = 0.7;				
-				_material.side = Three.DoubleSide;
-				
-		}*/
-	
 		_material.needsUpdate = true;
 	}
 		

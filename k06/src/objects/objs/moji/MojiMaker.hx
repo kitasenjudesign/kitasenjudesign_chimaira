@@ -19,6 +19,7 @@ class MojiMaker
 	public static var kitasenju	:MojiGeo;
 	public static var hexpixels	:MojiGeo;
 	public static var kimaira	:MojiGeo;
+	public static var de		:MojiGeo;
 	
 	private static var geos:Array<MojiGeo> = [];
 	
@@ -36,13 +37,14 @@ class MojiMaker
 		
 		_shape = shape;
 		if (dedemouse == null) {
-			
+			de = getGeometry("デ",6);			
 			dedemouse = getGeometry("デデマウス");
 			hexpixels = getGeometry("ヘックスピクセルズ");
 			kitasenju = getGeometry("北千住デザイン");
 			kimaira = getGeometry("キマイラ");
 			
 			geos = [
+				de,
 				dedemouse,
 				hexpixels,
 				kitasenju,
@@ -72,7 +74,7 @@ class MojiMaker
 	 * @param	shape
 	 * @return
 	 */
-	public static function getGeometry(src:String):MojiGeo {
+	public static function getGeometry(src:String,scl:Float = 2):MojiGeo {
 		
 		var space:Float = 215;
 		var spaceY:Float = 250;//
@@ -86,7 +88,7 @@ class MojiMaker
 				var geo:ExtrudeGeometry = new ExtrudeGeometry(shapes, { bevelSize:2,bevelEnabled:true, amount:amount, bevelSegments:1 } );
 				
 				var mat4:Matrix4 = new Matrix4();
-				mat4.multiply( new Matrix4().makeScale(2, 2, 2) );
+				mat4.multiply( new Matrix4().makeScale(scl, scl, scl) );
 				var vv:Vector3 = 
 					new Vector3( 
 						(j * space - (nn - 1) / 2 * space)*0.5, 
@@ -99,6 +101,7 @@ class MojiMaker
 		}
 		var geo:MojiGeo = new MojiGeo();
 		geo.init(g);
+		geo.updateColor();
 		/*
 		for (i in 0...g.vertices.length) {
 			

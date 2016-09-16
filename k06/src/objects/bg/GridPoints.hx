@@ -32,7 +32,7 @@ class GridPoints extends Points
 		    
 					var i3:Int = idx * 3;
 					
-					vertices[ i3 + 0 ] = (i - (ww-1)/2) * space;
+					vertices[ i3 + 0 ] = (i - (ww - 1) / 2) * space + (k % 2) * space / 2;
 					vertices[ i3 + 1 ] = (j - (hh-1)/2) * space;
 					vertices[ i3 + 2 ] = (k - (dd-1)/2) * space;
         			

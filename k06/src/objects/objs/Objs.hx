@@ -34,7 +34,7 @@ class Objs extends Object3D
 	}
 	
 	/**
-	 * 
+	 * init
 	 */
 	public function init(callback:Void->Void):Void {
 		
@@ -58,7 +58,7 @@ class Objs extends Object3D
 		
 		_objects = [
 			//_logos,
-			//_faces,
+			_faces,
 			_mojis
 			//_eyes
 			//_faces
