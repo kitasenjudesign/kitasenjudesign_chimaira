@@ -102,6 +102,7 @@ class MojiMaker
 		var geo:MojiGeo = new MojiGeo();
 		geo.init(g);
 		geo.updateColor();
+		
 		/*
 		for (i in 0...g.vertices.length) {
 			

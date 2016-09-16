@@ -1742,11 +1742,11 @@ objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 });
 objects.bg = {};
 objects.bg.GridPoints = function() {
-	var ww = 50;
+	var ww = 100;
 	var hh = 1;
-	var dd = 50;
+	var dd = 100;
 	var l = ww * hh * dd;
-	var space = 80;
+	var space = 50;
 	var idx = 0;
 	var vertices = new Float32Array(l * 3);
 	var _g = 0;
@@ -1759,8 +1759,9 @@ objects.bg.GridPoints = function() {
 			while(_g2 < dd) {
 				var k = _g2++;
 				var i3 = idx * 3;
-				vertices[i3] = (i - (ww - 1) / 2) * space + k % 2 * space / 2;
-				vertices[i3 + 1] = (j - (hh - 1) / 2) * space;
+				var xx = k % 2 * space / 2;
+				vertices[i3] = (i - (ww - 1) / 2) * space + xx;
+				vertices[i3 + 1] = -j * space;
 				vertices[i3 + 2] = (k - (dd - 1) / 2) * space;
 				idx++;
 			}
@@ -1768,14 +1769,16 @@ objects.bg.GridPoints = function() {
 	}
 	var g = new THREE.BufferGeometry();
 	g.addAttribute("position",new THREE.BufferAttribute(vertices,3));
-	var mat = new THREE.PointsMaterial({ size : 2, color : 16777215});
-	mat.sizeAttenuation = false;
+	var mat = new THREE.PointsMaterial({ size : 1, color : 16777215});
 	THREE.Points.call(this,g,mat);
+	this.frustrumCulled = false;
 };
 objects.bg.GridPoints.__name__ = true;
 objects.bg.GridPoints.__super__ = THREE.Points;
 objects.bg.GridPoints.prototype = $extend(THREE.Points.prototype,{
-	__class__: objects.bg.GridPoints
+	update: function(a) {
+	}
+	,__class__: objects.bg.GridPoints
 });
 objects.data = {};
 objects.data.EffectData = function(o) {
@@ -2346,7 +2349,7 @@ objects.objs.moji.MojiMaker.__name__ = true;
 objects.objs.moji.MojiMaker.init = function(shape) {
 	objects.objs.moji.MojiMaker._shape = shape;
 	if(objects.objs.moji.MojiMaker.dedemouse == null) {
-		objects.objs.moji.MojiMaker.de = objects.objs.moji.MojiMaker.getGeometry("デ",4);
+		objects.objs.moji.MojiMaker.de = objects.objs.moji.MojiMaker.getGeometry("デ",6);
 		objects.objs.moji.MojiMaker.dedemouse = objects.objs.moji.MojiMaker.getGeometry("デデマウス");
 		objects.objs.moji.MojiMaker.hexpixels = objects.objs.moji.MojiMaker.getGeometry("ヘックスピクセルズ");
 		objects.objs.moji.MojiMaker.kitasenju = objects.objs.moji.MojiMaker.getGeometry("北千住デザイン");

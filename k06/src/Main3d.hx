@@ -204,10 +204,12 @@ class Main3d
 		//Browser.window.alert("bg=" + bg +" / "+ e.keyCode);
 		
 		switch(Std.parseInt(e.keyCode)) {
+			
 			case Dat.A:
 				_showVideo();
 			case Dat.S:
 				_hideVideo();
+				
 		}
 		
 	}
