@@ -272,7 +272,7 @@ class MyFaceSingle extends Object3D
 			//g.computeVertexNormals();
 		
 		//g.colorsNeedUpdate = true;
-		g.computeVertexNormals();
+		//g.computeVertexNormals();
 		
 		rotation.x += _vx;
 		rotation.y += _vy;
@@ -338,7 +338,26 @@ class MyFaceSingle extends Object3D
 		
 	}
 	
-	//public 
+	/*
+		if (randomMode) {
+			
+			if ( audio.subFreqByteData[_index] > 10 && _count++ > 10 ) {
+				_count = 0;
+				_randomSpeed.x = audio.subFreqByteData[_index] / 255 * 0.4;
+				_randomSpeed.y = audio.subFreqByteData[_index+1] / 255 * 0.4;
+				_randomSpeed.z = audio.subFreqByteData[_index+2] / 255 * 0.4;				
+			}
+			
+			this.rotation.x += _randomSpeed.x;
+			this.rotation.y += _randomSpeed.y;
+			this.rotation.z += _randomSpeed.z;
+			
+		}else{
+			this.rotation.x += ( r.x - this.rotation.x)/4;
+			this.rotation.y += ( r.y - this.rotation.y)/4;
+			this.rotation.z += ( r.z - this.rotation.z)/4;
+		}
+		*/
 	
 	
 

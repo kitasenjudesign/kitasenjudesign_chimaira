@@ -56,9 +56,13 @@ class MyTiltShiftShader
 						}
 					}
 					
-					sum.x *= 1.1;
-					sum.y *= 1.05;
-					sum.z *= 1.0;
+					sum.x *= 1.0;
+					sum.y *= 0.95;
+					sum.z *= 0.90;
+					
+					sum.x += 0.02;
+					sum.y += 0.02;
+					sum.z += 0.02;
 					
 					
 					gl_FragColor = sum;

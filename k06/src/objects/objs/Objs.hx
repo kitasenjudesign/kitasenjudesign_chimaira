@@ -58,9 +58,9 @@ class Objs extends Object3D
 		
 		_objects = [
 			//_logos,
-			_faces,
-			_mojis,
-			_eyes
+			//_faces,
+			_mojis
+			//_eyes
 			//_faces
 		];
 		
@@ -78,8 +78,8 @@ class Objs extends Object3D
 		hideAll();
 		//Browser.window.alert("next " + _index);		
 		
-		_currentObj = _objects[_index%_objects.length];
-		
+		//_currentObj = _objects[_index%_objects.length];
+		_currentObj = _objects[Math.floor(Math.random() * _objects.length)];
 		
 		_currentObj.show( data );
 		add(_currentObj);

@@ -98,7 +98,9 @@ class VideoPlayer extends Object3D
 		
 		_videoPlane = new VideoPlane();
 		_videoPlane.init(_video);
-		if(_videoMode==MODE_3D)add(_videoPlane);
+		if (_videoMode == MODE_3D) {
+			add(_videoPlane);
+		}
 		
 		//_callback();
 		//setInitCallback(_callback);

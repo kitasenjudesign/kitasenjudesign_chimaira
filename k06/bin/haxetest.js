@@ -161,9 +161,9 @@ Main3d.prototype = {
 		window.document.body.appendChild(this._renderer.domElement);
 		var light1 = new light.MySpotLight();
 		this._scene.add(light1);
-		this._light = new THREE.DirectionalLight(10061943,1);
+		this._light = new THREE.DirectionalLight(8943462,1);
 		this._scene.add(this._light);
-		var a = new THREE.AmbientLight(8947848);
+		var a = new THREE.AmbientLight(10066329);
 		this._scene.add(a);
 		this._skyboxMat = new common.SkyboxTexture();
 		this._skyboxMat.init(THREE.ImageUtils.loadTexture("mate.png"));
@@ -172,7 +172,6 @@ Main3d.prototype = {
 		this._video.start();
 		this._shadowGround = new light.ShadowPlane();
 		this._scene.add(this._shadowGround);
-		this._scene.fog = new THREE.Fog(16773352,100,3000);
 		this._pp = new effect.PostProcessing2();
 		this._pp.init(this._scene,this._camera,this._renderer,null);
 		common.Dat.gui.add(this,"_showVideo");
@@ -1003,7 +1002,7 @@ effect.shaders.MyTiltShiftShader = function() {
 };
 effect.shaders.MyTiltShiftShader.__name__ = true;
 effect.shaders.MyTiltShiftShader.getObject = function() {
-	return { uniforms : { tDiffuse : { type : "t", value : null}, v : { type : "f", value : 0.00390625}, r : { type : "f", value : 0.5}, k : { type : "fv1", value : [1.0,4.0,6.0,4.0,1.0,4.0,16.0,24.0,16.0,4.0,6.0,24.0,36.0,24.0,6.0,4.0,16.0,24.0,16.0,4.0,1.0,4.0,6.0,4.0,1.0]}}, vertexShader : "\r\n\t\t\t\tvarying vec2 vUv;\r\n\t\t\t\tvoid main() {\r\n\t\t\t\t\tvUv = uv;\r\n\t\t\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\r\n\t\t\t\t}", fragmentShader : "\r\n\t\t\t\tuniform sampler2D tDiffuse;\r\n\t\t\t\tuniform float v;\r\n\t\t\t\tuniform float r;\r\n\t\t\t\tuniform float k[25];\r\n\t\t\t\tvarying vec2 vUv;\r\n\r\n\t\t\t\tvoid main() {\r\n\r\n\t\t\t\t\tvec4 sum = vec4( 0.0 );\r\n\t\t\t\t\tfloat vv = v * abs( r - vUv.y );\r\n\t\t\t\t\t\r\n\t\t\t\t\tfor(float i=-1.0;i<=1.0;i++){\r\n\t\t\t\t\t\tfor(float j = -1.0; j <=1.0; j++) {\r\n\t\t\t\t\t\t\tsum += texture2D( tDiffuse, vec2( vUv.x + i * vv, vUv.y + j * vv ) ) / 9.0;\r\n\t\t\t\t\t\t\t//idx += 1;\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\t\t\t\t\t\r\n\t\t\t\t\tsum.x *= 1.1;\r\n\t\t\t\t\tsum.y *= 1.05;\r\n\t\t\t\t\tsum.z *= 1.0;\r\n\t\t\t\t\t\r\n\t\t\t\t\t\r\n\t\t\t\t\tgl_FragColor = sum;\r\n\r\n\t\t\t\t}"};
+	return { uniforms : { tDiffuse : { type : "t", value : null}, v : { type : "f", value : 0.00390625}, r : { type : "f", value : 0.5}, k : { type : "fv1", value : [1.0,4.0,6.0,4.0,1.0,4.0,16.0,24.0,16.0,4.0,6.0,24.0,36.0,24.0,6.0,4.0,16.0,24.0,16.0,4.0,1.0,4.0,6.0,4.0,1.0]}}, vertexShader : "\r\n\t\t\t\tvarying vec2 vUv;\r\n\t\t\t\tvoid main() {\r\n\t\t\t\t\tvUv = uv;\r\n\t\t\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\r\n\t\t\t\t}", fragmentShader : "\r\n\t\t\t\tuniform sampler2D tDiffuse;\r\n\t\t\t\tuniform float v;\r\n\t\t\t\tuniform float r;\r\n\t\t\t\tuniform float k[25];\r\n\t\t\t\tvarying vec2 vUv;\r\n\r\n\t\t\t\tvoid main() {\r\n\r\n\t\t\t\t\tvec4 sum = vec4( 0.0 );\r\n\t\t\t\t\tfloat vv = v * abs( r - vUv.y );\r\n\t\t\t\t\t\r\n\t\t\t\t\tfor(float i=-1.0;i<=1.0;i++){\r\n\t\t\t\t\t\tfor(float j = -1.0; j <=1.0; j++) {\r\n\t\t\t\t\t\t\tsum += texture2D( tDiffuse, vec2( vUv.x + i * vv, vUv.y + j * vv ) ) / 9.0;\r\n\t\t\t\t\t\t\t//idx += 1;\r\n\t\t\t\t\t\t}\r\n\t\t\t\t\t}\r\n\t\t\t\t\t\r\n\t\t\t\t\tsum.x *= 1.0;\r\n\t\t\t\t\tsum.y *= 0.95;\r\n\t\t\t\t\tsum.z *= 0.90;\r\n\t\t\t\t\t\r\n\t\t\t\t\tsum.x += 0.02;\r\n\t\t\t\t\tsum.y += 0.02;\r\n\t\t\t\t\tsum.z += 0.02;\r\n\t\t\t\t\t\r\n\t\t\t\t\t\r\n\t\t\t\t\tgl_FragColor = sum;\r\n\r\n\t\t\t\t}"};
 };
 effect.shaders.MyTiltShiftShader.prototype = {
 	__class__: effect.shaders.MyTiltShiftShader
@@ -1273,7 +1272,7 @@ light.ShadowPlane = function() {
 	this._mat = new THREE.ShadowMaterial();
 	this._mat.opacity = 0.3;
 	this._mat2 = new THREE.MeshLambertMaterial({ color : 16711680});
-	THREE.Mesh.call(this,new THREE.PlaneGeometry(1000,1000,5,5),this._mat);
+	THREE.Mesh.call(this,new THREE.PlaneGeometry(1500,1000,5,5),this._mat);
 	this.receiveShadow = true;
 	this.position.y = 0;
 	this.rotation.x = -Math.PI / 2;
@@ -1281,7 +1280,7 @@ light.ShadowPlane = function() {
 	common.Dat.gui.add(this,"_changeMat");
 };
 light.ShadowPlane.__name__ = true;
-light.ShadowPlane.setScale = function(s) {
+light.ShadowPlane.setSize = function(s) {
 };
 light.ShadowPlane.__super__ = THREE.Mesh;
 light.ShadowPlane.prototype = $extend(THREE.Mesh.prototype,{
@@ -1292,6 +1291,55 @@ light.ShadowPlane.prototype = $extend(THREE.Mesh.prototype,{
 	,__class__: light.ShadowPlane
 });
 var materials = {};
+materials.MaterialParams = function() {
+};
+materials.MaterialParams.__name__ = true;
+materials.MaterialParams.setParam = function(material,matIndex) {
+	switch(matIndex) {
+	case 4:
+		material.map = materials.Textures.colorWhite;
+		if(Math.random() < 0.5) material.color = new THREE.Color(16777215); else material.color = new THREE.Color(15601937);
+		material.refractionRatio = 0.3;
+		material.reflectivity = 0.3;
+		material.wireframe = true;
+		material.transparent = false;
+		break;
+	case 1:
+		material.map = materials.Textures.colorWhite;
+		material.transparent = false;
+		material.refractionRatio = 0.7;
+		material.reflectivity = 0.7;
+		material.wireframe = false;
+		break;
+	case 0:
+		material.map = materials.Textures.dedeColor;
+		if(Math.random() < 0.5) material.color = new THREE.Color(16777215); else material.color = new THREE.Color(15601937);
+		material.transparent = false;
+		material.refractionRatio = 0.1;
+		material.reflectivity = 0.1;
+		material.wireframe = false;
+		break;
+	case 3:
+		material.map = materials.Textures.dedeColor;
+		material.transparent = true;
+		material.alphaTest = 0.5;
+		if(Math.random() < 0.5) material.alphaMap = materials.Textures.moji1; else material.alphaMap = materials.Textures.meshMono;
+		material.wireframe = false;
+		break;
+	case 2:
+		material.wireframe = false;
+		if(Math.random() < 0.5) material.map = materials.Textures.moji1; else material.map = materials.Textures.meshRed;
+		material.alphaMap = materials.Textures.colorWhite;
+		material.refractionRatio = 0.7;
+		material.reflectivity = 0.7;
+		material.side = 2;
+		break;
+	}
+	material.needsUpdate = true;
+};
+materials.MaterialParams.prototype = {
+	__class__: materials.MaterialParams
+};
 materials.MyPhongMaterial = function(param) {
 	var defines = { USE_MAP : ""};
 	var uniforms = THREE.UniformsUtils .clone(THREE.ShaderLib.phong.uniforms);
@@ -1652,7 +1700,6 @@ objects.MyFaceSingle.prototype = $extend(THREE.Object3D.prototype,{
 			g.vertices[i].z += (tgtZ - g.vertices[i].z) / 2;
 			if(this.isSplit) this._splitSpirit(g.vertices[i],tgtX,tgtY,tgtZ);
 		}
-		g.computeVertexNormals();
 		this.rotation.x += this._vx;
 		this.rotation.y += this._vy;
 		this.rotation.z += this._vz;
@@ -1907,47 +1954,7 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 	,_changeMat: function() {
 		this._matIndex++;
 		this._matIndex = this._matIndex % 5;
-		var _g = this._matIndex;
-		switch(_g) {
-		case 4:
-			this._material.map = materials.Textures.colorWhite;
-			if(Math.random() < 0.5) this._material.color = new THREE.Color(16777215); else this._material.color = new THREE.Color(15597568);
-			this._material.refractionRatio = 0.7;
-			this._material.reflectivity = 0.7;
-			this._material.wireframe = true;
-			this._material.transparent = false;
-			break;
-		case 1:
-			this._material.map = materials.Textures.colorWhite;
-			this._material.transparent = false;
-			this._material.refractionRatio = 0.7;
-			this._material.reflectivity = 0.7;
-			this._material.wireframe = false;
-			break;
-		case 0:
-			this._material.map = materials.Textures.dedeColor;
-			this._material.color = new THREE.Color(16777215);
-			this._material.transparent = false;
-			this._material.refractionRatio = 0.1;
-			this._material.reflectivity = 0.1;
-			this._material.wireframe = false;
-			break;
-		case 3:
-			this._material.transparent = true;
-			this._material.alphaTest = 0.5;
-			this._material.alphaMap = materials.Textures.meshMono;
-			this._material.wireframe = false;
-			break;
-		case 2:
-			this._redTexture = materials.Textures.moji1;
-			this._material.wireframe = false;
-			this._material.map = this._redTexture;
-			this._material.alphaMap = materials.Textures.colorWhite;
-			this._material.refractionRatio = 0.7;
-			this._material.reflectivity = 0.7;
-			this._material.side = 2;
-			break;
-		}
+		materials.MaterialParams.setParam(this._material,this._matIndex);
 		this._material.needsUpdate = true;
 	}
 	,setEnvMap: function(texture) {
@@ -1955,8 +1962,11 @@ objects.objs.Faces.prototype = $extend(objects.MatchMoveObects.prototype,{
 	}
 	,update: function(a) {
 		if(!this.visible) return;
-		if(this._matIndex == 3) {
-		} else if(this._matIndex == 2) {
+		if(this._matIndex == 2) {
+			this._offsetX += a.subFreqByteData[4] / 128 * 0.01;
+			this._offsetY += a.subFreqByteData[7] / 128 * 0.01;
+			materials.Textures.meshRed.offset.set(this._offsetX,this._offsetY);
+			materials.Textures.moji1.offset.set(this._offsetX,this._offsetY);
 		}
 		if(this._faces.length > 0) this._motion.update(a);
 	}
@@ -1993,7 +2003,8 @@ objects.objs.Hands.prototype = $extend(objects.MatchMoveObects.prototype,{
 	,__class__: objects.objs.Hands
 });
 objects.objs.Mojis = function() {
-	this._getIndex = 0;
+	this._matIndex = 0;
+	this._geoIndex = 0;
 	this._index = 0;
 	this._offsetY = 0;
 	this._rad = 0;
@@ -2013,8 +2024,9 @@ objects.objs.Mojis.prototype = $extend(objects.MatchMoveObects.prototype,{
 	,_onInit0: function() {
 		var all = "デデマウス";
 		objects.objs.moji.MojiMaker.init(this._shape);
-		var g = objects.objs.moji.MojiMaker.hexpixels;
+		var g = objects.objs.moji.MojiMaker.hexpixels.geo;
 		this._material = new THREE.MeshPhongMaterial({ color : 16777215});
+		this._material.vertexColors = 2;
 		this._material.clippingPlanes = [new THREE.Plane(new THREE.Vector3(0,1,0),0.8)];
 		this._material.clipShadows = true;
 		this._material.side = 0;
@@ -2032,9 +2044,11 @@ objects.objs.Mojis.prototype = $extend(objects.MatchMoveObects.prototype,{
 	,show: function(data) {
 		this._data = data;
 		this.visible = true;
+		this._geoIndex++;
 		var pos = this._data.camData.positions;
 		var ss = this._data.size;
 		var yy = this._data.offsetY;
+		this._currentGeo = objects.objs.moji.MojiMaker.getGeo(this._geoIndex);
 		var _g1 = 0;
 		var _g = this._meshes.length;
 		while(_g1 < _g) {
@@ -2042,13 +2056,37 @@ objects.objs.Mojis.prototype = $extend(objects.MatchMoveObects.prototype,{
 			if(i < pos.length) {
 				var p = pos[i];
 				this._meshes[i].visible = true;
-				this._meshes[i].setGeo(objects.objs.moji.MojiMaker.getGeo(this._getIndex));
-				this._meshes[i].scale.set(0.2,0.2,0.2);
+				this._meshes[i].setGeo(this._currentGeo.geo);
+				this._meshes[i].scale.set(ss * 0.2,ss * 0.2,ss * 0.2);
 				this._meshes[i].position.x = p.x;
 				this._meshes[i].position.y = p.y + yy;
 				this._meshes[i].position.z = p.z;
 			} else this._meshes[i].visible = false;
 		}
+		this._changeMat();
+	}
+	,_changeMat: function() {
+		this._matIndex++;
+		var _g = this._matIndex % 3;
+		switch(_g) {
+		case 0:
+			this._material.wireframe = true;
+			this._material.vertexColors = 2;
+			break;
+		case 1:
+			this._material.wireframe = false;
+			this._material.vertexColors = 2;
+			break;
+		case 2:
+			this._material.wireframe = false;
+			this._material.vertexColors = 0;
+			break;
+		case 3:
+			if(Math.random() < 0.5) this._material.color = new THREE.Color(16711680); else this._material.color = new THREE.Color(16777215);
+			this._material.vertexColors = 0;
+			break;
+		}
+		this._material.needsUpdate = true;
 	}
 	,setEnvMap: function(texture) {
 		this._material.envMap = texture;
@@ -2056,6 +2094,7 @@ objects.objs.Mojis.prototype = $extend(objects.MatchMoveObects.prototype,{
 	,update: function(a) {
 		if(this._texture != null) {
 		}
+		this._currentGeo.update(a);
 		var _g1 = 0;
 		var _g = this._meshes.length;
 		while(_g1 < _g) {
@@ -2087,7 +2126,7 @@ objects.objs.Objs.prototype = $extend(THREE.Object3D.prototype,{
 	,start: function(data) {
 		this._currentData = data;
 		this.hideAll();
-		this._currentObj = this._objects[this._index % this._objects.length];
+		this._currentObj = this._objects[Math.floor(Math.random() * this._objects.length)];
 		this._currentObj.show(data);
 		this.add(this._currentObj);
 		this._index++;
@@ -2184,6 +2223,92 @@ objects.objs.line.HattoriLine.prototype = $extend(objects.objs.line.GeoBase.prot
 	,__class__: objects.objs.line.HattoriLine
 });
 objects.objs.moji = {};
+objects.objs.moji.MojiGeo = function() {
+	this._count = 0;
+	this.baseRadY = [];
+	this.baseRadX = [];
+	this.baseAmp = [];
+};
+objects.objs.moji.MojiGeo.__name__ = true;
+objects.objs.moji.MojiGeo.updateColor = function(g) {
+	var faceIndices_0 = "a";
+	var faceIndices_1 = "b";
+	var faceIndices_2 = "c";
+	var faceIndices_3 = "d";
+	var _g1 = 0;
+	var _g = g.faces.length;
+	while(_g1 < _g) {
+		var i = _g1++;
+		var face = g.faces[i];
+		var numberOfSides;
+		if(js.Boot.__instanceof(face,THREE.Face3)) numberOfSides = 3; else numberOfSides = 4;
+		var _g2 = 0;
+		while(_g2 < numberOfSides) {
+			var j = _g2++;
+			var color = new THREE.Color(16777215);
+			color.setHex(Math.floor(Math.random() * 16777215));
+			face.vertexColors[j] = color;
+		}
+	}
+	g.colorsNeedUpdate = true;
+};
+objects.objs.moji.MojiGeo.prototype = {
+	init: function(base) {
+		this._base = base;
+		this.geo = this._base.clone();
+		var _g1 = 0;
+		var _g = this.geo.vertices.length;
+		while(_g1 < _g) {
+			var i = _g1++;
+			var vv = this.geo.vertices[i].clone();
+			var a = vv.length();
+			this.baseAmp.push(a);
+			this.baseRadX.push(-Math.atan2(vv.z,vv.x) + Math.PI * 0.5);
+			this.baseRadY.push(Math.asin(vv.y / a));
+		}
+	}
+	,update: function(a) {
+		this._count++;
+		this._updateZ(a);
+		this.geo.verticesNeedUpdate = true;
+	}
+	,_updatePolar: function(a) {
+		var len = this._base.vertices.length;
+		var _g = 0;
+		while(_g < len) {
+			var i = _g++;
+			var v = this.geo.vertices[i];
+			var base = this._base.vertices[i];
+			if(this._count % 10 == 0) {
+				var amp = this.baseAmp[i] + 300 * Math.random() * a.freqByteData[3] / 255;
+				var radX = this.baseRadX[i];
+				var radY = this.baseRadY[i];
+				v.x = amp * Math.sin(radX) * Math.cos(radY);
+				v.y = amp * Math.sin(radY);
+				v.z = amp * Math.cos(radX) * Math.cos(radY);
+			} else {
+				v.x += (base.x - v.x) / 2;
+				v.y += (base.y - v.y) / 2;
+				v.z += (base.z - v.z) / 2;
+			}
+		}
+	}
+	,_updateZ: function(a) {
+		var len = this._base.vertices.length;
+		var _g = 0;
+		while(_g < len) {
+			var i = _g++;
+			var v = this.geo.vertices[i];
+			var base = this._base.vertices[i];
+			if(i % 10 == 0) {
+				v.x = base.x + 100 * (Math.random() - 0.5);
+				v.y = base.y + 100 * (Math.random() - 0.5);
+			}
+			v.z = base.z + base.z * Math.pow(a.freqByteData[3] / 255,2) * 30 * Math.random();
+		}
+	}
+	,__class__: objects.objs.moji.MojiGeo
+};
 objects.objs.moji.MojiMaker = function() {
 };
 objects.objs.moji.MojiMaker.__name__ = true;
@@ -2201,7 +2326,7 @@ objects.objs.moji.MojiMaker.getRandomGeo = function() {
 	return objects.objs.moji.MojiMaker.geos[Math.floor(objects.objs.moji.MojiMaker.geos.length * Math.random())];
 };
 objects.objs.moji.MojiMaker.getGeo = function(index) {
-	return objects.objs.moji.MojiMaker.geos[index];
+	return objects.objs.moji.MojiMaker.geos[index % objects.objs.moji.MojiMaker.geos.length];
 };
 objects.objs.moji.MojiMaker.getGeometry = function(src) {
 	var space = 215;
@@ -2212,15 +2337,18 @@ objects.objs.moji.MojiMaker.getGeometry = function(src) {
 	var _g = src.length;
 	while(_g1 < _g) {
 		var j = _g1++;
+		var amount = 20;
 		var shapes = objects.objs.moji.MojiMaker._shape.getShapes(HxOverrides.substr(src,j,1),true);
-		var geo = new THREE.ExtrudeGeometry(shapes,{ bevelEnabled : true, amount : 30});
+		var geo = new THREE.ExtrudeGeometry(shapes,{ bevelSize : 2, bevelEnabled : true, amount : amount, bevelSegments : 1});
 		var mat4 = new THREE.Matrix4();
 		mat4.multiply(new THREE.Matrix4().makeScale(2,2,2));
-		var vv = new THREE.Vector3((j * space - (nn - 1) / 2 * space) * 0.5,0,0);
+		var vv = new THREE.Vector3((j * space - (nn - 1) / 2 * space) * 0.5,0,-amount / 2);
 		mat4.multiply(new THREE.Matrix4().makeTranslation(vv.x,vv.y,vv.z));
 		g.merge(geo,mat4);
 	}
-	return g;
+	var geo1 = new objects.objs.moji.MojiGeo();
+	geo1.init(g);
+	return geo1;
 };
 objects.objs.moji.MojiMaker.prototype = {
 	__class__: objects.objs.moji.MojiMaker
@@ -2252,21 +2380,22 @@ objects.objs.moji.MojiMesh.prototype = $extend(THREE.Mesh.prototype,{
 		this.rotation.z = Math.random() * 2 * Math.PI;
 	}
 	,update: function(a) {
-		if(a.subFreqByteData[3] > 9 && this._count++ > 30) {
+		this._count++;
+		if(a.subFreqByteData[3] > 9 && this._count > 30) {
 			this._count = 0;
 			this._targetV.x += a.subFreqByteData[this.idx1] / 100;
 			this._targetV.y += a.subFreqByteData[this.idx2] / 100;
 			this._targetV.z += a.subFreqByteData[this.idx3] / 100;
 			if(this._targetV.length() > Math.PI / 5) {
 				this._targetV = this._targetV.normalize();
-				this._targetV.x *= Math.PI / 3;
-				this._targetV.y *= Math.PI / 3;
-				this._targetV.z *= Math.PI / 3;
+				this._targetV.x *= Math.PI / 5;
+				this._targetV.y *= Math.PI / 5;
+				this._targetV.z *= Math.PI / 5;
 			}
 		}
-		this._targetV.x *= 0.8;
-		this._targetV.y *= 0.8;
-		this._targetV.z *= 0.8;
+		this._targetV.x *= 0.9;
+		this._targetV.y *= 0.9;
+		this._targetV.z *= 0.9;
 		this.rotation.x += this._targetV.x + this.ovx;
 		this.rotation.y += this._targetV.y + this.ovy;
 		this.rotation.z += this._targetV.z + this.ovz;
@@ -2294,7 +2423,6 @@ objects.objs.motion.FaceMotion.prototype = {
 		var scales = this._data.camData.scales;
 		var ss = this._data.size;
 		var yy = this._data.offsetY;
-		if(this._modePos == 11) ss = ss * 2;
 		this._spaceY = ss * 200;
 		switch(posMode) {
 		case 11:
@@ -2620,7 +2748,7 @@ video.Config.__name__ = true;
 video.Config.prototype = {
 	load: function(filename,callback) {
 		this._callback = callback;
-		var d = { data : [{ id : "HACHI", cam : "mov2/cam_hachi.json", mov : "mov2/03_hachi.mp4", size : 0.3, y : 2, offsetFrame : 0},{ id : "WWW", cam : "mov2/cam_www.json", mov : "mov2/00_www.mp4", size : 0.5, y : 50, offsetFrame : 0},{ id : "SCRAMBLE", cam : "mov2/cam_scramble.json", mov : "mov2/01_scramble.mp4", size : 0.8, y : 50, offsetFrame : 0},{ id : "OSHO", cam : "mov2/cam_osho.json", mov : "mov2/07_osho.mp4", size : 0.3, y : 10, offsetFrame : 0},{ id : "FUKAN", cam : "mov2/cam_fukan.json", mov : "mov2/04_fukan.mp4", size : 0.25, y : 10, offsetFrame : 0},{ id : "STATION", cam : "mov2/cam_station.json", mov : "mov2/02_station.mp4", size : 0.6, y : 50, offsetFrame : 0},{ id : "HACHI", cam : "mov2/cam_hachi.json", mov : "mov2/03_hachi.mp4", size : 0.3, y : 2, offsetFrame : 0},{ id : "KOKA", cam : "mov2/cam_koka.json", mov : "mov2/05_koka.mp4", size : 0.3, y : 2, offsetFrame : 0},{ id : "WWW3", cam : "mov2/cam_www3.json", mov : "mov2/08_www3.mp4", size : 0.4, y : 50, offsetFrame : 0}]};
+		var d = { data : [{ id : "HACHI", cam : "mov2/cam_hachi.json", mov : "mov2/03_hachi.mp4", size : 0.3, y : 2, offsetFrame : 0},{ id : "WWW", cam : "mov2/cam_www.json", mov : "mov2/00_www.mp4", size : 0.5, y : 50, offsetFrame : 0},{ id : "SCRAMBLE", cam : "mov2/cam_scramble.json", mov : "mov2/01_scramble.mp4", size : 0.8, y : 50, offsetFrame : 0},{ id : "OSHO", cam : "mov2/cam_osho.json", mov : "mov2/07_osho.mp4", size : 0.3, y : 40, offsetFrame : 0},{ id : "FUKAN", cam : "mov2/cam_fukan.json", mov : "mov2/04_fukan.mp4", size : 0.25, y : 10, offsetFrame : 0},{ id : "STATION", cam : "mov2/cam_station.json", mov : "mov2/02_station.mp4", size : 0.6, y : 50, offsetFrame : 0},{ id : "HACHI", cam : "mov2/cam_hachi.json", mov : "mov2/03_hachi.mp4", size : 0.3, y : 2, offsetFrame : 0},{ id : "KOKA", cam : "mov2/cam_koka.json", mov : "mov2/05_koka.mp4", size : 0.3, y : 2, offsetFrame : 0},{ id : "WWW3", cam : "mov2/cam_www3.json", mov : "mov2/08_www3.mp4", size : 0.4, y : 50, offsetFrame : 0}]};
 		this.list = [];
 		var _g1 = 0;
 		var _g = d.data.length;
@@ -3063,6 +3191,11 @@ effect.PostProcessing2.MODE_NORMAL = "MODE_NORMAL";
 effect.PostProcessing2.MODE_DISPLACEMENT_A = "MODE_DISPLACEMENT_A";
 effect.PostProcessing2.MODE_DISPLACEMENT_B = "MODE_DISPLACEMENT_B";
 effect.PostProcessing2.MODE_COLOR = "MODE_COLOR";
+materials.MaterialParams.MAT_COLOR = 0;
+materials.MaterialParams.MAT_MIRROR = 1;
+materials.MaterialParams.MAT_NET_RED = 2;
+materials.MaterialParams.MAT_NET = 3;
+materials.MaterialParams.MAT_WIREFRAME = 4;
 objects.MyDAELoader.MAX_Y = 1.36578;
 objects.MyDAELoader.MIN_Y = -1.13318;
 objects.MyFaceSingle.geometries = [];
@@ -3081,11 +3214,6 @@ objects.data.EffectData.EFFECT_COLOR = new objects.data.EffectData({ name : "EFF
 objects.data.EffectData.EFFECT_COLOR_WIRE = new objects.data.EffectData({ name : "EFFECT_COLOR_WIRE", colorType : 1, displaceType : 0, strength : 1, wireframe : true});
 objects.data.EffectData.effects = [objects.data.EffectData.EFFECT_NORMAL,objects.data.EffectData.EFFECT_DISPLACE_X,objects.data.EffectData.EFFECT_DISPLACE_MAP];
 objects.data.EffectData._count = -1;
-objects.objs.Faces.MAT_WIREFRAME = 4;
-objects.objs.Faces.MAT_MIRROR = 1;
-objects.objs.Faces.MAT_COLOR = 0;
-objects.objs.Faces.MAT_NET = 3;
-objects.objs.Faces.MAT_NET_RED = 2;
 objects.objs.Faces.MAT_NUM = 5;
 objects.objs.moji.MojiMaker.geos = [];
 objects.objs.motion.FaceMotion.MODE_ROT_Y = 0;

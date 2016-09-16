@@ -27,8 +27,6 @@ class MySpotLight extends SpotLight
 		castShadow = true;
 		
 	
-		
-		
 		var fuga:MySpotLight = this;
 		untyped __js__("
 			fuga.shadow = new THREE.LightShadow( new THREE.PerspectiveCamera( 30, 16/9, 200, 6000 ) );

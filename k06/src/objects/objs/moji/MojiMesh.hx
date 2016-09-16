@@ -46,9 +46,12 @@ class MojiMesh extends Mesh
 		
 	}
 	
+	
+	
 	public function update(a:MyAudio):Void {
 
-		if( a.subFreqByteData[3] > 9 && _count++>30 ){
+		_count++;
+		if( a.subFreqByteData[3] > 9 && _count>30 ){
 		
 			_count = 0;
 			_targetV.x += a.subFreqByteData[idx1]/100;
@@ -58,16 +61,16 @@ class MojiMesh extends Mesh
 			//limit
 			if (_targetV.length() > Math.PI/5) {
 				_targetV = _targetV.normalize();
-				_targetV.x *= Math.PI/3;
-				_targetV.y *= Math.PI/3;
-				_targetV.z *= Math.PI/3;				
+				_targetV.x *= Math.PI/5;
+				_targetV.y *= Math.PI/5;
+				_targetV.z *= Math.PI/5;				
 			}
 			
 		}
 		
-		_targetV.x *= 0.8;
-		_targetV.y *= 0.8;
-		_targetV.z *= 0.8;
+		_targetV.x *= 0.9;
+		_targetV.y *= 0.9;
+		_targetV.z *= 0.9;
 		
 		rotation.x += _targetV.x + ovx;
 		rotation.y += _targetV.y + ovy;

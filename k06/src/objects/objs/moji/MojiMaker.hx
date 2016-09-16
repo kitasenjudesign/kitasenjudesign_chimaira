@@ -1,6 +1,8 @@
 package objects.objs.moji;
 import three.Color;
 import three.ExtrudeGeometry;
+import three.Face;
+import three.Face3;
 import three.Geometry;
 import three.Matrix4;
 import three.Shape;
@@ -13,12 +15,12 @@ import three.Vector3;
 class MojiMaker
 {
 
-	public static var dedemouse	:Geometry;
-	public static var kitasenju	:Geometry;
-	public static var hexpixels	:Geometry;
-	public static var kimaira	:Geometry;
+	public static var dedemouse	:MojiGeo;
+	public static var kitasenju	:MojiGeo;
+	public static var hexpixels	:MojiGeo;
+	public static var kimaira	:MojiGeo;
 	
-	private static var geos:Array<Geometry> = [];
+	private static var geos:Array<MojiGeo> = [];
 	
 	
 	static private var _shape:FontShapeMaker;
@@ -51,7 +53,7 @@ class MojiMaker
 	}
 	
 	
-	public static function getRandomGeo():Geometry {
+	public static function getRandomGeo():MojiGeo {
 		
 		
 		return geos[ Math.floor(geos.length * Math.random()) ];
@@ -59,8 +61,8 @@ class MojiMaker
 	}
 	
 	
-	public static function getGeo(index:Int):Geometry {
-		return geos[index];
+	public static function getGeo(index:Int):MojiGeo {
+		return geos[index % geos.length];
 	}
 	
 	
@@ -70,7 +72,7 @@ class MojiMaker
 	 * @param	shape
 	 * @return
 	 */
-	public static function getGeometry(src:String):Geometry {
+	public static function getGeometry(src:String):MojiGeo {
 		
 		var space:Float = 215;
 		var spaceY:Float = 250;//
@@ -79,8 +81,9 @@ class MojiMaker
 		
 		for(j in 0...src.length){
 			
+				var amount:Float = 20;
 				var shapes:Array<Shape> = _shape.getShapes(src.substr(j,1), true);
-				var geo:ExtrudeGeometry = new ExtrudeGeometry(shapes, { bevelEnabled:true, amount:30 } );
+				var geo:ExtrudeGeometry = new ExtrudeGeometry(shapes, { bevelSize:2,bevelEnabled:true, amount:amount, bevelSegments:1 } );
 				
 				var mat4:Matrix4 = new Matrix4();
 				mat4.multiply( new Matrix4().makeScale(2, 2, 2) );
@@ -88,13 +91,14 @@ class MojiMaker
 					new Vector3( 
 						(j * space - (nn - 1) / 2 * space)*0.5, 
 						0,//(- i * spaceY)*0.5, 
-						0
+						-amount/2
 				);
 				mat4.multiply( new Matrix4().makeTranslation(vv.x,vv.y,vv.z));
 				g.merge(geo, mat4);
 			
 		}
-		
+		var geo:MojiGeo = new MojiGeo();
+		geo.init(g);
 		/*
 		for (i in 0...g.vertices.length) {
 			
@@ -112,10 +116,20 @@ class MojiMaker
 		g.colorsNeedUpdate = true;
 		*/
 		
-		return g;
+		/*
+		for ( i in 0...g.faces.length ) {
+
+			//g.faces[i].color = new Color(Math.floor(Math.random() * 0xffffff));
+			g.faces[i].color = new Color(Math.random() < 0.5 ? 0 : 0xffffff);
+			
+		}*/
+		
+		//updateColor(g);
+		
+		
+		return geo;
 	}
 	
-	
-	
+
 	
 }

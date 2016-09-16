@@ -137,10 +137,10 @@ class Main3d
 		var light:MySpotLight = new MySpotLight();
 		_scene.add(light);
 		
-		_light = new DirectionalLight(0x998877, 1);
+		_light = new DirectionalLight(0x887766, 1);
 		_scene.add(_light);
 		
-		var a:AmbientLight = new AmbientLight(0x888888);
+		var a:AmbientLight = new AmbientLight(0x999999);
 		_scene.add(a);
 		
 		_skyboxMat = new SkyboxTexture();
@@ -154,7 +154,7 @@ class Main3d
 		_shadowGround = new ShadowPlane();
 		_scene.add(_shadowGround);
 		
-		_scene.fog = new Fog(0xfff0e8, 100, 3000);
+		//_scene.fog = new Fog(0xfff0e8, 100, 4000);
 		
 		//var mm:ShadowMaterial = new ShadowMaterial();
 		//mm.opacity = 0.5;

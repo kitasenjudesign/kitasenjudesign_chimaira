@@ -70,7 +70,7 @@ class Config
 					"cam":"mov2/cam_osho.json",
 					"mov":"mov2/07_osho.mp4",
 					"size":0.3,
-					"y":10,
+					"y":40,
 					"offsetFrame":0
 				},		
 				{

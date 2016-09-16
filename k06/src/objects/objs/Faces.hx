@@ -1,6 +1,7 @@
 package objects.objs;
 import common.Path;
 import js.Browser;
+import materials.MaterialParams;
 import materials.Textures;
 import objects.MyDAELoader;
 import objects.objs.motion.FaceMotion;
@@ -21,11 +22,7 @@ class Faces extends MatchMoveObects
 {
 
 	
-	public static inline var MAT_WIREFRAME	:Int = 4;
-	public static inline var MAT_MIRROR		:Int = 1;
-	public static inline var MAT_COLOR		:Int = 0;
-	public static inline var MAT_NET		:Int = 3;
-	public static inline var MAT_NET_RED	:Int = 2;
+
 	public static inline var MAT_NUM:Int = 5;
 	
 	//public static var MATERIALS
@@ -162,14 +159,16 @@ class Faces extends MatchMoveObects
 		_matIndex++;
 		_matIndex = _matIndex % MAT_NUM;
 		
+		MaterialParams.setParam(_material, _matIndex);
 		
+		/*
 		switch(_matIndex) {
 			case MAT_WIREFRAME://0
 				//normal
 				_material.map = Textures.colorWhite;
-				_material.color = (Math.random() < 0.5) ? new Color(0xffffff) : new Color(0xee0000); 
-				_material.refractionRatio = 0.7;
-				_material.reflectivity = 0.7;				
+				_material.color = (Math.random() < 0.5) ? new Color(0xffffff) : new Color(0xee1111); 
+				_material.refractionRatio = 0.3;
+				_material.reflectivity = 0.3;				
 				_material.wireframe = true;
 				_material.transparent = false;
 				
@@ -185,7 +184,7 @@ class Faces extends MatchMoveObects
 			case MAT_COLOR://2
 				
 				_material.map = Textures.dedeColor;
-				_material.color = new Color(0xffffff);// Math.random() < 0.5 ? new Color(0xffffff) : new Color(0xee4444); 
+				_material.color = Math.random() < 0.5 ? new Color(0xffffff) : new Color(0xee1111); 
 				_material.transparent = false;
 				_material.refractionRatio = 0.1;
 				_material.reflectivity = 0.1;
@@ -193,17 +192,17 @@ class Faces extends MatchMoveObects
 			
 			case MAT_NET://3
 				//Browser.window.alert("net!! " + _matIndex);
-				//_material.map = Textures.dedeColor;
+				_material.map = Textures.dedeColor;
 				_material.transparent = true;
 				_material.alphaTest = 0.5;				
-				_material.alphaMap = Textures.meshMono;				
+				_material.alphaMap = Math.random() < 0.5 ? Textures.moji1 : Textures.meshMono;				
 				_material.wireframe = false;
 			
 					
 			case MAT_NET_RED:
 				//Browser.window.alert("red!! " + _matIndex);
 				//_material.map = ImageUtils.loadTexture("mate3.png");
-				_redTexture = Textures.moji1;// Math.random() < 0.5 ? Textures.moji1 : Textures.meshRed;
+				_redTexture = Math.random() < 0.5 ? Textures.moji1 : Textures.meshRed;
 				_material.wireframe = false;
 				_material.map = _redTexture;
 				_material.alphaMap = Textures.colorWhite;
@@ -211,7 +210,7 @@ class Faces extends MatchMoveObects
 				_material.reflectivity = 0.7;				
 				_material.side = Three.DoubleSide;
 				
-		}
+		}*/
 	
 		_material.needsUpdate = true;
 	}
@@ -237,21 +236,13 @@ class Faces extends MatchMoveObects
 		
 		
 		//update
-		if ( _matIndex == MAT_NET ) {
-			/*
-			Tracer.debug("yy>>>"+_offsetY);
-			_offsetY += 0.01;
-			Textures.meshMono.offset.set(_offsetY, 0);
-			Textures.meshMono.repeat.set(1 + _offsetY/2, 1 + _offsetY/2);
-			_material.needsUpdate = true;
-			Textures.meshMono.needsUpdate = true;
-			*/
-		
-		}else if ( _matIndex == MAT_NET_RED ) {
+		if ( _matIndex == MaterialParams.MAT_NET_RED ) {
 			
-			//_offsetX += a.freqByteData[4] / 255 * 0.1;
-			//_offsetY += a.freqByteData[7] / 255 * 0.1;
-			//_redTexture.offset.set(_offsetX, _offsetY);	
+			_offsetX += a.subFreqByteData[4] / 128 * 0.01;
+			_offsetY += a.subFreqByteData[7] / 128 * 0.01;
+			Textures.meshRed.offset.set(_offsetX, _offsetY);	
+			Textures.moji1.offset.set(_offsetX, _offsetY);	
+			
 			//_material.needsUpdate = true;
 		
 		}		

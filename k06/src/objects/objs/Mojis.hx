@@ -5,9 +5,11 @@ import materials.MyPhongMaterial;
 import materials.Textures;
 import objects.MyDAELoader;
 import objects.MyFaceSingle;
+import objects.objs.moji.MojiGeo;
 import objects.objs.moji.MojiMaker;
 import objects.objs.moji.MojiMesh;
 import sound.MyAudio;
+import three.Color;
 import three.ExtrudeGeometry;
 import three.Geometry;
 import three.ImageUtils;
@@ -42,7 +44,9 @@ class Mojis extends MatchMoveObects
 	private var _offsetY:Float = 0;
 	private var _eyeball:Mesh;
 	private var _index:Int = 0;
-	private var _getIndex:Int = 0;
+	private var _geoIndex:Int = 0;
+	private var _matIndex:Int = 0;
+	private var _currentGeo:MojiGeo;
 
 	public function new() 
 	{
@@ -71,13 +75,14 @@ class Mojis extends MatchMoveObects
 		var all:String = "デデマウス";
 		
 		MojiMaker.init(_shape);
-		var g:Geometry = MojiMaker.hexpixels;
+		var g:Geometry = MojiMaker.hexpixels.geo;
 		
 		
 		
 		////material
 		//_texture = ImageUtils.loadTexture( Path.assets + "face/dede_face_diff.png" );
 		_material = new MeshPhongMaterial( { color:0xffffff } );
+		_material.vertexColors = Three.VertexColors;
 		//cast new MyPhongMaterial(null);//
 		//_material.vertexColors = true;
 		//_material.map = Textures.meshRed;
@@ -92,9 +97,9 @@ class Mojis extends MatchMoveObects
 		
 		_meshes = [];
 		
+		
 		for (i in 0...5) {
 			var m:MojiMesh = new MojiMesh(g, _material);
-			
 			m.scale.set(0.1, 0.1, 0.1);
 			m.castShadow = true;
 			add(m);
@@ -111,20 +116,22 @@ class Mojis extends MatchMoveObects
 	override public function show(data:MovieData):Void {
 		_data = data;		
 		this.visible = true;
-		
+		_geoIndex++;
 		
 		var pos:Array<Vector3> = _data.camData.positions;
 		var ss:Float = _data.size;
 		var yy:Float = _data.offsetY;
+		
+		_currentGeo = MojiMaker.getGeo(_geoIndex);
 		
 		for (i in 0..._meshes.length) {
 			
 			if (i < pos.length) {
 				var p:Vector3 = pos[i];
 				_meshes[i].visible = true;
-				_meshes[i].setGeo( MojiMaker.getGeo(_getIndex) );
+				_meshes[i].setGeo( _currentGeo.geo );
 				//_meshes[i].geometry = MojiMaker.getGeo(_getIndex);
-				_meshes[i].scale.set(0.2, 0.2, 0.2);
+				_meshes[i].scale.set(ss*0.2, ss*0.2, ss*0.2);
 				_meshes[i].position.x = p.x;
 				_meshes[i].position.y = p.y + yy;
 				_meshes[i].position.z = p.z;
@@ -133,8 +140,36 @@ class Mojis extends MatchMoveObects
 				_meshes[i].visible = false;				
 			}
 
-			
 		}		
+		
+		_changeMat();
+		
+	}
+	
+	
+	//changeMat wo kak
+	private function _changeMat():Void {
+		
+		_matIndex++;
+		
+		switch(_matIndex%3) {
+			case 0:
+				_material.wireframe = true;
+				_material.vertexColors = Three.VertexColors;
+				
+			case 1:
+				_material.wireframe = false;
+				_material.vertexColors = Three.VertexColors;
+			case 2:
+				_material.wireframe = false;
+				_material.vertexColors = Three.NoColors;
+			case 3:
+				_material.color = (Math.random() < 0.5) ? new Color(0xff0000) : new Color(0xffffff);
+				_material.vertexColors = Three.NoColors;
+			
+		}
+		_material.needsUpdate = true;
+		
 	}
 	
 	/**
@@ -162,6 +197,8 @@ class Mojis extends MatchMoveObects
 			//_texture.offset.set(0, _offsetY);
 		}
 		
+		_currentGeo.update(a);
+		//MojiMaker.updateColor( _currentGeo );
 		
 		for(i in 0..._meshes.length){
 			//_meshes[i].rotation.x += 0.001*(i+1); 

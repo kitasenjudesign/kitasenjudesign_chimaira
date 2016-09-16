@@ -59,9 +59,9 @@ class FaceMotion
 		var yy:Float = _data.offsetY;
 		
 		//shokichi set
-		if (_modePos == MODE_POS_MOVE_Y) {
-			ss = ss * 2;
-		}
+		//if (_modePos == MODE_POS_MOVE_Y) {
+		//	ss = ss * 2;
+		//}
 
 		_spaceY = ss * 200;
 		

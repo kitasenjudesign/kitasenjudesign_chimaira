@@ -95,7 +95,7 @@ extern class MeshPhongMaterial extends Material {
     var wireframeLinecap : String; // 'round'
     var wireframeLinejoin : String; // 'round'
  
-    var vertexColors : Bool; // NoColors
+    var vertexColors : Int; // NoColors
 
     var skinning : Bool; // false
     var morphTargets : Bool; // false

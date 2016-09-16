@@ -29,7 +29,7 @@ class ShadowPlane extends Mesh
 		_mat2 = new MeshLambertMaterial( { color:0xff0000 } );
 		//shadow no ookisa
 		super(
-			new PlaneGeometry(1000, 1000, 5, 5),
+			new PlaneGeometry(1500, 1000, 5, 5),
 			_mat
 		);
 		receiveShadow = true;
@@ -42,6 +42,9 @@ class ShadowPlane extends Mesh
 		
 	}
 	
+	/**
+	 * 
+	 */
 	private function _changeMat():Void {
 		
 		material = _flag ? _mat : _mat2;
@@ -54,7 +57,7 @@ class ShadowPlane extends Mesh
 	 * 
 	 * @param	s
 	 */
-	public static function setScale(s:Float):Void {
+	public static function setSize(s:Float):Void {
 		
 		//instance.scale.set(s, s, s);
 		
