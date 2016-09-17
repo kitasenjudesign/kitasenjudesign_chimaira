@@ -1,4 +1,5 @@
 package faces.data;
+import js.Browser;
 
 /**
  * ...
@@ -7,9 +8,12 @@ package faces.data;
 class MaeFormVpers extends MaeFormBase
 {
 	private var _cams:Array<CamData> = [
-		new CamData(255, 0, 0 ),
-		new CamData(255, 0, -0.1 ),
-		new CamData(255, 0, 0.1 )
+		new CamData(255, 0, 0 ),//0
+		new CamData(255, 0, 0 ),//1
+		new CamData(255, 0, 0 ),//2
+		new CamData(255, 0, 0 ),//3
+		new CamData(255, 0, 0 ),//4
+		new CamData(255, -0.73, -0.1 )//5
 	];
 	
 	public function new() 
@@ -35,7 +39,7 @@ class MaeFormVpers extends MaeFormBase
 		_camera.radX = data.radX;
 		_camera.radY = data.radY;
 		
-		_camera.setFOV(35);//
+		_camera.setFOV(45);//
 		
 		var spaceX:Float = 60;
 		var spaceY:Float = 60;
@@ -47,6 +51,25 @@ class MaeFormVpers extends MaeFormBase
 		
 		var len:Int = _faces.length;
 		var oz:Float = -200;
+		
+		//random
+		if ( (_camIndex-1)%3 == 2 ) {
+			//Browser.window.alert("random");
+			for (i in 0...len) {
+				var ff:MaeFace = _faces[i];
+					ff.enabled = true;
+					ff.visible = true;
+					
+					ff.position.x = 800*(Math.random()-0.5); 
+					ff.position.y = _height * (Math.random() -0.5);
+					ff.position.z = _height	* (Math.random() -0.5);
+					
+					ff.rotation.y = 0;
+			}
+			
+			return;
+		}
+		
 		
 		for (i in 0...len) {
 			var ff:MaeFace = _faces[i];

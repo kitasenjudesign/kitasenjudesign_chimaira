@@ -1552,7 +1552,7 @@ faces.data.MaeFormV.prototype = $extend(faces.data.MaeFormBase.prototype,{
 	}
 });
 faces.data.MaeFormVpers = function() {
-	this._cams = [new faces.data.CamData(255,0,0),new faces.data.CamData(255,0,-0.1),new faces.data.CamData(255,0,0.1)];
+	this._cams = [new faces.data.CamData(255,0,0),new faces.data.CamData(255,0,0),new faces.data.CamData(255,0,0),new faces.data.CamData(255,0,0),new faces.data.CamData(255,0,0),new faces.data.CamData(255,-0.73,-0.1)];
 	faces.data.MaeFormBase.call(this);
 };
 faces.data.MaeFormVpers.__super__ = faces.data.MaeFormBase;
@@ -1567,7 +1567,7 @@ faces.data.MaeFormVpers.prototype = $extend(faces.data.MaeFormBase.prototype,{
 		this._camera.amp = data.amp;
 		this._camera.radX = data.radX;
 		this._camera.radY = data.radY;
-		this._camera.setFOV(35);
+		this._camera.setFOV(45);
 		var spaceX = 60;
 		var spaceY = 60;
 		var xnum = 9;
@@ -1577,31 +1577,45 @@ faces.data.MaeFormVpers.prototype = $extend(faces.data.MaeFormBase.prototype,{
 		this._height = spaceY * ynum;
 		var len = this._faces.length;
 		var oz = -200;
-		var _g = 0;
-		while(_g < len) {
-			var i = _g++;
-			var ff = this._faces[i];
-			ff.enabled = true;
-			ff.visible = true;
-			if(i < num) {
-				var idx = i;
+		if((this._camIndex - 1) % 3 == 2) {
+			var _g = 0;
+			while(_g < len) {
+				var i = _g++;
+				var ff = this._faces[i];
+				ff.enabled = true;
+				ff.visible = true;
+				ff.position.x = 800 * (Math.random() - 0.5);
+				ff.position.y = this._height * (Math.random() - 0.5);
+				ff.position.z = this._height * (Math.random() - 0.5);
+				ff.rotation.y = 0;
+			}
+			return;
+		}
+		var _g1 = 0;
+		while(_g1 < len) {
+			var i1 = _g1++;
+			var ff1 = this._faces[i1];
+			ff1.enabled = true;
+			ff1.visible = true;
+			if(i1 < num) {
+				var idx = i1;
 				var xx = idx % xnum - (xnum - 1) / 2;
 				var yy = Math.floor(idx / xnum) - (ynum - 1) / 2;
-				ff.position.x = 150;
-				ff.position.y = yy * spaceX;
-				ff.position.z = xx * spaceY + oz;
-				ff.rotation.y = -Math.PI / 2;
-			} else if(i < num * 2) {
-				var idx1 = i - num;
+				ff1.position.x = 150;
+				ff1.position.y = yy * spaceX;
+				ff1.position.z = xx * spaceY + oz;
+				ff1.rotation.y = -Math.PI / 2;
+			} else if(i1 < num * 2) {
+				var idx1 = i1 - num;
 				var xx1 = idx1 % xnum - (xnum - 1) / 2;
 				var yy1 = Math.floor(idx1 / xnum) - (ynum - 1) / 2;
-				ff.position.x = -150;
-				ff.position.y = yy1 * spaceX;
-				ff.position.z = xx1 * spaceY + oz;
-				ff.rotation.y = Math.PI / 2;
+				ff1.position.x = -150;
+				ff1.position.y = yy1 * spaceX;
+				ff1.position.z = xx1 * spaceY + oz;
+				ff1.rotation.y = Math.PI / 2;
 			} else {
-				ff.enabled = false;
-				ff.visible = false;
+				ff1.enabled = false;
+				ff1.visible = false;
 			}
 		}
 	}
