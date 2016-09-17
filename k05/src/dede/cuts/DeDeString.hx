@@ -13,6 +13,7 @@ class DeDeString
 	public var type:Int = -1;
 	private static var _count:Int = 0;
 	public static var texts:Array<Dynamic> = [
+	
 		{ text:"HEXPIXELS", font:1, spaceX:50 },
 		{ text:"デデマウス", font:0, spaceX:50 },
 		{ text:"WWWXWWWXWWWX", font:0, spaceX:50 },

@@ -43,7 +43,7 @@ class Test3d
 		_renderer = new WebGLRenderer( { antialias:true,devicePixelRatio:1, } );
 		
 		_renderer.shadowMapEnabled = false;
-		_renderer.setClearColor(new Color(0xee0000));
+		_renderer.setClearColor(new Color(0x000000));
 		_scene = new Scene();
         
 		//_renderer.setClearColor(0x000000, 1);

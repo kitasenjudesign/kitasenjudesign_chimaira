@@ -58,7 +58,7 @@ class MaeFormVpers extends MaeFormBase
 				var xx:Float = idx % xnum - (xnum-1)/2;
 				var yy:Float = Math.floor(idx / xnum) - (ynum - 1) / 2;
 				
-				ff.position.x = 200; 
+				ff.position.x = 150; 
 				ff.position.y = yy * spaceX;
 				ff.position.z = xx * spaceY + oz;
 				
@@ -68,7 +68,7 @@ class MaeFormVpers extends MaeFormBase
 				var xx:Float = idx % xnum - (xnum-1)/2;
 				var yy:Float = Math.floor(idx / xnum) - (ynum - 1) / 2;
 				
-				ff.position.x = -200;
+				ff.position.x = -150;
 				ff.position.y = yy * spaceX;
 				ff.position.z = xx * spaceY + oz;		
 				ff.rotation.y = Math.PI/2;

@@ -390,6 +390,7 @@ common.Dat._onInit = function() {
 	common.Key.init();
 	common.Key.board.addEventListener("keydown",common.Dat._onKeyDown);
 	common.Dat.show(false);
+	common.Dat.hide();
 	if(common.Dat._callback != null) common.Dat._callback();
 };
 common.Dat._onKeyDown = function(e) {
@@ -529,11 +530,11 @@ common.StageRef = function() {
 };
 common.StageRef.showBorder = function() {
 	var dom = window.document.getElementById("webgl");
-	dom.style.border = "solid 1px #cccccc";
+	if(dom != null) dom.style.border = "solid 1px #cccccc";
 };
 common.StageRef.hideBorder = function() {
 	var dom = window.document.getElementById("webgl");
-	dom.style.border = "solid 0px";
+	if(dom != null) dom.style.border = "solid 0px";
 };
 common.StageRef.fadeIn = function() {
 	if(common.StageRef.sheet == null) common.StageRef.sheet = new common.FadeSheet(window.document.getElementById("webgl"));
@@ -1156,6 +1157,7 @@ objects.MySphere = function() {
 	this._nejireX = 0;
 	this._count = 0;
 	THREE.Object3D.call(this);
+	this._white = THREE.ImageUtils.loadTexture("../../assets/" + "bg/white.png");
 	var texture = THREE.ImageUtils.loadTexture("../../assets/" + "bg/m01.jpg");
 	this._textures = [texture,THREE.ImageUtils.loadTexture("../../assets/" + "bg/m02.jpg"),THREE.ImageUtils.loadTexture("../../assets/" + "bg/00.jpg"),THREE.ImageUtils.loadTexture("../../assets/" + "bg/01.jpg"),THREE.ImageUtils.loadTexture("../../assets/" + "bg/03.jpg")];
 	this.mate = new THREE.MeshBasicMaterial({ map : texture});
@@ -1186,7 +1188,18 @@ objects.MySphere.prototype = $extend(THREE.Object3D.prototype,{
 		this._texIndex++;
 		return false;
 	}
+	,setWireframe: function() {
+		this.mate.wireframe = !this.mate.wireframe;
+		if(this.mate.wireframe) {
+			this.mate.map = this._white;
+			this.mate.color.setRGB(0.7,0.7,0.7);
+		} else {
+			this.mate.map = this._textures[this._texIndex % this._textures.length];
+			this.mate.color.setRGB(common.Config.bgLight,common.Config.bgLight,common.Config.bgLight);
+		}
+	}
 	,update: function(audio) {
+		if(!this.visible) return;
 		this._audio = audio;
 		var g = this.mesh.geometry;
 		g.verticesNeedUpdate = true;
@@ -1273,6 +1286,7 @@ objects.MyWorld.prototype = $extend(THREE.Object3D.prototype,{
 		common.Key.board.addEventListener("keydown",$bind(this,this._KeyDownFunc));
 		common.Dat.gui.add(this,"effectName").listen();
 		common.Dat.gui.add(this,"_changeIndex");
+		this.sphere.visible = false;
 		this.changeMode1();
 		this._nextEffect();
 	}
@@ -1321,6 +1335,10 @@ objects.MyWorld.prototype = $extend(THREE.Object3D.prototype,{
 			break;
 		case 78:
 			this._nextTexture();
+			break;
+		case 66:
+			this.sphere.visible = !this.sphere.visible;
+			if(this.sphere.visible) this.sphere.setWireframe();
 			break;
 		}
 	}
@@ -1397,8 +1415,7 @@ objects.MyWorld.prototype = $extend(THREE.Object3D.prototype,{
 	}
 	,_impulese: function() {
 		this._camera.radX = Math.PI / 10 * (Math.random() - 0.5);
-		this._camera.amp = 650 + 500 * Math.random();
-		if(Math.random() < 0.1) this._camera.amp = 300;
+		this._camera.amp = 650 + 50 * Math.random();
 		if(this._audio != null) this._audio.setImpulse();
 	}
 	,update: function(audio) {

@@ -43,7 +43,7 @@ class MySphere extends Object3D
 	public var power:Float = 1;
 
 	private var _texIndex:Int = 0;
-	
+	private var _white:Texture;
 	
 	public function new() 
 	{
@@ -51,6 +51,8 @@ class MySphere extends Object3D
 		super();
 	
 		//if (!Dat.bg) return;
+		
+		_white = ImageUtils.loadTexture( Path.assets + 'bg/white.png' );
 		
 		var texture:Texture = ImageUtils.loadTexture( Path.assets + 'bg/m01.jpg' );
 
@@ -62,6 +64,7 @@ class MySphere extends Object3D
 			//ImageUtils.loadTexture( Path.assets + 'bg/02.jpg' ),			
 			ImageUtils.loadTexture( Path.assets + 'bg/03.jpg' )
 		];
+		
 		
 		
 		mate = new MeshBasicMaterial( { map: texture/*,side:Three.DoubleSide*/ } );
@@ -115,11 +118,28 @@ class MySphere extends Object3D
 		return false;
 	}
 	
-	
+	public function setWireframe():Void {
+		
+		mate.wireframe = !mate.wireframe;
+		
+		if (mate.wireframe) {
+			
+			mate.map = _white;
+			mate.color.setRGB(0.7,0.7,0.7);
+		
+		}else {
+			
+			mate.map = _textures[_texIndex % _textures.length];
+			mate.color.setRGB(Config.bgLight, Config.bgLight, Config.bgLight);
+		
+		}
+		
+	}
 	
 	public function update(audio:MyAudio):Void {
 		
 		//if (!Dat.bg) return;
+		if (!this.visible) return;
 		
 		_audio = audio;
 		
@@ -210,10 +230,10 @@ class MySphere extends Object3D
 	private function _getNoise(xx:Float,yy:Float,zz:Float):Float
 	{
 		
-		
 		var f = untyped __js__("noise.perlin3");
 		var n:Float = f(xx, yy, zz);
 		return n;
+		
 	}
 	
 	

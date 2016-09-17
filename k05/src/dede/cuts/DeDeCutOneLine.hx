@@ -37,7 +37,7 @@ class DeDeCutOneLine  extends DeDeCutBase
 		_cam.setZoom(3.1);
 		
 		data = DeDeParam.getParam();
-		data.txt = "DEDEMOUSE KTSNJDSGN ";
+		data.txt = "DEDEMOUSE HEXPIXELS KTSNJDSGN ";
 		data.font = StrokeUtil.FUTURA;
 		data.speedX = DeDeLine.SPEEDX0;///////////////////////////////speedx
 		data.spaceX = 20;

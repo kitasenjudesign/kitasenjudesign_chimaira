@@ -72,6 +72,8 @@ class TypoCanvasPlane extends Object3D
 		
 		//生成したvideo textureをmapに指定し、overdrawをtureにしてマテリアルを生成
 		geo = new PlaneBufferGeometry(data.w*_scale, data.h*_scale, SEG_X, SEG_Y);
+		
+		//geo = new PlaneBufferGeometry(data.w*_scale, data.h*_scale, SEG_X, SEG_Y);
 		_geoPos = geo.attributes.position.array;
 
 		_plane = new Mesh(cast geo, data.mate1 );
@@ -80,12 +82,22 @@ class TypoCanvasPlane extends Object3D
 		_plane2 = new Mesh(cast geo, data.mate2 );
 		add(_plane2);
 		
+		changeMat(false, 0);
 		
 	}
 
-	public function changeMat(isWhite:Bool):Void {
+	/*
+	public function updateData(index:Int):Void {
 		
-		var data:LogoData = Logos.getRandom();//Logos.getTexture(_index);
+		var data:LogoData = Logos.getTexture(index);
+		_plane.scale(data.w*_scale,data.h*_scale,1);
+		_plane2.scale(data.w*_scale,data.h*_scale,1);
+	}*/
+	
+	
+	public function changeMat(isWhite:Bool,idex:Int):Void {
+		
+		var data:LogoData = Logos.getTexture(idex);
 		//_scale = 2;// +1.5 * Math.random();
 		_spaceX = data.w * _scale / SEG_X;//
 		

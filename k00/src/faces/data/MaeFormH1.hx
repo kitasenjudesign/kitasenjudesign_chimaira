@@ -62,7 +62,7 @@ class MaeFormH1 extends MaeFormBase
 		
 		var ox:Float = 0;
 		if (_count == 0) {
-			ox = _width*0.63;
+			ox = _width*0.60;
 		}
 		
 		for (i in 0...len) {

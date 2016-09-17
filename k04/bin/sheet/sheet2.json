@@ -1,0 +1,43 @@
+﻿{"frames": [
+
+{
+	"filename": "シンボル 3 インスタンス 10000",
+	"frame": {"x":0,"y":0,"w":442,"h":129},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":512,"h":129},
+	"sourceSize": {"w":512,"h":129}
+}
+,{
+	"filename": "シンボル 3 インスタンス 10001",
+	"frame": {"x":0,"y":129,"w":512,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":512,"h":129},
+	"sourceSize": {"w":512,"h":129}
+}
+,{
+	"filename": "シンボル 3 インスタンス 10002",
+	"frame": {"x":0,"y":237,"w":402,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":512,"h":129},
+	"sourceSize": {"w":512,"h":129}
+}
+,{
+	"filename": "シンボル 3 インスタンス 10003",
+	"frame": {"x":0,"y":345,"w":484,"h":108},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":0,"w":512,"h":129},
+	"sourceSize": {"w":512,"h":129}
+}],
+"meta": {
+	"app": "Adobe Animate",
+	"version": "15.1.1.13",
+	"image": "sheet2.png",
+	"format": "RGBA8888",
+	"size": {"w":512,"h":512},
+	"scale": "1"
+}
+}

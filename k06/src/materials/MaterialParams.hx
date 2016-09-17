@@ -44,7 +44,8 @@ class MaterialParams
 				material.map = Textures.colorWhite;
 				material.color = (Math.random() < 0.5) ? new Color(0xffffff) : new Color(0xee1111); 
 				material.refractionRatio = 0.3;
-				material.reflectivity = 0.3;				
+				material.reflectivity = 0.3;		
+				material.alphaMap = Textures.colorWhite;
 				material.wireframe = true;
 				material.transparent = false;
 				

@@ -182,6 +182,7 @@ class Mojis extends MatchMoveObects
 			
 		}
 		
+		_currentGeo.updateColor();
 		_material.needsUpdate = true;
 		
 	}

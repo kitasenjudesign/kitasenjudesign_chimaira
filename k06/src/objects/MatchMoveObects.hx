@@ -53,4 +53,10 @@ class MatchMoveObects extends Object3D
 		
 	}
 	
+	public function kill():Void {
+		
+		//kill
+		
+	}
+	
 }

@@ -53,6 +53,7 @@ class MojiGeo
 			
 		}
 		
+		
 		/*
 		float a = length(vv);
 	float radX = (-atan(vv.z, vv.x) + PI * 0.5) + vv.y * sin(_count) * nejireX;//横方向の角度
@@ -197,6 +198,12 @@ class MojiGeo
 		
 		var g:Geometry = geo;
 		var faceIndices:Array<String> = [ 'a', 'b', 'c', 'd' ];
+		var colors:Array<Color> = [
+			new Color( Math.floor( 0xffffff * Math.random())),
+			new Color( Math.floor( 0xffffff * Math.random())),
+			new Color( Math.floor( 0xffffff * Math.random()))
+		];
+		
 		for ( i in 0...g.faces.length ) {
 	
 			var face:Face  = g.faces[ i ];	
@@ -207,9 +214,8 @@ class MojiGeo
 			{
 				//var vertexIndex = face[ faceIndices[ j ] ];
 				// initialize color variable
-				var color:Color = new Color( 0xffffff );
-				color.setHex( Math.floor( Math.random() * 0xffffff ) );
-				face.vertexColors[ j ] = color;
+				
+				face.vertexColors[ j ] = colors[Math.floor(Math.random()*colors.length)];
 			}
 			
 		}

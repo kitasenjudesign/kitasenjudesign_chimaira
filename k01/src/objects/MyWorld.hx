@@ -85,7 +85,7 @@ class MyWorld extends Object3D
 		Dat.gui.add(this, "effectName").listen();
 		Dat.gui.add(this, "_changeIndex");
 		//Dat.gui.add(this, "_idx").listen();
-		
+		sphere.visible = false;
 		
 		changeMode1();
 		_nextEffect();
@@ -144,6 +144,11 @@ class MyWorld extends Object3D
 			case Dat.N:
 				_nextTexture();//next_texture
 
+			case Dat.B:
+				sphere.visible = !sphere.visible;
+				if(sphere.visible){
+					sphere.setWireframe();
+				}
 		}
 		
 	}
@@ -258,11 +263,11 @@ class MyWorld extends Object3D
 		
 		_camera.radX = Math.PI / 10 * ( Math.random() - 0.5);
 		//_camera.radY = Math.PI / 10 * (Math.random() - 0.5);
-		_camera.amp = 650 + 500 * Math.random();
+		_camera.amp = 650 + 50 * Math.random();
 		
-		if (Math.random() < 0.1) {
-			_camera.amp = 300;
-		}
+		//if (Math.random() < 0.1) {
+		//	_camera.amp = 300;
+		//}
 		
 		if (_audio!=null) _audio.setImpulse();
 	}

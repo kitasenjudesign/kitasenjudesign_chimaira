@@ -85,7 +85,9 @@ class MojiMaker
 			
 				var amount:Float = 20;
 				var shapes:Array<Shape> = _shape.getShapes(src.substr(j,1), true);
-				var geo:ExtrudeGeometry = new ExtrudeGeometry(shapes, { bevelSize:2,bevelEnabled:true, amount:amount, bevelSegments:1 } );
+				var geo:ExtrudeGeometry = new ExtrudeGeometry(
+						shapes, { bevelSize:2, bevelEnabled:true, amount:amount, bevelSegments:1 }
+					);
 				
 				var mat4:Matrix4 = new Matrix4();
 				mat4.multiply( new Matrix4().makeScale(scl, scl, scl) );

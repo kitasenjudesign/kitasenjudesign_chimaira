@@ -57,6 +57,8 @@ class Dots extends Object3D
 	private var _camType:String = "";
 	public var camera:ExCamera;
 	
+	private var _planeIndex:Int = 0;
+	
 	public function new() 
 	{
 		super();
@@ -216,7 +218,10 @@ class Dots extends Object3D
 		
 		for (i in 0...dots.length) {
 			dots[i].init(_currentData);
+			dots[i].changeMat(false, _planeIndex);
 		}
+		_planeIndex++;
+		
 		_cube.setScale( _currentData.size );
 		_cutName = _currentData.name;
 			
@@ -471,7 +476,7 @@ class Dots extends Object3D
 	{
 		_cube.setWhite(b);	
 		for ( i in 0...dots.length) {
-			dots[i].changeMat(b);
+			dots[i].changeMat(b, 0);
 		}
 		
 	}

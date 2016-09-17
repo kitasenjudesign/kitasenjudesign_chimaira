@@ -16,7 +16,7 @@ Test3d.prototype = {
 	init: function() {
 		this._renderer = new THREE.WebGLRenderer({ antialias : true, devicePixelRatio : 1});
 		this._renderer.shadowMapEnabled = false;
-		this._renderer.setClearColor(new THREE.Color(15597568));
+		this._renderer.setClearColor(new THREE.Color(0));
 		this._scene = new THREE.Scene();
 		this._renderer.setSize(1280,720);
 		window.document.body.appendChild(this._renderer.domElement);
@@ -494,6 +494,7 @@ common.Dat._onInit = function() {
 	common.Key.init();
 	common.Key.board.addEventListener("keydown",common.Dat._onKeyDown);
 	common.Dat.show(false);
+	common.Dat.hide();
 	if(common.Dat._callback != null) common.Dat._callback();
 };
 common.Dat._onKeyDown = function(e) {
@@ -525,22 +526,22 @@ common.Dat._onKeyDown = function(e) {
 	}
 };
 common.Dat._goURL1 = function() {
-	common.Dat._goURL("../../04/bin/");
+	common.Dat._goURL("../../k04/bin/");
 };
 common.Dat._goURL2 = function() {
-	common.Dat._goURL("../../05/bin/");
+	common.Dat._goURL("../../k05/bin/");
 };
 common.Dat._goURL3 = function() {
-	common.Dat._goURL("../../02/bin/");
+	common.Dat._goURL("../../k02/bin/");
 };
 common.Dat._goURL4 = function() {
-	common.Dat._goURL("../../03/bin/");
+	common.Dat._goURL("../../k03/bin/");
 };
 common.Dat._goURL5 = function() {
-	common.Dat._goURL("../../00/bin/");
+	common.Dat._goURL("../../k00/bin/");
 };
 common.Dat._goURL6 = function() {
-	common.Dat._goURL("../../01/bin/");
+	common.Dat._goURL("../../k01/bin/");
 };
 common.Dat._goURL = function(url) {
 	Tracer.log("goURL " + url);
@@ -633,11 +634,11 @@ common.StageRef = function() {
 };
 common.StageRef.showBorder = function() {
 	var dom = window.document.getElementById("webgl");
-	dom.style.border = "solid 1px #cccccc";
+	if(dom != null) dom.style.border = "solid 1px #cccccc";
 };
 common.StageRef.hideBorder = function() {
 	var dom = window.document.getElementById("webgl");
-	dom.style.border = "solid 0px";
+	if(dom != null) dom.style.border = "solid 0px";
 };
 common.StageRef.fadeIn = function() {
 	if(common.StageRef.sheet == null) common.StageRef.sheet = new common.FadeSheet(window.document.getElementById("webgl"));
@@ -913,12 +914,12 @@ logo.LogoMaterialMaker.prototype = {
 logo.LogoParam = function() {
 };
 logo.LogoParam.getParam = function() {
-	return { frames : [{ filename : "シンボル 3 インスタンス 10000", frame : { x : 0, y : 0, w : 408, h : 119}, rotated : false, trimmed : false, spriteSourceSize : { x : 0, y : 0, w : 408, h : 119}, sourceSize : { w : 408, h : 119}},{ filename : "シンボル 3 インスタンス 10001", frame : { x : 0, y : 119, w : 408, h : 119}, rotated : false, trimmed : false, spriteSourceSize : { x : 0, y : 0, w : 408, h : 119}, sourceSize : { w : 408, h : 119}}], meta : { app : "Adobe Animate", version : "15.1.1.13", image : "sheet1.png", format : "RGBA8888", size : { w : 512, h : 512}, scale : "1"}};
+	return { frames : [{ filename : "シンボル 3 インスタンス 10000", frame : { x : 0, y : 0, w : 385, h : 112}, rotated : false, trimmed : true, spriteSourceSize : { x : 0, y : 0, w : 504, h : 112}, sourceSize : { w : 504, h : 112}},{ filename : "シンボル 3 インスタンス 10001", frame : { x : 0, y : 112, w : 432, h : 60}, rotated : false, trimmed : true, spriteSourceSize : { x : 7, y : 0, w : 504, h : 112}, sourceSize : { w : 504, h : 112}},{ filename : "シンボル 3 インスタンス 10002", frame : { x : 0, y : 172, w : 338, h : 55}, rotated : false, trimmed : true, spriteSourceSize : { x : 7, y : 0, w : 504, h : 112}, sourceSize : { w : 504, h : 112}},{ filename : "シンボル 3 インスタンス 10003", frame : { x : 0, y : 227, w : 406, h : 60}, rotated : false, trimmed : true, spriteSourceSize : { x : 7, y : 0, w : 504, h : 112}, sourceSize : { w : 504, h : 112}},{ filename : "シンボル 3 インスタンス 10004", frame : { x : 0, y : 287, w : 504, h : 54}, rotated : false, trimmed : true, spriteSourceSize : { x : 0, y : 0, w : 504, h : 112}, sourceSize : { w : 504, h : 112}},{ filename : "シンボル 3 インスタンス 10005", frame : { x : 0, y : 0, w : 385, h : 112}, rotated : false, trimmed : true, spriteSourceSize : { x : 0, y : 0, w : 504, h : 112}, sourceSize : { w : 504, h : 112}},{ filename : "シンボル 3 インスタンス 10006", frame : { x : 0, y : 341, w : 271, h : 56}, rotated : false, trimmed : true, spriteSourceSize : { x : 0, y : 0, w : 504, h : 112}, sourceSize : { w : 504, h : 112}}], meta : { app : "Adobe Animate", version : "15.1.1.13", image : "sheet3.png", format : "RGBA8888", size : { w : 512, h : 512}, scale : "1"}};
 };
 logo.Logos = function() {
 };
 logo.Logos.init = function(callback) {
-	logo.Logos._texture = THREE.ImageUtils.loadTexture("sheet/sheet1.png",null,callback);
+	logo.Logos._texture = THREE.ImageUtils.loadTexture("sheet/sheet3.png",null,callback);
 };
 logo.Logos.init2 = function() {
 	var param = logo.LogoParam.getParam();
@@ -939,7 +940,7 @@ logo.Logos.getBaseTexture = function() {
 	return logo.Logos._texture;
 };
 logo.Logos.getRandom = function() {
-	return logo.Logos._logos[0];
+	return logo.Logos._logos[Math.floor(Math.random() * logo.Logos._logos.length)];
 };
 logo.Logos.getTextureByName = function(s) {
 	var _g1 = 0;
@@ -951,7 +952,7 @@ logo.Logos.getTextureByName = function(s) {
 	return null;
 };
 logo.Logos.getTexture = function(idx) {
-	return logo.Logos._logos[idx];
+	return logo.Logos._logos[idx % logo.Logos._logos.length];
 };
 logo.Logos.getLength = function() {
 	return logo.Logos._logos.length;
@@ -1187,11 +1188,12 @@ typo.Dot.prototype = $extend(THREE.Object3D.prototype,{
 		this.position.y = pos.y;
 		this.position.z = pos.z;
 	}
-	,changeMat: function(isWhite) {
-		if(isWhite) this.plane.changeMat(true); else this.plane.changeMat(false);
+	,changeMat: function(isWhite,idx) {
+		if(isWhite) this.plane.changeMat(true,idx); else this.plane.changeMat(false,idx);
 	}
 });
 typo.Dots = function() {
+	this._planeIndex = 0;
 	this._camType = "";
 	this._gene = false;
 	this._count = 0;
@@ -1301,7 +1303,9 @@ typo.Dots.prototype = $extend(THREE.Object3D.prototype,{
 		while(_g1 < _g) {
 			var i = _g1++;
 			this.dots[i].init(this._currentData);
+			this.dots[i].changeMat(false,this._planeIndex);
 		}
+		this._planeIndex++;
 		this._cube.setScale(this._currentData.size);
 		this._cutName = this._currentData.name;
 		this._w = this._currentData.size.x;
@@ -1492,7 +1496,7 @@ typo.Dots.prototype = $extend(THREE.Object3D.prototype,{
 		var _g = this.dots.length;
 		while(_g1 < _g) {
 			var i = _g1++;
-			this.dots[i].changeMat(b);
+			this.dots[i].changeMat(b,0);
 		}
 	}
 	,calcDistance: function() {
@@ -1553,9 +1557,10 @@ typo.TypoCanvasPlane.prototype = $extend(THREE.Object3D.prototype,{
 		this.add(this._plane);
 		this._plane2 = new THREE.Mesh(this.geo,data.mate2);
 		this.add(this._plane2);
+		this.changeMat(false,0);
 	}
-	,changeMat: function(isWhite) {
-		var data = logo.Logos.getRandom();
+	,changeMat: function(isWhite,idex) {
+		var data = logo.Logos.getTexture(idex);
 		this._spaceX = data.w * this._scale / this.SEG_X;
 		data.setWhite(isWhite);
 		this._plane.material = data.mate1;
@@ -1756,7 +1761,7 @@ typo.data.CutData.prototype = {
 			this._gene = true;
 			break;
 		case 2:
-			this.camPosMode = "MODE_NORMAL";
+			this.camPosMode = "MODE_FOLLOW";
 			this._gene = true;
 			break;
 		}

@@ -1,19 +1,10 @@
 package objects;
-import js.Browser;
-import js.html.CanvasElement;
-import js.html.Uint8Array;
 import three.Color;
-import three.Geometry;
-import three.Line;
-import three.Matrix3;
 import three.Matrix4;
 import three.Mesh;
 import three.MeshBasicMaterial;
 import three.Object3D;
-import three.PlaneBufferGeometry;
 import three.PlaneGeometry;
-import three.Texture;
-import three.Vector3;
 
 /**
  * ...

@@ -136,13 +136,13 @@ class Dot extends Object3D
 
 	}
 	
-	public function changeMat(isWhite:Bool) 
+	public function changeMat(isWhite:Bool,idx:Int):Void 
 	{
 		//hoge0001
 		if (isWhite) {
-			plane.changeMat(true);			
+			plane.changeMat(true,idx);			
 		}else{
-			plane.changeMat(false);
+			plane.changeMat(false,idx);
 		}
 	}
 	

@@ -9,11 +9,16 @@ class MaeFormH3 extends MaeFormBase
 
 	
 	private var _cams:Array<CamData> = [
-		new CamData(255, 0, 0 ),
+		new CamData(255, 0, 0 ),//heimen
 		new CamData(255, 0, 0.4 ),
-		new CamData(255, 0, -0.4 ),
+		//new CamData(255, 0, -0.4 ),
 		new CamData(255, 0.55, 0.87 ),		
 		new CamData(255, 0.75, -0.8 ),
+		new CamData(255, 0, 0 ),//heimen
+		new CamData(255, -0.45, 0.75 ),
+		new CamData(255, 0.67, -0.11 )
+		
+		
 		
 	];
 	

@@ -46,7 +46,7 @@ class GridPoints extends Points
 		var g:BufferGeometry = new BufferGeometry();
 			g.addAttribute( 'position',  new BufferAttribute( vertices, 3 ) );	
 		
-		var mat:PointsMaterial = new PointsMaterial( { size:1, color:0xffffff } );
+		var mat:PointsMaterial = new PointsMaterial( { size:2, color:0xffffff } );
 		//mat.sizeAttenuation = false;
 		
 		super(cast g, mat);

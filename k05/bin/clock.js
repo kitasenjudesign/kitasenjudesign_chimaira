@@ -226,8 +226,8 @@ MyPointCloud.__super__ = THREE.Object3D;
 MyPointCloud.prototype = $extend(THREE.Object3D.prototype,{
 	init: function() {
 		MyPointCloud.cloud = this;
-		this._mat = new THREE.PointCloudMaterial({ color : 16777215, size : 15});
-		this._mat.size = 5;
+		this._mat = new THREE.PointCloudMaterial({ color : 16777215});
+		this._mat.size = 10;
 		this._mat.depthTest = false;
 		var g1 = new THREE.Geometry();
 		var _g = 0;
@@ -944,6 +944,7 @@ common.Dat._onInit = function() {
 	common.Key.init();
 	common.Key.board.addEventListener("keydown",common.Dat._onKeyDown);
 	common.Dat.show(false);
+	common.Dat.hide();
 	if(common.Dat._callback != null) common.Dat._callback();
 };
 common.Dat._onKeyDown = function(e) {
@@ -1103,11 +1104,11 @@ common.StageRef = function() {
 };
 common.StageRef.showBorder = function() {
 	var dom = window.document.getElementById("webgl");
-	dom.style.border = "solid 1px #cccccc";
+	if(dom != null) dom.style.border = "solid 1px #cccccc";
 };
 common.StageRef.hideBorder = function() {
 	var dom = window.document.getElementById("webgl");
-	dom.style.border = "solid 0px";
+	if(dom != null) dom.style.border = "solid 0px";
 };
 common.StageRef.fadeIn = function() {
 	if(common.StageRef.sheet == null) common.StageRef.sheet = new common.FadeSheet(window.document.getElementById("webgl"));
@@ -2032,7 +2033,7 @@ dede.cuts.DeDeCutOneLine.prototype = $extend(dede.cuts.DeDeCutBase.prototype,{
 		this._vrdg.setGeoMax(1);
 		this._cam.setZoom(3.1);
 		this.data = dede.cuts.DeDeParam.getParam();
-		this.data.txt = "DEDEMOUSE KTSNJDSGN ";
+		this.data.txt = "DEDEMOUSE HEXPIXELS KTSNJDSGN ";
 		this.data.font = 1;
 		this.data.speedX = -0.5;
 		this.data.spaceX = 20;

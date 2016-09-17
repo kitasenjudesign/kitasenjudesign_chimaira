@@ -45,7 +45,7 @@ class Main3d
 	public static  var H:Int = 540;// 768;// 1920;
 
 	private var _scene		:Scene;
-	private var _camera		:ExCamera;
+	private static var _camera		:ExCamera;
 	private var _renderer	:WebGLRenderer;
 	private var _audio:MyAudio;
 	private var _skyboxMat:SkyboxTexture;
@@ -313,12 +313,16 @@ class Main3d
 		_video.resize(W, H, oy);
 	}
 	
-		
+	
 	
 	private function fullscreen() 
 	{
 		_renderer.domElement.requestFullscreen();
 	}
 	
+	
+	public static function getCamera():ExCamera {
+		return _camera;
+	}
 	
 }

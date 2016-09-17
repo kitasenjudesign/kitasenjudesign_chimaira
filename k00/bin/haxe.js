@@ -375,7 +375,7 @@ common.Dat._onInit = function() {
 	common.Dat.gui.domElement.style.position = "absolute";
 	common.Dat.gui.domElement.style.right = "0px";
 	var yy = window.innerHeight / 2 + common.StageRef.get_stageHeight() / 2 + common.Config.canvasOffsetY;
-	common.Dat.gui.domElement.style.top = yy + "px";
+	common.Dat.gui.domElement.style.top = Math.floor(yy / 2) + "px";
 	common.Dat.gui.domElement.style.opacity = 1;
 	common.Dat.gui.domElement.style.zIndex = 1000;
 	common.Dat.gui.domElement.style.transformOrigin = "1 0";
@@ -383,6 +383,7 @@ common.Dat._onInit = function() {
 	common.Key.init();
 	common.Key.board.addEventListener("keydown",common.Dat._onKeyDown);
 	common.Dat.show(false);
+	common.Dat.hide();
 	if(common.Dat._callback != null) common.Dat._callback();
 };
 common.Dat._onKeyDown = function(e) {
@@ -414,22 +415,22 @@ common.Dat._onKeyDown = function(e) {
 	}
 };
 common.Dat._goURL1 = function() {
-	common.Dat._goURL("../../04/bin/");
+	common.Dat._goURL("../../k04/bin/");
 };
 common.Dat._goURL2 = function() {
-	common.Dat._goURL("../../05/bin/");
+	common.Dat._goURL("../../k05/bin/");
 };
 common.Dat._goURL3 = function() {
-	common.Dat._goURL("../../02/bin/");
+	common.Dat._goURL("../../k02/bin/");
 };
 common.Dat._goURL4 = function() {
-	common.Dat._goURL("../../03/bin/");
+	common.Dat._goURL("../../k03/bin/");
 };
 common.Dat._goURL5 = function() {
-	common.Dat._goURL("../../00/bin/");
+	common.Dat._goURL("../../k00/bin/");
 };
 common.Dat._goURL6 = function() {
-	common.Dat._goURL("../../01/bin/");
+	common.Dat._goURL("../../k01/bin/");
 };
 common.Dat._goURL = function(url) {
 	Tracer.log("goURL " + url);
@@ -522,11 +523,11 @@ common.StageRef = function() {
 };
 common.StageRef.showBorder = function() {
 	var dom = window.document.getElementById("webgl");
-	dom.style.border = "solid 1px #cccccc";
+	if(dom != null) dom.style.border = "solid 1px #cccccc";
 };
 common.StageRef.hideBorder = function() {
 	var dom = window.document.getElementById("webgl");
-	dom.style.border = "solid 0px";
+	if(dom != null) dom.style.border = "solid 0px";
 };
 common.StageRef.fadeIn = function() {
 	if(common.StageRef.sheet == null) common.StageRef.sheet = new common.FadeSheet(window.document.getElementById("webgl"));
@@ -1089,7 +1090,7 @@ faces.MaeGauge.prototype = $extend(THREE.Mesh.prototype,{
 	}
 });
 faces.MaeLines = function() {
-	this.posY = -34;
+	this.posY = -120;
 	this._lineIdx = 0;
 	THREE.Object3D.call(this);
 };
@@ -1397,7 +1398,7 @@ faces.data.MaeFormH1.prototype = $extend(faces.data.MaeFormBase.prototype,{
 		this._width = xnum * spaceX;
 		var len = this._faces.length;
 		var ox = 0;
-		if(this._count == 0) ox = this._width * 0.63;
+		if(this._count == 0) ox = this._width * 0.60;
 		var _g = 0;
 		while(_g < len) {
 			var i = _g++;
@@ -1433,7 +1434,7 @@ faces.data.MaeFormH1.prototype = $extend(faces.data.MaeFormBase.prototype,{
 	}
 });
 faces.data.MaeFormH3 = function() {
-	this._cams = [new faces.data.CamData(255,0,0),new faces.data.CamData(255,0,0.4),new faces.data.CamData(255,0,-0.4),new faces.data.CamData(255,0.55,0.87),new faces.data.CamData(255,0.75,-0.8)];
+	this._cams = [new faces.data.CamData(255,0,0),new faces.data.CamData(255,0,0.4),new faces.data.CamData(255,0.55,0.87),new faces.data.CamData(255,0.75,-0.8),new faces.data.CamData(255,0,0),new faces.data.CamData(255,-0.45,0.75),new faces.data.CamData(255,0.67,-0.11)];
 	faces.data.MaeFormBase.call(this);
 };
 faces.data.MaeFormH3.__super__ = faces.data.MaeFormBase;
@@ -1491,7 +1492,7 @@ faces.data.MaeFormH3.prototype = $extend(faces.data.MaeFormBase.prototype,{
 	}
 });
 faces.data.MaeFormV = function() {
-	this._cams = [new faces.data.CamData(215,0,0),new faces.data.CamData(215,0,-0.5),new faces.data.CamData(215,0,0.5),new faces.data.CamData(116,-0.34,-0.59)];
+	this._cams = [new faces.data.CamData(215,0,0),new faces.data.CamData(215,0,-0.5),new faces.data.CamData(215,0,0.5),new faces.data.CamData(312,0,0),new faces.data.CamData(116,-0.34,-0.59),new faces.data.CamData(90,0,0)];
 	faces.data.MaeFormBase.call(this);
 };
 faces.data.MaeFormV.__super__ = faces.data.MaeFormBase;
@@ -1586,7 +1587,7 @@ faces.data.MaeFormVpers.prototype = $extend(faces.data.MaeFormBase.prototype,{
 				var idx = i;
 				var xx = idx % xnum - (xnum - 1) / 2;
 				var yy = Math.floor(idx / xnum) - (ynum - 1) / 2;
-				ff.position.x = 200;
+				ff.position.x = 150;
 				ff.position.y = yy * spaceX;
 				ff.position.z = xx * spaceY + oz;
 				ff.rotation.y = -Math.PI / 2;
@@ -1594,7 +1595,7 @@ faces.data.MaeFormVpers.prototype = $extend(faces.data.MaeFormBase.prototype,{
 				var idx1 = i - num;
 				var xx1 = idx1 % xnum - (xnum - 1) / 2;
 				var yy1 = Math.floor(idx1 / xnum) - (ynum - 1) / 2;
-				ff.position.x = -200;
+				ff.position.x = -150;
 				ff.position.y = yy1 * spaceX;
 				ff.position.z = xx1 * spaceY + oz;
 				ff.rotation.y = Math.PI / 2;

@@ -26,10 +26,13 @@ class Logos {
 		
 	}
 	
-	
+	/**
+	 * 
+	 * @param	callback
+	 */
 	public static function init(callback:Void->Void):Void {
 		
-		_texture = ImageUtils.loadTexture("sheet/sheet1.png", null, callback);
+		_texture = ImageUtils.loadTexture("sheet/sheet3.png", null, callback);
 		
 	}
 	
@@ -63,7 +66,7 @@ class Logos {
 	
 	public static function getRandom():LogoData {
 		
-		return _logos[ 0 ];// Math.floor(Math.random() * _logos.length) ];
+		return _logos[ Math.floor(Math.random() * _logos.length) ];
 		
 	}
 
@@ -91,7 +94,7 @@ class Logos {
 	}
 	
 	public static function getTexture(idx:Int):LogoData {
-		return _logos[idx];
+		return _logos[idx % _logos.length];
 	}
 	
 	

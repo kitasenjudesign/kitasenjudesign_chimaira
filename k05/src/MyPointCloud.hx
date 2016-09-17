@@ -44,9 +44,9 @@ class MyPointCloud extends Object3D
 		
 		_mat = new PointCloudMaterial(
 			//{ /*transparent:true,*/ color:0xffffff, size:15, map:ImageUtils.loadTexture("dotA.png") }
-			{ /*transparent:true,*/ color:0xffffff, size:15}
+			{ /*transparent:true,*/ color:0xffffff}
 		);
-		_mat.size = 5;// Dat.bg ? 10 : 15;
+		_mat.size = 10;// Dat.bg ? 10 : 15;
 		
 		//_mat.blending = Three.AdditiveBlending;
 		_mat.depthTest = false;
