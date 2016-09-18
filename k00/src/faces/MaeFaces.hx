@@ -29,6 +29,7 @@ class MaeFaces extends Object3D
 	private var _formation:MaeFormation;
 	private var _main:Main3d;
 	private var _matType:Int =0;
+	private var _isBlue:Bool = false;
 	
 	
 	public function new() 
@@ -113,7 +114,19 @@ class MaeFaces extends Object3D
 			case Dat.DOWN:
 				_resetMaterial();
 				
+			case Dat.B:
+				_setBlue();
+				_main.setBgColor(_isBlue);
+				
 		}
+	}
+	
+	private function _setBlue():Void
+	{
+		_isBlue = !_isBlue;
+		for (i in 0..._faces.length) {
+			_faces[i].setTexture( _isBlue ? 1 : 0 );
+		}		
 	}
 	
 	//formation shidai de 
@@ -126,9 +139,9 @@ class MaeFaces extends Object3D
 		
 		var mats:Array<Int> = [
 			MaeFace.MAT_COLOR,
-			//MaeFace.MAT_WIRE_COLOR,
-			//MaeFace.MAT_WIRE_WHITE,
-			MaeFace.MAT_COLOR_RED
+			MaeFace.MAT_WIRE_COLOR,
+			MaeFace.MAT_COLOR_RED,
+			MaeFace.MAT_WIRE_WHITE
 		];
 		var type:Int = mats[_matType % mats.length];
 		_matType++;

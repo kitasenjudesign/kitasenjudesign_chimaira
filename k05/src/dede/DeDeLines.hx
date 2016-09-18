@@ -37,7 +37,7 @@ class DeDeLines extends Object3D
 		
 		var oy:Float = -150;
 		
-		for(i in 0...3){
+		for(i in 0...4){
 			var line:DeDeLine = new DeDeLine();
 			line.init();
 			line.position.y = i * 150 + oy;

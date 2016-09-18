@@ -30,11 +30,10 @@ class DeDeCutMultiLine  extends DeDeCutBase
 		//public function reposition(ynum:Int,spaceY:Float=150, oy:Float=-150):Void {
 
 		//_lines.setSpeedX( DeDeLine.SPEEDX1 );
-		
 		_vrdg.visible = false;
 		_vrdg.setGeoMax(1);
 		
-		_cam.setZoom(3.1);		
+		_cam.setZoom(6);		
 		
 	}
 	
@@ -49,7 +48,7 @@ class DeDeCutMultiLine  extends DeDeCutBase
 		_vrdg.visible = false;
 		_vrdg.setGeoMax(1);
 		
-		_cam.setZoom(1.3);
+		_cam.setZoom(3.8);
 		
 		//next();		
 		
@@ -58,15 +57,15 @@ class DeDeCutMultiLine  extends DeDeCutBase
 	private function _reposThree():Void {
 		
 		_lines.visible = true;
-		_lines.setGeoMax(150,[true,true,true]);
-		_lines.reposition(3);
+		_lines.setGeoMax(150,[true,true,true,true]);
+		_lines.reposition(3,150,-150-70);
 		//_lines.setSpeedX( DeDeLine.SPEEDX1 );
 		
 		_vrdg.visible = false;
 		_vrdg.setGeoMax(1);
 		
-		_cam.setZoom(0.85);
-		
+		//_cam.setZoom(0.85);
+		_cam.setZoom(1.8);
 		//next();		
 		
 	}
@@ -77,14 +76,13 @@ class DeDeCutMultiLine  extends DeDeCutBase
 	override public function next():Void
 	{
 		
-		
-		switch(_lineType % 2) {
+		switch(_lineType % 3) {
 			case 0:
 				_reposThree();
 			case 1:
 				_reposTwo();
-			//case 2:
-			//	_reposOne();				
+			case 2:
+				_reposOne();				
 		}		
 		_lineType++;
 		

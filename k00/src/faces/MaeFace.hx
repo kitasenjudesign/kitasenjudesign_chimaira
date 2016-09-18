@@ -237,6 +237,11 @@ class MaeFace extends Object3D
 		
 	}
 	
+	public function setTexture(nn:Int):Void 
+	{
+		_face.getMat().setTexture(nn);
+	}
+	
 	
 	
 }

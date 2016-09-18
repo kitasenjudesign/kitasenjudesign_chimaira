@@ -14,7 +14,8 @@ class MaeFormV extends MaeFormBase
 		new CamData(215, 0, 0.5 ),
 		new CamData(312, 0, 0 ),//heimen
 		new CamData(116, -0.34, -0.59 ),
-		new CamData(90, 0, 0)
+		new CamData(90, 0, 0),
+		new CamData(209,0.34,-0.59)
 		
 	];
 	

@@ -154,6 +154,9 @@ class MaeFaceMesh extends Mesh
 		
 	}
 	
+	public function getMat():MaeShaderMaterial {
+		return _material;
+	}
 	
 	public function show():Void
 	{

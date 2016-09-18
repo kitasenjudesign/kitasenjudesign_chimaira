@@ -9,6 +9,7 @@ import faces.MaeFaces;
 import js.Browser;
 import objects.MyDAELoader;
 import sound.MyAudio;
+import three.Color;
 import three.DirectionalLight;
 import three.Geometry;
 import three.Scene;
@@ -46,9 +47,19 @@ class Main3d
 	{
 		renderer = new WebGLRenderer( { antialias:true, devicePixelRatio:1/*, preserveDrawingBuffer: true*/ } );
 		renderer.domElement.id = StageRef.name;	
+		//renderer.setClearColor(new Color(0xffffff));
 		Browser.document.body.appendChild(renderer.domElement);
 		Dat.init(_onInit);
 		
+	}
+	
+	public function setBgColor(isBlue:Bool) 
+	{
+		if (isBlue) {
+			renderer.setClearColor(new Color(0xffffff));
+		}else {
+			renderer.setClearColor(new Color(0));
+		}
 	}
 	
 	private function _onInit():Void {

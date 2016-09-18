@@ -34,7 +34,7 @@ class DeDeCutOneLine  extends DeDeCutBase
 		_vrdg.setGeoMax(1);
 		
 		//_cam.setZoom(2);
-		_cam.setZoom(3.1);
+		_cam.setZoom(6);// 3.1);
 		
 		data = DeDeParam.getParam();
 		data.txt = "DEDEMOUSE HEXPIXELS KTSNJDSGN ";

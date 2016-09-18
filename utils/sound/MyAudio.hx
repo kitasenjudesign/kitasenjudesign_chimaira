@@ -108,7 +108,6 @@ class MyAudio
 	}
 	
 	
-	
 	public function update():Void {
 		
 		if (!isStart) {

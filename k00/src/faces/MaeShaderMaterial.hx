@@ -238,6 +238,7 @@ void main()
 	public static var MAT_COLOR_RED:Int = 1;
 	
 	private static var _texture1:Texture;
+	private static var _texture2:Texture;
 	private static var _colorTextures:Array<Texture>;
 	private static var _colorTexturesRed:Array<Texture>;
 	
@@ -253,6 +254,9 @@ void main()
 	{
 		if (_texture1 == null) {
 			_texture1 = ImageUtils.loadTexture(Path.assets+ "face/dede_face_diff.png");// mae_face.png");
+		}
+		if (_texture2 == null) {
+			_texture2 = ImageUtils.loadTexture(Path.assets+ "face/dede_face_diff_blue.png");// mae_face.png");			
 		}
 		
 		_indecies = [];
@@ -287,6 +291,8 @@ void main()
 		//this.side = Three.DoubleSide;
 		//this.transparent = true;
 		//this.alphaTest = 0.5;
+		
+		//setTexture(1);
 		
 	}
 	
@@ -347,6 +353,16 @@ void main()
 		
 	}
 	
+	
+	public function setTexture(index:Int):Void {
+		
+		if (index == 0) {
+			uniforms.texture.value = _texture1;
+		}else {
+			uniforms.texture.value = _texture2;
+		}
+		
+	}
 	
 	public function setWireframe(b:Bool):Void {
 		

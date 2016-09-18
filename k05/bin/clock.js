@@ -950,7 +950,9 @@ common.Dat._onInit = function() {
 common.Dat._onKeyDown = function(e) {
 	var _g = Std.parseInt(e.keyCode);
 	switch(_g) {
-	case 65:
+	case 90:
+		common.Dat._soundFlag = !common.Dat._soundFlag;
+		TweenMax.to(sound.MyAudio.a,0.5,{ globalVolume : common.Dat._soundFlag?common.Config.globalVol:0});
 		break;
 	case 68:
 		if(common.Dat.gui.domElement.style.display == "block") common.Dat.hide(); else common.Dat.show(true);
@@ -973,6 +975,9 @@ common.Dat._onKeyDown = function(e) {
 	case 54:
 		common.StageRef.fadeOut(common.Dat._goURL6);
 		break;
+	case 55:
+		common.StageRef.fadeOut(common.Dat._goURL7);
+		break;
 	}
 };
 common.Dat._goURL1 = function() {
@@ -991,6 +996,9 @@ common.Dat._goURL5 = function() {
 	common.Dat._goURL("../../k00/bin/");
 };
 common.Dat._goURL6 = function() {
+	common.Dat._goURL("../../k06/bin/");
+};
+common.Dat._goURL7 = function() {
 	common.Dat._goURL("../../k01/bin/");
 };
 common.Dat._goURL = function(url) {
@@ -1650,7 +1658,7 @@ dede.DeDeLines.prototype = $extend(THREE.Object3D.prototype,{
 		this._lines = [];
 		var oy = -150;
 		var _g = 0;
-		while(_g < 3) {
+		while(_g < 4) {
 			var i = _g++;
 			var line = new dede.DeDeLine();
 			line.init();
@@ -1967,7 +1975,7 @@ dede.cuts.DeDeCutMultiLine.prototype = $extend(dede.cuts.DeDeCutBase.prototype,{
 		this._lines.reposition(1,150,0);
 		this._vrdg.visible = false;
 		this._vrdg.setGeoMax(1);
-		this._cam.setZoom(3.1);
+		this._cam.setZoom(6);
 	}
 	,_reposTwo: function() {
 		this._lines.visible = true;
@@ -1975,24 +1983,27 @@ dede.cuts.DeDeCutMultiLine.prototype = $extend(dede.cuts.DeDeCutBase.prototype,{
 		this._lines.reposition(2,150,-65);
 		this._vrdg.visible = false;
 		this._vrdg.setGeoMax(1);
-		this._cam.setZoom(1.3);
+		this._cam.setZoom(3.8);
 	}
 	,_reposThree: function() {
 		this._lines.visible = true;
-		this._lines.setGeoMax(150,[true,true,true]);
-		this._lines.reposition(3);
+		this._lines.setGeoMax(150,[true,true,true,true]);
+		this._lines.reposition(3,150,-220);
 		this._vrdg.visible = false;
 		this._vrdg.setGeoMax(1);
-		this._cam.setZoom(0.85);
+		this._cam.setZoom(1.8);
 	}
 	,next: function() {
-		var _g = this._lineType % 2;
+		var _g = this._lineType % 3;
 		switch(_g) {
 		case 0:
 			this._reposThree();
 			break;
 		case 1:
 			this._reposTwo();
+			break;
+		case 2:
+			this._reposOne();
 			break;
 		}
 		this._lineType++;
@@ -2031,7 +2042,7 @@ dede.cuts.DeDeCutOneLine.prototype = $extend(dede.cuts.DeDeCutBase.prototype,{
 		this._lines.reposition(3);
 		this._vrdg.visible = false;
 		this._vrdg.setGeoMax(1);
-		this._cam.setZoom(3.1);
+		this._cam.setZoom(6);
 		this.data = dede.cuts.DeDeParam.getParam();
 		this.data.txt = "DEDEMOUSE HEXPIXELS KTSNJDSGN ";
 		this.data.font = 1;
@@ -3399,7 +3410,7 @@ clock.DotDigit.TYPE_RANDOM_CONTINUE = 5;
 clock.DotDigit.NUM_TYPE = 4;
 common.Config.canvasOffsetY = 0;
 common.Config.globalVol = 1.0;
-common.Config.particleSize = 3000;
+common.Config.particleSize = 10000;
 common.Config.bgLight = 0.5;
 common.Dat.UP = 38;
 common.Dat.DOWN = 40;
@@ -3445,6 +3456,7 @@ common.Dat.Z = 90;
 common.Dat.hoge = 0;
 common.Dat.bg = false;
 common.Dat._showing = true;
+common.Dat._soundFlag = true;
 common.Key.keydown = "keydown";
 common.QueryGetter.NORMAL = 0;
 common.QueryGetter.SKIP = 1;

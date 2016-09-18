@@ -79,6 +79,9 @@ CanvasTest3d.prototype = $extend(Test3d.prototype,{
 		console.log("keydown");
 		var _g = Std.parseInt(e.keyCode);
 		switch(_g) {
+		case 80:
+			this._isPP = !this._isPP;
+			break;
 		case 37:
 			this._pp.changeTexture();
 			break;
@@ -500,7 +503,9 @@ common.Dat._onInit = function() {
 common.Dat._onKeyDown = function(e) {
 	var _g = Std.parseInt(e.keyCode);
 	switch(_g) {
-	case 65:
+	case 90:
+		common.Dat._soundFlag = !common.Dat._soundFlag;
+		TweenMax.to(sound.MyAudio.a,0.5,{ globalVolume : common.Dat._soundFlag?common.Config.globalVol:0});
 		break;
 	case 68:
 		if(common.Dat.gui.domElement.style.display == "block") common.Dat.hide(); else common.Dat.show(true);
@@ -523,6 +528,9 @@ common.Dat._onKeyDown = function(e) {
 	case 54:
 		common.StageRef.fadeOut(common.Dat._goURL6);
 		break;
+	case 55:
+		common.StageRef.fadeOut(common.Dat._goURL7);
+		break;
 	}
 };
 common.Dat._goURL1 = function() {
@@ -541,6 +549,9 @@ common.Dat._goURL5 = function() {
 	common.Dat._goURL("../../k00/bin/");
 };
 common.Dat._goURL6 = function() {
+	common.Dat._goURL("../../k06/bin/");
+};
+common.Dat._goURL7 = function() {
 	common.Dat._goURL("../../k01/bin/");
 };
 common.Dat._goURL = function(url) {
@@ -742,7 +753,7 @@ effect.shaders.Dhiza.getObject = function() {
 effect.shaders.LuminosityShader = function() {
 };
 effect.shaders.LuminosityShader.getObject = function(tt) {
-	return { uniforms : { tDiffuse : { type : "t", value : null}, texture : { type : "t", value : tt}, texture2 : { type : "t", value : tt}}, vertexShader : "\r\n\t\t\t\t\tvarying vec2 vUv;\r\n\t\t\t\t\tvoid main() {\r\n\t\t\t\t\t\tvUv = uv;\r\n\t\t\t\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\r\n\t\t\t\t\t}\t\t\t\t\r\n\t\t\t\t", fragmentShader : "\r\n\t\t\t\t\tuniform sampler2D tDiffuse;\r\n\t\t\t\t\tuniform sampler2D texture;\r\n\t\t\t\t\tuniform sampler2D texture2;\r\n\t\t\t\t\tvarying vec2 vUv;\r\n\t\t\t\t\tvoid main() {\r\n\t\t\t\t\t\tvec4 texel = texture2D( tDiffuse, vUv );\r\n\t\t\t\t\t\tvec3 luma = vec3( 0.299, 0.587, 0.114 );\r\n\t\t\t\t\t\tfloat v = dot( texel.xyz, luma );//akarusa\r\n\t\t\t\t\t\tvec2 axis = vec2( 0.5,v );\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t//vec4 pa = texture2D( tDiffuse, vUv);\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t//vec4 pb = texture2D( texture, axis);\r\n\t\t\t\t\t\t//vec4 pb = mix( texture2D( tDiffuse, vUv), texture2D( texture, axis), 0.6+0.4*vUv.y);\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t//fu tatsu wo mazeteiru\r\n\t\t\t\t\t\tvec4 pb = mix( texture2D( texture2, axis), texture2D( texture, axis), vUv.y);\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\tgl_FragColor = vec4( pb.x,pb.y,pb.z, 1.0 );\r\n\t\t\t\t\t}\r\n\t\t\t\t"};
+	return { uniforms : { tDiffuse : { type : "t", value : null}, texture : { type : "t", value : tt}, texture2 : { type : "t", value : tt}}, vertexShader : "\r\n\t\t\t\t\tvarying vec2 vUv;\r\n\t\t\t\t\tvoid main() {\r\n\t\t\t\t\t\tvUv = uv;\r\n\t\t\t\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\r\n\t\t\t\t\t}\t\t\t\t\r\n\t\t\t\t", fragmentShader : "\r\n\t\t\t\t\tuniform sampler2D tDiffuse;\r\n\t\t\t\t\tuniform sampler2D texture;\r\n\t\t\t\t\tuniform sampler2D texture2;\r\n\t\t\t\t\tvarying vec2 vUv;\r\n\t\t\t\t\tvoid main() {\r\n\t\t\t\t\t\tvec4 texel = texture2D( tDiffuse, vUv );\r\n\t\t\t\t\t\tvec3 luma = vec3( 0.299, 0.587, 0.114 );\r\n\t\t\t\t\t\tfloat v = dot( texel.xyz, luma );//akarusa\r\n\t\t\t\t\t\tvec2 axis = vec2( 0.5,v );\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t//vec4 pa = texture2D( tDiffuse, vUv);\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\tvec4 pb = texture2D( texture, axis);\r\n\t\t\t\t\t\t//vec4 pb = mix( texture2D( tDiffuse, vUv), texture2D( texture, axis), 0.6+0.4*vUv.y);\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t//fu tatsu wo mazeteiru\r\n\t\t\t\t\t\t//vec4 pb = mix( texture2D( texture2, axis), texture2D( texture, axis), vUv.y);\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\t\r\n\t\t\t\t\t\tgl_FragColor = vec4( pb.x,pb.y,pb.z, 1.0 );\r\n\t\t\t\t\t}\r\n\t\t\t\t"};
 };
 effect.shaders.MyTiltShiftShader = function() {
 };
@@ -1526,7 +1537,7 @@ typo.Dots.prototype = $extend(THREE.Object3D.prototype,{
 typo.Textures = function() {
 };
 typo.Textures.init = function() {
-	typo.Textures._textures = [THREE.ImageUtils.loadTexture("../../assets/" + "grade/grade.png"),THREE.ImageUtils.loadTexture("../../assets/" + "grade/grade1.png"),THREE.ImageUtils.loadTexture("../../assets/" + "grade/grade2.png"),THREE.ImageUtils.loadTexture("../../assets/" + "grade/grade3.png"),THREE.ImageUtils.loadTexture("../../assets/" + "grade/grade4.png"),THREE.ImageUtils.loadTexture("../../assets/" + "grade/grade5.png"),THREE.ImageUtils.loadTexture("../../assets/" + "grade/grade6.png"),THREE.ImageUtils.loadTexture("../../assets/" + "grade/grade7.png")];
+	typo.Textures._textures = [THREE.ImageUtils.loadTexture("../../assets/" + "grade/grade1.png"),THREE.ImageUtils.loadTexture("../../assets/" + "grade/grade2.png"),THREE.ImageUtils.loadTexture("../../assets/" + "grade/grade4.png"),THREE.ImageUtils.loadTexture("../../assets/" + "grade/grade6.png"),THREE.ImageUtils.loadTexture("../../assets/" + "grade/grade7.png")];
 };
 typo.Textures.getTexture = function() {
 	return typo.Textures._textures[Math.floor(Math.random() * typo.Textures._textures.length)];
@@ -2075,7 +2086,7 @@ camera.ExCamera.POS_NORMAL = "MODE_NORMAL";
 camera.ExCamera.POS_FOLLOW = "MODE_FOLLOW";
 common.Config.canvasOffsetY = 0;
 common.Config.globalVol = 1.0;
-common.Config.particleSize = 3000;
+common.Config.particleSize = 10000;
 common.Config.bgLight = 0.5;
 common.Dat.UP = 38;
 common.Dat.DOWN = 40;
@@ -2121,6 +2132,7 @@ common.Dat.Z = 90;
 common.Dat.hoge = 0;
 common.Dat.bg = false;
 common.Dat._showing = true;
+common.Dat._soundFlag = true;
 common.Key.keydown = "keydown";
 common.Path.assets = "../../assets/";
 common.QueryGetter.NORMAL = 0;

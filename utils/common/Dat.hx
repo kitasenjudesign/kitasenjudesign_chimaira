@@ -5,6 +5,8 @@ import js.Browser;
 import js.html.CanvasElement;
 import js.html.DivElement;
 import js.html.Element;
+import sound.MyAudio;
+import tween.TweenMax;
 
 /**
  * ...
@@ -70,6 +72,7 @@ class Dat
 	private static var _showing:Bool = true;
 	private static var _config:Config;
 	private static var _cover:DivElement;
+	private static var _soundFlag:Bool = true;
 	static private var _callback:Void->Void;
 	
 	public function new() 
@@ -126,9 +129,12 @@ class Dat
 		//Browser.window.alert("bg=" + bg +" / "+ e.keyCode);
 		
 		switch(Std.parseInt(e.keyCode)) {
-			case Dat.A :
-				//socket.send("UNKO " + Math.random());
-			
+			case Dat.Z :
+				_soundFlag = !_soundFlag;
+				TweenMax.to(MyAudio.a, 0.5, {
+					globalVolume: _soundFlag ? Config.globalVol : 0
+				});
+				
 			case Dat.D :
 				if ( gui.domElement.style.display == "block"){
 					hide();
@@ -137,20 +143,27 @@ class Dat
 				}
 			//case Dat.F :
 				//untyped Browser.document.body.webkitRequestFullscreen();
-
 			case Dat.K1 :
 				StageRef.fadeOut( _goURL1 );		
+				
 			case Dat.K2 :
 				StageRef.fadeOut( _goURL2 );		
+				
 			case Dat.K3 :
-				StageRef.fadeOut( _goURL3 );						
+				StageRef.fadeOut( _goURL3 );		
+				
 			case Dat.K4 :
 				StageRef.fadeOut( _goURL4 );		
-			case Dat.K5 :
-				StageRef.fadeOut( _goURL5 );				
-			case Dat.K6 :
-				StageRef.fadeOut( _goURL6 );		
 				
+			case Dat.K5 :
+				StageRef.fadeOut( _goURL5 );	
+				
+			case Dat.K6 :
+				StageRef.fadeOut( _goURL6 );	
+				
+			case Dat.K7 :
+				StageRef.fadeOut( _goURL7 );		
+			
 		}
 		
 	}
@@ -159,31 +172,49 @@ class Dat
 	private static function _goURL1():Void {
 		
 		_goURL( "../../k04/bin/" );
+		
 	}
 	
 	//dot moji
 	private static function _goURL2():Void {
+		
 		_goURL( "../../k05/bin/" );
+		
 	}	
 	
 	//emoji
 	private static function _goURL3():Void {
+		
 		_goURL( "../../k02/bin/" );
+		
 	}
 	
 	//emoji fbo
 	private static function _goURL4():Void {
+		
 		_goURL( "../../k03/bin/" );
+		
 	}
 	
 	//faces
 	private static function _goURL5():Void {
+		
 		_goURL( "../../k00/bin/" );
+		
 	}
 	
-	//single
+	//faces
 	private static function _goURL6():Void {
+		
+		_goURL( "../../k06/bin/" );
+		
+	}	
+	
+	//single
+	private static function _goURL7():Void {
+		
 		_goURL( "../../k01/bin/" );
+		
 	}	
 	
 	
@@ -201,6 +232,7 @@ class Dat
 		if(isBorder)StageRef.showBorder();
 		gui.domElement.style.display = "block";
 	}
+	
 	public static function hide():Void {
 		StageRef.hideBorder();
 		gui.domElement.style.display = "none";

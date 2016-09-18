@@ -11,9 +11,15 @@ class MaeFormVpers extends MaeFormBase
 		new CamData(255, 0, 0 ),//0
 		new CamData(255, 0, 0 ),//1
 		new CamData(255, 0, 0 ),//2
+		
 		new CamData(255, 0, 0 ),//3
 		new CamData(255, 0, 0 ),//4
-		new CamData(255, -0.73, -0.1 )//5
+		new CamData(255, -0.73, -0.1 ),//5
+		
+		new CamData(255, 0, 0 ),//3
+		new CamData(255, 0, 0 ),//4
+		new CamData(255, 0.63, -0.1 )//5
+		
 	];
 	
 	public function new() 

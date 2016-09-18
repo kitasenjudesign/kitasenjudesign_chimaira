@@ -48,11 +48,11 @@ class LuminosityShader
 						
 						//vec4 pa = texture2D( tDiffuse, vUv);
 						
-						//vec4 pb = texture2D( texture, axis);
+						vec4 pb = texture2D( texture, axis);
 						//vec4 pb = mix( texture2D( tDiffuse, vUv), texture2D( texture, axis), 0.6+0.4*vUv.y);
 						
 						//fu tatsu wo mazeteiru
-						vec4 pb = mix( texture2D( texture2, axis), texture2D( texture, axis), vUv.y);
+						//vec4 pb = mix( texture2D( texture2, axis), texture2D( texture, axis), vUv.y);
 						
 						
 						gl_FragColor = vec4( pb.x,pb.y,pb.z, 1.0 );
