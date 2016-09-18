@@ -129,8 +129,8 @@ class MyWorld extends Object3D
 				_isWire = !_isWire;
 				_showColor();
 				
-			case Dat.DOWN:
-				_hideColor();
+			//case Dat.DOWN:
+			//	_hideColor();
 				
 			case Dat.RIGHT:	
 				_nextEffect();///////////////////////////////

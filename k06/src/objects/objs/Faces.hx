@@ -38,6 +38,7 @@ class Faces extends MatchMoveObects
 	var _offsetX:Float=0;
 	var _count:Int = 0;
 	
+	
 	public function new() 
 	{
 		super();
@@ -65,6 +66,7 @@ class Faces extends MatchMoveObects
 		_material.refractionRatio = 0.1;
 		_material.reflectivity = 0.1;
 		_material.shininess = 0.01;
+		_material.side = Three.DoubleSide;
 	
 		//_material.normalMap = Textures.eyeNormal;
 		//_material.wireframe = false;
@@ -117,22 +119,31 @@ class Faces extends MatchMoveObects
 		this.visible = true;
 		
 		
+		//kokowo set
+		
 		var rotMode:Int = 0;
 		var posMode:Int = 0;
-		switch(_count%4) {
+		
+		var n:Int = _count % 4;
+		if ( _count < 5) {
+			n = Math.floor(Math.random() * 2);
+		}
+		
+		switch( n ) {
 			case 0:
-				posMode = FaceMotion.MODE_POS_FIX;
+				posMode = FaceMotion.MODE_POS_MOVE_Y;
 				rotMode = FaceMotion.MODE_ROT_Y;
 			case 1:
 				posMode = FaceMotion.MODE_POS_MOVE_Y;
 				rotMode = FaceMotion.MODE_ROT_XYZ;				
 			case 2:
 				posMode = FaceMotion.MODE_POS_FIX;
-				rotMode = FaceMotion.MODE_ROT_XYZ;			
+				rotMode = FaceMotion.MODE_ROT_Y;			
 			case 3:
 				posMode = FaceMotion.MODE_POS_FIX;
 				rotMode = FaceMotion.MODE_ROT_XYZ;			
 		}
+		
 		
 		_motion.start(
 			data,posMode,rotMode
@@ -146,18 +157,16 @@ class Faces extends MatchMoveObects
 	
 	private function _changeMat():Void {
 		
-		/*
-			public static inline var MAT_WIREFRAME	:Int = 0;
-			public static inline var MAT_MIRROR		:Int = 1;
-			public static inline var MAT_COLOR		:Int = 2;
-			public static inline var MAT_MESH		:Int = 3;
-			public static inline var MAT_MESH_RED	:Int = 4;	
-		*/
-	
+		
 		//3pattern
 		_matIndex++;
-		_matIndex = _matIndex % MAT_NUM;
-		MaterialParams.setParam(_material, _matIndex);
+		//_matIndex = _matIndex ;
+		
+		var n:Int = _matIndex% MAT_NUM;
+		if (_matIndex < 5) {
+			n = 0;
+		}
+		MaterialParams.setParam(_material, n);
 		
 		_material.needsUpdate = true;
 	}

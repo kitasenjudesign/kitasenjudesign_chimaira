@@ -1396,6 +1396,7 @@ common.Dat._onInit = function() {
 	common.Key.init();
 	common.Key.board.addEventListener("keydown",common.Dat._onKeyDown);
 	common.Dat.show(false);
+	common.Dat.hide();
 	if(common.Dat._callback != null) common.Dat._callback();
 };
 common.Dat._onKeyDown = function(e) {
@@ -1581,11 +1582,11 @@ common.StageRef = function() {
 common.StageRef.__name__ = true;
 common.StageRef.showBorder = function() {
 	var dom = window.document.getElementById("webgl");
-	dom.style.border = "solid 1px #cccccc";
+	if(dom != null) dom.style.border = "solid 1px #cccccc";
 };
 common.StageRef.hideBorder = function() {
 	var dom = window.document.getElementById("webgl");
-	dom.style.border = "solid 0px";
+	if(dom != null) dom.style.border = "solid 0px";
 };
 common.StageRef.fadeIn = function() {
 	if(common.StageRef.sheet == null) common.StageRef.sheet = new common.FadeSheet(window.document.getElementById("webgl"));
@@ -3133,8 +3134,8 @@ Three.RGBA_S3TC_DXT3_Format = 2003;
 Three.RGBA_S3TC_DXT5_Format = 2004;
 Three.LineStrip = 0;
 Three.LinePieces = 1;
-canvas.CanvasSrc.W = 200;
-canvas.CanvasSrc.H = 50;
+canvas.CanvasSrc.W = 120;
+canvas.CanvasSrc.H = 68;
 canvas.primitives.VideoPlane.W = 192;
 canvas.primitives.VideoPlane.H = 58;
 canvas.primitives.data.EffectData.BLACK_RANDOM = 0;
@@ -3142,7 +3143,7 @@ canvas.primitives.data.EffectData.BLACK_TRUE = 1;
 canvas.primitives.data.EffectData.BLACK_FALSE = 2;
 common.Config.canvasOffsetY = 0;
 common.Config.globalVol = 1.0;
-common.Config.particleSize = 3000;
+common.Config.particleSize = 10000;
 common.Config.bgLight = 0.5;
 common.Dat.UP = 38;
 common.Dat.DOWN = 40;

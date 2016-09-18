@@ -4,6 +4,7 @@ import materials.Textures;
 import objects.objs.eye.Eye;
 import objects.objs.line.HattoriLine;
 import sound.MyAudio;
+import three.BoxGeometry;
 import three.Geometry;
 import three.Matrix4;
 import three.Mesh;
@@ -42,7 +43,7 @@ class Eyes extends MatchMoveObects
 		if (_material != null) return;
 
 		//_meshes
-		_material = new MeshPhongMaterial({color:0xff0000});
+		_material = new MeshPhongMaterial({color:0xffffff});
 		_material.map = Textures.eyeColor;			
 		_material.normalMap = Textures.eyeNormal;
 		//m.normalMap = Textures.handNormal;		
@@ -59,12 +60,10 @@ class Eyes extends MatchMoveObects
 		var mat4:Matrix4 = new Matrix4();
 		mat4.multiply( new Matrix4().makeRotationX(Math.PI / 2));
 		mat4.multiply( new Matrix4().makeRotationZ(Math.PI));
-		
 		//mat4.multiply( new Matrix4().makeRotationY(Math.PI));
 		//mat4.multiply( new Matrix4().makeRotationZ(Math.PI / 2));
-		
-		
-		geo.merge(new SphereGeometry(50, 50, 10, 10), mat4);		
+		//geo.merge(new SphereGeometry(50, 50, 10, 10), mat4);		
+		geo.merge(new BoxGeometry(50, 50, 50), mat4);		
 		
 		
 		_eyes = [];
@@ -125,12 +124,14 @@ class Eyes extends MatchMoveObects
 	private function _move():Void {
 		
 		var pos:Array<Vector3> = _data.camData.positions;
+		var yy:Float = _data.offsetY;
+		
 		for (i in 0..._eyes.length) {
 			var p:Vector3 = pos[ _count % pos.length ];
-			_eyes[i].tween(p, 0.5);
+			_eyes[i].tween(p,yy, 0.5);
 			_count++;
 		}
-		TweenMax.delayedCall(2, _move);
+		TweenMax.delayedCall(4, _move);
 		
 	}
 	

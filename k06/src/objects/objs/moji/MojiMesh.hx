@@ -23,6 +23,7 @@ class MojiMesh extends Mesh
 	private var idx2:Int = 0;
 	private var idx3:Int = 0;
 	
+	private var _isRotate:Bool = false;
 	
 	public function new(g:Geometry,m:Material) 
 	{
@@ -44,14 +45,21 @@ class MojiMesh extends Mesh
 		rotation.y = Math.random() * 2 * Math.PI;
 		rotation.z = Math.random() * 2 * Math.PI;
 		
+		
 	}
 	
+	
+	public function setRotate(b:Bool):Void {
+		
+		_isRotate = b;
+		
+	}
 	
 	
 	public function update(a:MyAudio):Void {
 
 		_count++;
-		if( a.subFreqByteData[3] > 9 && _count>30 ){
+		if( a.subFreqByteData[3] > 9 && _count>30 && _isRotate && MyFaceSingle.isActive ){
 		
 			_count = 0;
 			_targetV.x += a.subFreqByteData[idx1]/100;

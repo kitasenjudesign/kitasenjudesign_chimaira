@@ -145,7 +145,7 @@ class MojiGeo
 		//polar wo update
 		var n:Int = _count % 60;
 
-		if ( n == 0 && Math.random()<0.5 ) {
+		if ( n == 0 && Math.random()<0.6 ) {
 			_updateReset();
 		}
 		
@@ -161,7 +161,7 @@ class MojiGeo
 				v.x = base.x + 100 * (Math.random() - 0.5);// + Math.pow(a.freqByteData[5] / 255, 2) * 1200 * Math.random();//
 				v.y = base.y + 100 * (Math.random() - 0.5);// + Math.pow(a.freqByteData[7] / 255, 2) * 1200 * Math.random();//
 			}
-			v.z = base.z + base.z * Math.pow(a.freqByteData[3] / 255, 2) * 70 * Math.random();//
+			v.z = base.z + base.z * Math.pow(a.freqByteData[3] / 255, 2) * 100 * Math.random();//
 			
 			//var tgtX:Float = amp * Math.sin( radX ) * Math.cos(radY) + zengo;//横
 			//var tgtY:Float = amp * Math.sin( radY );//縦
@@ -196,13 +196,23 @@ class MojiGeo
 	 */
 	public function updateColor():Void {
 		
-		var g:Geometry = geo;
+		changeColor( geo );
+		
+		
+	}
+	
+	public static function changeColor(g:Geometry):Void {
+		
 		var faceIndices:Array<String> = [ 'a', 'b', 'c', 'd' ];
-		var colors:Array<Color> = [
-			new Color( Math.floor( 0xffffff * Math.random())),
-			new Color( Math.floor( 0xffffff * Math.random())),
-			new Color( Math.floor( 0xffffff * Math.random()))
-		];
+		
+		var col1:Color = new Color(0xffffff);
+		var col2:Color = new Color(0xffffff);
+		var col3:Color = new Color(0xffffff);
+		col1.setHSL(Math.random(), 1, 1);
+		col2.setHSL( Math.random(), 1, 1);		
+		col3.setHSL(Math.random(), 1, 1);
+		
+		var colors:Array<Color> = [ col1,col2,col3];
 		
 		for ( i in 0...g.faces.length ) {
 	
@@ -219,8 +229,7 @@ class MojiGeo
 			}
 			
 		}
-		g.colorsNeedUpdate = true;
-		
+		g.colorsNeedUpdate = true;		
 	}
 		
 	

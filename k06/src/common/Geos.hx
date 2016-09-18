@@ -1,10 +1,10 @@
-package materials;
+package common;
 
 /**
  * ...
  * @author watanabe
  */
-class MyEyeMaterial
+class Geos
 {
 
 	public function new() 

@@ -12,6 +12,7 @@ import light.MySpotLight;
 import light.ShadowPlane;
 import materials.Textures;
 import objects.CgBg;
+import objects.MyFaceSingle;
 import objects.objs.Mojis;
 import objects.MyDAELoader;
 import objects.objs.Objs;
@@ -28,6 +29,7 @@ import three.PlaneGeometry;
 import three.Scene;
 import three.ShadowMaterial;
 import three.SpotLight;
+import three.SpotLightHelper;
 import three.Vector3;
 import three.WebGLRenderer;
 import video.MovieData;
@@ -140,6 +142,16 @@ class Main3d
 		_light = new DirectionalLight(0x887766, 1);
 		_scene.add(_light);
 		
+		//var hoge:SpotLightHelper = new SpotLightHelper(light);
+		//_scene.add(hoge);
+		
+		/*
+		Dat.gui.add(_light.position, "x", -100, 100).listen();
+		Dat.gui.add(_light.position, "y", -100, 100).listen();
+		Dat.gui.add(_light.position, "z", -100, 100).listen();
+		*/
+		
+		
 		var a:AmbientLight = new AmbientLight(0x999999);
 		_scene.add(a);
 		
@@ -154,25 +166,6 @@ class Main3d
 		_shadowGround = new ShadowPlane();
 		_scene.add(_shadowGround);
 		
-		//_scene.fog = new Fog(0xfff0e8, 100, 4000);
-		
-		//var mm:ShadowMaterial = new ShadowMaterial();
-		//mm.opacity = 0.5;
-		
-		/*
-		var mm:MeshBasicMaterial = new MeshBasicMaterial( { color:0xff0000 } );
-		//shadow no ookisa
-		_shadowGround = new Mesh(
-			new PlaneGeometry(700, 700, 5, 5),
-			mm
-		);
-		_shadowGround.receiveShadow = true;
-		_shadowGround.position.y = 0;
-		_shadowGround.rotation.x = -Math.PI / 2;
-		_scene.add(_shadowGround);*/
-				
-		//var axis:AxisHelper = new AxisHelper(100);   
-		//_scene.add(axis);
 		_pp = new PostProcessing2();
 		_pp.init(_scene, _camera, _renderer, null);
 		
@@ -180,14 +173,6 @@ class Main3d
 		//Dat.gui.add(this, "_fov", 10, 100).step(0.1).onFinishChange(_onResize);
 		Dat.gui.add(this, "_showVideo");
 		Dat.gui.add(this, "_hideVideo");
-		
-		Dat.gui.add(_camera.rotation, "x").name("rotX").listen();
-		Dat.gui.add(_camera.rotation, "y").name("rotY").listen();
-		Dat.gui.add(_camera.rotation, "z").name("rotZ").listen();
-		Dat.gui.add(_camera.position, "x").name("posX").listen();
-		Dat.gui.add(_camera.position, "y").name("posY").listen();
-		Dat.gui.add(_camera.position, "z").name("posZ").listen();
-		
 		
 		Browser.window.onresize = _onResize;
 		_onResize(null);
@@ -207,8 +192,15 @@ class Main3d
 			
 			case Dat.A:
 				_showVideo();
+				
 			case Dat.S:
 				_hideVideo();
+				
+			case Dat.UP:
+				MyFaceSingle.isActive = true;
+				
+			case Dat.DOWN:
+				MyFaceSingle.isActive = false;
 				
 		}
 		
@@ -280,9 +272,11 @@ class Main3d
 			_renderer.render(_scene, _camera);
 		}
 		
+		
 		var vv:Vector3 = new Vector3(1, 0.3, 0);
 		vv.applyQuaternion(_camera.quaternion.clone());
 		_light.position.copy(vv);		
+		
 		
 		//Timer.delay(_run, Math.floor(1000 / 30));
 		if(loop)Three.requestAnimationFrame( untyped _run);

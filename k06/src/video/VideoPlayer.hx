@@ -1,6 +1,7 @@
 package video;
 import camera.ExCamera;
 import common.Dat;
+import common.Key;
 import js.Browser;
 import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
@@ -113,6 +114,7 @@ class VideoPlayer extends Object3D
 	 */
 	public function setStartCallback(cb:Void->Void):Void {
 		_callback2 = cb;	
+		
 	}
 	
 	//
@@ -145,11 +147,13 @@ class VideoPlayer extends Object3D
 		
 		_video.src = _movieData.pathMov;
 		//_video.style.display = "none";
-		_video.addEventListener("canplay", _onLoad2);
+		_video.addEventListener("canplay", _onLoad2);///////////////canplay?
 		
 	}
 	
 	private function _onLoad2(e):Void{
+		
+		if (!_loading) return;
 		
 		//load suru
 		//Browser.window.alert("_onLoad");
@@ -165,12 +169,14 @@ class VideoPlayer extends Object3D
 		_camera.position.x = frameData.x;
 		_camera.position.y = frameData.y;
 		_camera.position.z = frameData.z;
-		
-		MySpotLight.instance.setSize( _movieData.size );
-		
 		_camera.quaternion.copy(_q);
 		_camera.lookAt(_tgt );
 		_camera.setFOV(_fov);
+
+		
+		MySpotLight.instance.setSize( _movieData );
+	
+		
 	
 		_loading = false;
 		_video.addEventListener("ended", _onFinish);
@@ -180,7 +186,7 @@ class VideoPlayer extends Object3D
 		//_video.seeking
 		
 		//
-		Browser.document.addEventListener("keydown" , _onKeyDown);
+		Key.board.addEventListener("keydown" , _onKeyDown);
 		
 		//callback2
 		if (_callback2 != null) {
@@ -197,8 +203,15 @@ class VideoPlayer extends Object3D
 	private function _onKeyDown(e):Void {
 		//
 		switch(Std.parseInt(e.keyCode)) {
-			case Dat.RIGHT :
+			case Dat.RIGHT,Dat.Q,Dat.W,Dat.E :
 				_onFinish(null);
+				
+			case Dat.LEFT :
+				_video.currentTime = 0;
+				
+			case Dat.SPACE:
+				_video.pause();
+				//_video.play();
 		}
 	}
 	

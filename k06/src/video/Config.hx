@@ -41,20 +41,21 @@ class Config
 		
 		var d:Dynamic = {
 			"data":[
-				{
-					"id":"HACHI",
-					"cam":"mov2/cam_hachi.json",
-					"mov":"mov2/03_hachi.mp4",
-					"size":0.3,
-					"y":2,
-					"offsetFrame":0
-				},
+
 				{
 					"id":"WWW",			
 					"cam":"mov2/cam_www.json",
 					"mov":"mov2/00_www.mp4",
 					"size":0.5,
 					"y":50,
+					"offsetFrame":0
+				},			
+				{
+					"id":"HACHI",
+					"cam":"mov2/cam_hachi.json",
+					"mov":"mov2/03_hachi.mp4",
+					"size":0.3,
+					"y":2,
 					"offsetFrame":0
 				},
 				{
@@ -104,7 +105,7 @@ class Config
 					"cam":"mov2/cam_koka.json",
 					"mov":"mov2/05_koka.mp4",
 					"size":0.3,
-					"y":2,
+					"y":10,
 					"offsetFrame":0
 				},
 				{

@@ -69,7 +69,7 @@ class MyFaceSingle extends Object3D
 	public var border:Float = 0;
 	public var borderHeight:Float = 0;
 	public var isSplit	:Bool = false;
-	public var isActive	:Bool = true;
+	public static var isActive	:Bool = false;// true;
 	public var index:Int = 0;
 	
 	private var _mode:String = "";
@@ -190,6 +190,7 @@ class MyFaceSingle extends Object3D
 		if (dae == null) return;
 		if (!this.visible) return;
 		if (index >= MAX) return;
+		if (!isActive) return;
 		
 		_pauseCount++;
 		

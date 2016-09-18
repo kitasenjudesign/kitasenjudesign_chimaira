@@ -20,6 +20,7 @@ class MojiMaker
 	public static var hexpixels	:MojiGeo;
 	public static var kimaira	:MojiGeo;
 	public static var de		:MojiGeo;
+	public static var mouse		:MojiGeo;
 	
 	private static var geos:Array<MojiGeo> = [];
 	
@@ -37,22 +38,31 @@ class MojiMaker
 		
 		_shape = shape;
 		if (dedemouse == null) {
+			
 			de = getGeometry("デ",6);			
 			dedemouse = getGeometry("デデマウス");
-			hexpixels = getGeometry("ヘックスピクセルズ");
+			hexpixels = getGeometry("ヘックスピクセルズ",2,200);
 			kitasenju = getGeometry("北千住デザイン");
 			kimaira = getGeometry("キマイラ");
+			
+			mouse = new MojiGeo();
+			mouse.init(Objs.geoMouse);
+			mouse.updateColor();
+			
 			
 			geos = [
 				de,
 				dedemouse,
 				hexpixels,
 				kitasenju,
-				kimaira
+				kimaira,
+				mouse
 			];
 			
 		}
 	}
+	
+	
 	
 	
 	public static function getRandomGeo():MojiGeo {
@@ -74,19 +84,19 @@ class MojiMaker
 	 * @param	shape
 	 * @return
 	 */
-	public static function getGeometry(src:String,scl:Float = 2):MojiGeo {
+	public static function getGeometry(src:String,scl:Float = 2,space:Float = 215):MojiGeo {
 		
-		var space:Float = 215;
+		//var space:Float = 215;
 		var spaceY:Float = 250;//
 		var nn:Int = src.length;
 		var g:Geometry = new Geometry();
 		
 		for(j in 0...src.length){
 			
-				var amount:Float = 20;
+				var amount:Float = 10;
 				var shapes:Array<Shape> = _shape.getShapes(src.substr(j,1), true);
 				var geo:ExtrudeGeometry = new ExtrudeGeometry(
-						shapes, { bevelSize:2, bevelEnabled:true, amount:amount, bevelSegments:1 }
+						shapes, { bevelSize:1, bevelEnabled:true, amount:amount, bevelSegments:1 }
 					);
 				
 				var mat4:Matrix4 = new Matrix4();

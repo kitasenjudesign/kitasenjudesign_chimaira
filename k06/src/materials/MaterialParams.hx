@@ -22,6 +22,67 @@ class MaterialParams
 	}
 
 	//setmaterial
+	public static function setParam3(material:MeshPhongMaterial,matIndex:Int):Void {
+	
+		switch(matIndex%3) {
+
+			//wire
+			case 0:
+				material.wireframe = false;
+				material.vertexColors = Three.VertexColors;
+				material.reflectivity 		= 0.8;
+				material.refractionRatio 	= 0.8;
+				
+			case 1:
+				material.wireframe = false;
+				material.vertexColors = Three.NoColors;
+				material.reflectivity 		= 0.8;
+				material.refractionRatio 	= 0.8;
+				
+			case 2:
+				material.color = (Math.random() < 0.5) ? new Color(0xff0000) : new Color(0xffffff);
+				material.vertexColors = Three.NoColors;
+				material.reflectivity 		= 0.8;
+				material.refractionRatio 	= 0.8;
+			
+		}			
+		
+	}
+		
+	public static function setParam2(material:MeshPhongMaterial,matIndex:Int):Void {
+	
+
+		switch(matIndex%4) {
+
+			//wire
+			case 0:
+				material.color = (Math.random() < 0.5) ? new Color(0xff0000) : new Color(0xffffff);
+				material.wireframe = true;
+				material.vertexColors = Three.NoColors;
+				material.reflectivity 		= 0;
+				material.refractionRatio 	= 0;
+				
+			case 1:
+				material.wireframe = false;
+				material.vertexColors = Three.VertexColors;
+				material.reflectivity 		= 0.8;
+				material.refractionRatio 	= 0.8;
+				
+			case 2:
+				material.wireframe = false;
+				material.vertexColors = Three.NoColors;
+				material.reflectivity 		= 0.8;
+				material.refractionRatio 	= 0.8;
+				
+			case 3:
+				material.color = (Math.random() < 0.5) ? new Color(0xff0000) : new Color(0xffffff);
+				material.vertexColors = Three.NoColors;
+				material.reflectivity 		= 0.8;
+				material.refractionRatio 	= 0.8;
+			
+		}	
+		
+	}
 	
 	public static function setParam(material:MeshPhongMaterial,matIndex:Int):Void {
 		
@@ -39,6 +100,15 @@ class MaterialParams
 		
 		
 		switch(matIndex) {
+			case MAT_COLOR://2
+				
+				material.map = Textures.dedeColor;
+				material.color = new Color(0xffffff); 
+				material.transparent = false;
+				material.refractionRatio = 0.1;
+				material.reflectivity = 0.1;
+				material.wireframe = false;			
+			
 			case MAT_WIREFRAME://0
 				//normal
 				material.map = Textures.colorWhite;
@@ -58,14 +128,7 @@ class MaterialParams
 				material.wireframe = false;
 				
 				
-			case MAT_COLOR://2
-				
-				material.map = Textures.dedeColor;
-				material.color = Math.random() < 0.5 ? new Color(0xffffff) : new Color(0xee1111); 
-				material.transparent = false;
-				material.refractionRatio = 0.1;
-				material.reflectivity = 0.1;
-				material.wireframe = false;
+			
 			
 			case MAT_NET://3
 				//Browser.window.alert("net!! " + _matIndex);
@@ -84,7 +147,7 @@ class MaterialParams
 				material.alphaMap = Textures.colorWhite;
 				material.refractionRatio = 0.7;
 				material.reflectivity = 0.7;				
-				material.side = Three.DoubleSide;
+				
 				
 		}
 	

@@ -72,12 +72,12 @@ class FaceMotion
 				//toriaezu yaru
 				for (i in 0..._faces.length) {
 					
-					if(i<3){
+					if(i<5){
 						var p:Vector3 = pos[0];
 						
 						_faces[i].scale.set(ss, ss, ss);
 						_faces[i].position.x = p.x;
-						_faces[i].position.y = p.y - _spaceY * (i + 0.3);// - _spaceY;//0,1,2
+						_faces[i].position.y = p.y - _spaceY * (i-0.2);// - _spaceY;//0,1,2
 						_faces[i].baseY = _faces[i].position.y;
 						_faces[i].position.z = p.z;
 					
@@ -168,7 +168,7 @@ class FaceMotion
 					
 					//_data.offsetY
 					
-					_faces[i].position.y+=0.4;
+					_faces[i].position.y+=0.1;
 					if (_faces[i].position.y > _spaceY * 5) {
 						_faces[i].position.y = -_spaceY * 5;
 					}

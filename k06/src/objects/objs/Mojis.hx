@@ -1,6 +1,7 @@
 package objects.objs;
 
 import common.Path;
+import materials.MaterialParams;
 import materials.MyPhongMaterial;
 import materials.Textures;
 import objects.MyDAELoader;
@@ -83,14 +84,6 @@ class Mojis extends MatchMoveObects
 		//_texture = ImageUtils.loadTexture( Path.assets + "face/dede_face_diff.png" );
 		_material = new MeshPhongMaterial( { color:0xffffff } );
 		_material.vertexColors = Three.VertexColors;
-		//cast new MyPhongMaterial(null);//
-		//_material.vertexColors = true;
-		//_material.map = Textures.meshRed;
-		//_material.wireframe = true;
-		//_material.alphaMap = _texture;
-		//_material.alphaTest = 0.5;
-		//_material.transparent = true;
-		
 		_material.clippingPlanes = [new Plane(new Vector3( 0, 1, 0 ), 0.8 )];//
 		_material.clipShadows = true;
 		_material.side = Three.FrontSide;		
@@ -118,32 +111,71 @@ class Mojis extends MatchMoveObects
 		this.visible = true;
 		_geoIndex++;
 		
-		var pos:Array<Vector3> = _data.camData.positions;
-		var ss:Float = _data.size;
-		var yy:Float = _data.offsetY;
-		
 		_currentGeo = MojiMaker.getGeo(_geoIndex);
 		
-		for (i in 0..._meshes.length) {
-			
-			if (i < pos.length) {
-				var p:Vector3 = pos[i];
-				_meshes[i].visible = true;
-				_meshes[i].setGeo( _currentGeo.geo );
-				//_meshes[i].geometry = MojiMaker.getGeo(_getIndex);
-				_meshes[i].scale.set(ss*0.2, ss*0.2, ss*0.2);
-				_meshes[i].position.x = p.x;
-				_meshes[i].position.y = p.y + yy;
-				_meshes[i].position.z = p.z;
-				
-			}else {
-				_meshes[i].visible = false;				
-			}
-
-		}		
+		if( Math.random() < 0.5){
+			_setMulti();		
+		}else {
+			_setOne();
+		}
 		
 		_changeMat();
 		
+	}
+	
+	private function _setMulti():Void {
+			var pos:Array<Vector3> = _data.camData.positions;
+			var ss:Float = _data.size;
+			var yy:Float = _data.offsetY;
+			var isRotate:Bool = Math.random()< 0.5 ? true : false;
+		
+			for (i in 0..._meshes.length) {
+				
+				if (i < pos.length) {
+					var p:Vector3 = pos[i];
+					_meshes[i].visible = true;
+					_meshes[i].setGeo( _currentGeo.geo );
+					_meshes[i].setRotate( isRotate );
+					//_meshes[i].geometry = MojiMaker.getGeo(_getIndex);
+					_meshes[i].scale.set(ss*0.2, ss*0.2, ss*0.2);
+					_meshes[i].position.x = p.x;
+					_meshes[i].position.y = p.y + yy;
+					_meshes[i].position.z = p.z;
+					
+				}else {
+					_meshes[i].visible = false;				
+				}
+
+			}		
+	}
+	
+	private function _setOne():Void {
+		var pos:Array<Vector3> = _data.camData.positions;
+		var ss:Float = _data.size;
+		var yy:Float = _data.offsetY;
+		var isRotate:Bool = Math.random()< 0.5 ? true : false;
+			
+		for (i in 0..._meshes.length) {
+		
+				//if (i == 0) {
+				//var b1:Bool = i < pos.length
+				
+				if (i < pos.length && i<3) {
+					var p:Vector3 = pos[i%pos.length];
+					_meshes[i].visible = true;
+					_meshes[i].setGeo( _currentGeo.geo );
+					_meshes[i].setRotate( isRotate );
+					//_meshes[i].geometry = MojiMaker.getGeo(_getIndex);
+					_meshes[i].scale.set(ss*0.2, ss*0.2, ss*0.2);
+					_meshes[i].position.x = p.x;
+					_meshes[i].position.y = p.y + yy;
+					_meshes[i].position.z = p.z;
+					
+				}else {
+					_meshes[i].visible = false;				
+				}			
+			
+		}
 	}
 	
 	
@@ -151,7 +183,8 @@ class Mojis extends MatchMoveObects
 	private function _changeMat():Void {
 		
 		_matIndex++;
-		
+		MaterialParams.setParam2(_material, _matIndex % 4);
+		/*
 		switch(_matIndex%4) {
 
 			//wire
@@ -180,7 +213,7 @@ class Mojis extends MatchMoveObects
 				_material.reflectivity 		= 0.8;
 				_material.refractionRatio 	= 0.8;
 			
-		}
+		}*/
 		
 		_currentGeo.updateColor();
 		_material.needsUpdate = true;
@@ -212,7 +245,9 @@ class Mojis extends MatchMoveObects
 			//_texture.offset.set(0, _offsetY);
 		}
 		
-		_currentGeo.update(a);
+		if( MyFaceSingle.isActive ){
+			_currentGeo.update(a);
+		}
 		//MojiMaker.updateColor( _currentGeo );
 		
 		for(i in 0..._meshes.length){

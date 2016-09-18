@@ -16,7 +16,7 @@ class Config
 	public static var host:String;
 	public static var canvasOffsetY:Float = 0;
 	public static var globalVol:Float = 1.0;
-	public static var particleSize:Float = 3000;
+	public static var particleSize:Float = 10000;
 	public static var bgLight:Float = 0.5;
 	
 	public function new() 

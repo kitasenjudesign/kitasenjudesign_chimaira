@@ -31,8 +31,8 @@ import three.WebGLRenderer;
 class CanvasSrc
 {
 	
-	public static var W:Int = 200;// 120; 
-	public static var H:Int = 50;// * 2;
+	public static var W:Int = 120;// 200;// 120; 
+	public static var H:Int = 68;// 50;// * 2;
 
 	private var _camera:ExCamera;
 	private var _renderer:WebGLRenderer;

@@ -33,7 +33,7 @@ class Eye extends Mesh
 	}
 	
 	
-	public function tween(tgt:Vector3,time:Float):Void {
+	public function tween(tgt:Vector3,yy:Float,time:Float):Void {
 		
 		if (_tween != null) {
 			_tween.kill();
@@ -41,7 +41,7 @@ class Eye extends Mesh
 				
 		_tween = TweenMax.to(this.position, time, {
 			x:tgt.x,
-			//y:tgt.y,
+			y:tgt.y + yy * 4 * Math.random(),
 			z:tgt.z
 		});
 		
