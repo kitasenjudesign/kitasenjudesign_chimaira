@@ -12,7 +12,7 @@ extern class Color {
 	function set( value : Int ) : Void;
 	function setHex( hex : Int ) : Color;
 	function setRGB(r:Float, g:Float, b:Float) : Color;
-	function setHSL(h:Float, s:Float, l:Float) : Color;
+	function setHSL(h:Float, ?s:Float, ?l:Float) : Color;
 	function setStyle(style:String) : Color;
 	function copy(color:Color) : Color;
 	function copyCammaToLinear(color:Color) : Color;

@@ -118,7 +118,6 @@ class Faces extends MatchMoveObects
 		_data = data;		
 		this.visible = true;
 		
-		
 		//kokowo set
 		
 		var rotMode:Int = 0;

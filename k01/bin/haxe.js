@@ -396,7 +396,9 @@ common.Dat._onInit = function() {
 common.Dat._onKeyDown = function(e) {
 	var _g = Std.parseInt(e.keyCode);
 	switch(_g) {
-	case 65:
+	case 90:
+		common.Dat._soundFlag = !common.Dat._soundFlag;
+		TweenMax.to(sound.MyAudio.a,0.5,{ globalVolume : common.Dat._soundFlag?common.Config.globalVol:0});
 		break;
 	case 68:
 		if(common.Dat.gui.domElement.style.display == "block") common.Dat.hide(); else common.Dat.show(true);
@@ -419,6 +421,12 @@ common.Dat._onKeyDown = function(e) {
 	case 54:
 		common.StageRef.fadeOut(common.Dat._goURL6);
 		break;
+	case 55:
+		common.StageRef.fadeOut(common.Dat._goURL7);
+		break;
+	case 56:
+		common.StageRef.fadeOut(common.Dat._goURL8);
+		break;
 	}
 };
 common.Dat._goURL1 = function() {
@@ -437,7 +445,13 @@ common.Dat._goURL5 = function() {
 	common.Dat._goURL("../../k00/bin/");
 };
 common.Dat._goURL6 = function() {
+	common.Dat._goURL("../../k06/bin/");
+};
+common.Dat._goURL7 = function() {
 	common.Dat._goURL("../../k01/bin/");
+};
+common.Dat._goURL8 = function() {
+	common.Dat._goURL("../../k07/bin/");
 };
 common.Dat._goURL = function(url) {
 	Tracer.log("goURL " + url);
@@ -1900,7 +1914,7 @@ Three.LineStrip = 0;
 Three.LinePieces = 1;
 common.Config.canvasOffsetY = 0;
 common.Config.globalVol = 1.0;
-common.Config.particleSize = 3000;
+common.Config.particleSize = 10000;
 common.Config.bgLight = 0.5;
 common.Dat.UP = 38;
 common.Dat.DOWN = 40;
@@ -1946,6 +1960,7 @@ common.Dat.Z = 90;
 common.Dat.hoge = 0;
 common.Dat.bg = false;
 common.Dat._showing = true;
+common.Dat._soundFlag = true;
 common.Key.keydown = "keydown";
 common.Path.assets = "../../assets/";
 common.QueryGetter.NORMAL = 0;

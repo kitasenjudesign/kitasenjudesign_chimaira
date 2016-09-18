@@ -41,6 +41,7 @@ class Primitives extends MatchMoveObects
 	private var _matIndex:Int = 0;
 	var _geoIndex:Int = 0;
 	var _geos:Array<Geometry>;
+	var _tweening:Bool=false;
 	
 	public function new() 
 	{
@@ -145,22 +146,24 @@ class Primitives extends MatchMoveObects
 	 */
 	private function _move():Void {
 		
+		if (_tweening) return;
 		if (_twn != null)_twn.kill();
 		
+		_tweening = true;
 		var pos:Array<Vector3> = _data.camData.positions;
 		var yy:Float = _data.offsetY;
 		
 		for (i in 0..._meshes.length) {
 			var p:Vector3 = pos[ _count % pos.length ];
-			_meshes[i].tween(p,yy, 0.3);
+			_meshes[i].tween(p,yy, 0.3,_onMove);
 			_count++;
 		}
-		_twn = TweenMax.delayedCall(4, _move);
+		//_twn = TweenMax.delayedCall(4, _move);
 		
 	}
 	
 	private function _onMove():Void {
-		
+		_tweening = false;
 	}
 	
 	
@@ -180,6 +183,10 @@ class Primitives extends MatchMoveObects
 	 * @param	a
 	 */
 	override public function update(a:MyAudio):Void {
+		
+		if (!_tweening && a.subFreqByteData[5] > 10) {
+			_move();
+		}
 		
 		_rad += 0.1;
 		var camPos:Vector3 = Main3d.getCamera().position;

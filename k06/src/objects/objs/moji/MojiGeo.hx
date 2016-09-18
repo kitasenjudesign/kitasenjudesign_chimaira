@@ -205,12 +205,12 @@ class MojiGeo
 		
 		var faceIndices:Array<String> = [ 'a', 'b', 'c', 'd' ];
 		
-		var col1:Color = new Color(0xffffff);
-		var col2:Color = new Color(0xffffff);
-		var col3:Color = new Color(0xffffff);
-		col1.setHSL(Math.random(), 1, 1);
-		col2.setHSL( Math.random(), 1, 1);		
-		col3.setHSL(Math.random(), 1, 1);
+		var col1:Color = new Color(Math.floor( Math.random() * 0xffffff ));
+		var col2:Color = new Color(Math.floor( Math.random() * 0xffffff ));
+		var col3:Color = new Color(Math.floor( Math.random() * 0xffffff ));
+		//col1.setHSL(Math.random(), 1, 1);
+		//col2.setHSL( Math.random(), 1, 1);		
+		//col3.setHSL(Math.random(), 1, 1);
 		
 		var colors:Array<Color> = [ col1,col2,col3];
 		

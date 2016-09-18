@@ -978,6 +978,9 @@ common.Dat._onKeyDown = function(e) {
 	case 55:
 		common.StageRef.fadeOut(common.Dat._goURL7);
 		break;
+	case 56:
+		common.StageRef.fadeOut(common.Dat._goURL8);
+		break;
 	}
 };
 common.Dat._goURL1 = function() {
@@ -1000,6 +1003,9 @@ common.Dat._goURL6 = function() {
 };
 common.Dat._goURL7 = function() {
 	common.Dat._goURL("../../k01/bin/");
+};
+common.Dat._goURL8 = function() {
+	common.Dat._goURL("../../k07/bin/");
 };
 common.Dat._goURL = function(url) {
 	Tracer.log("goURL " + url);

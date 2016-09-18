@@ -232,7 +232,7 @@ camera.ExCamera.prototype = $extend(THREE.PerspectiveCamera.prototype,{
 		if(this._camera != null) this._updatePosition(0.25);
 	}
 	,setFOV: function(fov) {
-		haxe.Log.trace("setFOV = " + fov,{ fileName : "ExCamera.hx", lineNumber : 145, className : "camera.ExCamera", methodName : "setFOV"});
+		console.log("setFOV = " + fov);
 		this._camera.fov = fov;
 		this._camera.updateProjectionMatrix();
 	}
@@ -339,20 +339,23 @@ common.Dat._onInit = function() {
 	common.Dat.gui.domElement.style.position = "absolute";
 	common.Dat.gui.domElement.style.right = "0px";
 	var yy = window.innerHeight / 2 + common.StageRef.get_stageHeight() / 2 + common.Config.canvasOffsetY;
-	common.Dat.gui.domElement.style.top = yy + "px";
+	common.Dat.gui.domElement.style.top = Math.floor(yy / 2) + "px";
 	common.Dat.gui.domElement.style.opacity = 1;
-	common.Dat.gui.domElement.style.zIndex = 10;
+	common.Dat.gui.domElement.style.zIndex = 1000;
 	common.Dat.gui.domElement.style.transformOrigin = "1 0";
 	common.Dat.gui.domElement.style.transform = "scale(0.8,0.8)";
 	common.Key.init();
 	common.Key.board.addEventListener("keydown",common.Dat._onKeyDown);
 	common.Dat.show(false);
+	common.Dat.hide();
 	if(common.Dat._callback != null) common.Dat._callback();
 };
 common.Dat._onKeyDown = function(e) {
 	var _g = Std.parseInt(e.keyCode);
 	switch(_g) {
-	case 65:
+	case 90:
+		common.Dat._soundFlag = !common.Dat._soundFlag;
+		TweenMax.to(sound.MyAudio.a,0.5,{ globalVolume : common.Dat._soundFlag?common.Config.globalVol:0});
 		break;
 	case 68:
 		if(common.Dat.gui.domElement.style.display == "block") common.Dat.hide(); else common.Dat.show(true);
@@ -375,25 +378,37 @@ common.Dat._onKeyDown = function(e) {
 	case 54:
 		common.StageRef.fadeOut(common.Dat._goURL6);
 		break;
+	case 55:
+		common.StageRef.fadeOut(common.Dat._goURL7);
+		break;
+	case 56:
+		common.StageRef.fadeOut(common.Dat._goURL8);
+		break;
 	}
 };
 common.Dat._goURL1 = function() {
-	common.Dat._goURL("../../04/bin/");
+	common.Dat._goURL("../../k04/bin/");
 };
 common.Dat._goURL2 = function() {
-	common.Dat._goURL("../../05/bin/");
+	common.Dat._goURL("../../k05/bin/");
 };
 common.Dat._goURL3 = function() {
-	common.Dat._goURL("../../02/bin/");
+	common.Dat._goURL("../../k02/bin/");
 };
 common.Dat._goURL4 = function() {
-	common.Dat._goURL("../../03/bin/");
+	common.Dat._goURL("../../k03/bin/");
 };
 common.Dat._goURL5 = function() {
-	common.Dat._goURL("../../00/bin/");
+	common.Dat._goURL("../../k00/bin/");
 };
 common.Dat._goURL6 = function() {
-	common.Dat._goURL("../../01/bin/");
+	common.Dat._goURL("../../k06/bin/");
+};
+common.Dat._goURL7 = function() {
+	common.Dat._goURL("../../k01/bin/");
+};
+common.Dat._goURL8 = function() {
+	common.Dat._goURL("../../k07/bin/");
 };
 common.Dat._goURL = function(url) {
 	Tracer.log("goURL " + url);
@@ -418,17 +433,19 @@ common.FadeSheet = function(ee) {
 common.FadeSheet.__name__ = true;
 common.FadeSheet.prototype = {
 	fadeIn: function() {
-		this.element.style.opacity = "0";
-		this.opacity = 0;
-		if(this._twn != null) this._twn.kill();
-		this._twn = TweenMax.to(this,0.8,{ opacity : 1, delay : 0.2, ease : Power0.easeInOut, onUpdate : $bind(this,this._onUpdate)});
+		if(this.element != null) {
+			this.element.style.opacity = "0";
+			this.opacity = 0;
+			if(this._twn != null) this._twn.kill();
+			this._twn = TweenMax.to(this,0.8,{ opacity : 1, delay : 0.2, ease : Power0.easeInOut, onUpdate : $bind(this,this._onUpdate)});
+		}
 	}
 	,fadeOut: function(callback) {
 		if(this._twn != null) this._twn.kill();
 		this._twn = TweenMax.to(this,0.5,{ opacity : 0, ease : Power0.easeInOut, onUpdate : $bind(this,this._onUpdate), onComplete : callback});
 	}
 	,_onUpdate: function() {
-		this.element.style.opacity = "" + this.opacity;
+		if(this.element != null) this.element.style.opacity = "" + this.opacity;
 	}
 	,__class__: common.FadeSheet
 };
@@ -530,11 +547,11 @@ common.StageRef = function() {
 common.StageRef.__name__ = true;
 common.StageRef.showBorder = function() {
 	var dom = window.document.getElementById("webgl");
-	dom.style.border = "solid 1px #cccccc";
+	if(dom != null) dom.style.border = "solid 1px #cccccc";
 };
 common.StageRef.hideBorder = function() {
 	var dom = window.document.getElementById("webgl");
-	dom.style.border = "solid 0px";
+	if(dom != null) dom.style.border = "solid 0px";
 };
 common.StageRef.fadeIn = function() {
 	if(common.StageRef.sheet == null) common.StageRef.sheet = new common.FadeSheet(window.document.getElementById("webgl"));
@@ -556,8 +573,7 @@ common.StageRef.get_stageWidth = function() {
 	return window.innerWidth;
 };
 common.StageRef.get_stageHeight = function() {
-	if(common.Dat.bg) return Math.floor(window.innerWidth * 816 / 1920);
-	return Math.floor(window.innerWidth * 576 / 1920);
+	return window.innerHeight;
 };
 common.StageRef.prototype = {
 	__class__: common.StageRef
@@ -781,7 +797,6 @@ fbo.Fbo.prototype = {
 			starts[i3] = vs[idx].x * 100;
 			starts[i3 + 1] = vs[idx].y * 100;
 			starts[i3 + 2] = vs[idx].z * 100;
-			haxe.Log.trace(starts[i3],{ fileName : "Fbo.hx", lineNumber : 108, className : "fbo.Fbo", methodName : "init", customParams : [starts[i3 + 1],starts[i3 + 2]]});
 		}
 		simGeo.addAttribute("starts",new THREE.BufferAttribute(starts,3));
 		simGeo.addAttribute("life",new THREE.BufferAttribute(life,1));
@@ -1186,11 +1201,6 @@ haxe.Http.prototype = {
 	}
 	,__class__: haxe.Http
 };
-haxe.Log = function() { };
-haxe.Log.__name__ = true;
-haxe.Log.trace = function(v,infos) {
-	js.Boot.__trace(v,infos);
-};
 haxe.ds = {};
 haxe.ds.StringMap = function() {
 	this.h = { };
@@ -1209,94 +1219,8 @@ haxe.ds.StringMap.prototype = {
 var js = {};
 js.Boot = function() { };
 js.Boot.__name__ = true;
-js.Boot.__unhtml = function(s) {
-	return s.split("&").join("&amp;").split("<").join("&lt;").split(">").join("&gt;");
-};
-js.Boot.__trace = function(v,i) {
-	var msg;
-	if(i != null) msg = i.fileName + ":" + i.lineNumber + ": "; else msg = "";
-	msg += js.Boot.__string_rec(v,"");
-	if(i != null && i.customParams != null) {
-		var _g = 0;
-		var _g1 = i.customParams;
-		while(_g < _g1.length) {
-			var v1 = _g1[_g];
-			++_g;
-			msg += "," + js.Boot.__string_rec(v1,"");
-		}
-	}
-	var d;
-	if(typeof(document) != "undefined" && (d = document.getElementById("haxe:trace")) != null) d.innerHTML += js.Boot.__unhtml(msg) + "<br/>"; else if(typeof console != "undefined" && console.log != null) console.log(msg);
-};
 js.Boot.getClass = function(o) {
 	if((o instanceof Array) && o.__enum__ == null) return Array; else return o.__class__;
-};
-js.Boot.__string_rec = function(o,s) {
-	if(o == null) return "null";
-	if(s.length >= 5) return "<...>";
-	var t = typeof(o);
-	if(t == "function" && (o.__name__ || o.__ename__)) t = "object";
-	switch(t) {
-	case "object":
-		if(o instanceof Array) {
-			if(o.__enum__) {
-				if(o.length == 2) return o[0];
-				var str = o[0] + "(";
-				s += "\t";
-				var _g1 = 2;
-				var _g = o.length;
-				while(_g1 < _g) {
-					var i = _g1++;
-					if(i != 2) str += "," + js.Boot.__string_rec(o[i],s); else str += js.Boot.__string_rec(o[i],s);
-				}
-				return str + ")";
-			}
-			var l = o.length;
-			var i1;
-			var str1 = "[";
-			s += "\t";
-			var _g2 = 0;
-			while(_g2 < l) {
-				var i2 = _g2++;
-				str1 += (i2 > 0?",":"") + js.Boot.__string_rec(o[i2],s);
-			}
-			str1 += "]";
-			return str1;
-		}
-		var tostr;
-		try {
-			tostr = o.toString;
-		} catch( e ) {
-			return "???";
-		}
-		if(tostr != null && tostr != Object.toString) {
-			var s2 = o.toString();
-			if(s2 != "[object Object]") return s2;
-		}
-		var k = null;
-		var str2 = "{\n";
-		s += "\t";
-		var hasp = o.hasOwnProperty != null;
-		for( var k in o ) {
-		if(hasp && !o.hasOwnProperty(k)) {
-			continue;
-		}
-		if(k == "prototype" || k == "__class__" || k == "__super__" || k == "__interfaces__" || k == "__properties__") {
-			continue;
-		}
-		if(str2.length != 2) str2 += ", \n";
-		str2 += s + k + " : " + js.Boot.__string_rec(o[k],s);
-		}
-		s = s.substring(1);
-		str2 += "\n" + s + "}";
-		return str2;
-	case "function":
-		return "<function>";
-	case "string":
-		return o;
-	default:
-		return String(o);
-	}
 };
 js.Boot.__interfLoop = function(cc,cl) {
 	if(cc == null) return false;
@@ -1393,7 +1317,7 @@ sound.MyAudio.prototype = {
 	}
 	,update: function() {
 		if(!this.isStart) {
-			haxe.Log.trace("not work",{ fileName : "MyAudio.hx", lineNumber : 115, className : "sound.MyAudio", methodName : "update"});
+			console.log("not work");
 			return;
 		}
 		this.freqByteData = new Uint8Array(this.analyser.frequencyBinCount);
@@ -1643,7 +1567,7 @@ Three.LineStrip = 0;
 Three.LinePieces = 1;
 common.Config.canvasOffsetY = 0;
 common.Config.globalVol = 1.0;
-common.Config.particleSize = 3000;
+common.Config.particleSize = 10000;
 common.Config.bgLight = 0.5;
 common.Dat.UP = 38;
 common.Dat.DOWN = 40;
@@ -1689,6 +1613,7 @@ common.Dat.Z = 90;
 common.Dat.hoge = 0;
 common.Dat.bg = false;
 common.Dat._showing = true;
+common.Dat._soundFlag = true;
 common.Key.keydown = "keydown";
 common.Path.assets = "../../assets/";
 common.QueryGetter.NORMAL = 0;

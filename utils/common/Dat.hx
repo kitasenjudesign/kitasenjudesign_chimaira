@@ -163,7 +163,10 @@ class Dat
 				
 			case Dat.K7 :
 				StageRef.fadeOut( _goURL7 );		
-			
+
+			case Dat.K8 :
+				StageRef.fadeOut( _goURL8 );		
+				
 		}
 		
 	}
@@ -216,7 +219,12 @@ class Dat
 		_goURL( "../../k01/bin/" );
 		
 	}	
-	
+
+	private static function _goURL8():Void {
+		
+		_goURL( "../../k07/bin/" );
+		
+	}		
 	
 	
 	private static function _goURL(url:String):Void {

@@ -1,4 +1,5 @@
 package materials;
+import js.Browser;
 import three.Color;
 import three.MeshPhongMaterial;
 
@@ -63,6 +64,7 @@ class MaterialParams
 				material.refractionRatio 	= 0;
 				
 			case 1:
+				//Browser.window.alert("changeColor");
 				material.wireframe = false;
 				material.vertexColors = Three.VertexColors;
 				material.reflectivity 		= 0.8;

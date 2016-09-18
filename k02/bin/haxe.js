@@ -1195,7 +1195,7 @@ canvas.primitives.VideoPlane.prototype = $extend(canvas.primitives.PrimitiveBase
 			this._texture = new THREE.Texture(this._canvas);
 			this._material = new THREE.MeshBasicMaterial({ map : this._texture});
 			this._material.side = 2;
-			var s = 3.5;
+			var s = 2.2;
 			this._plane = new THREE.Mesh(new THREE.PlaneBufferGeometry(192 * s,58 * s,1,1),this._material);
 			this.add(this._plane);
 		}
@@ -1402,7 +1402,9 @@ common.Dat._onInit = function() {
 common.Dat._onKeyDown = function(e) {
 	var _g = Std.parseInt(e.keyCode);
 	switch(_g) {
-	case 65:
+	case 90:
+		common.Dat._soundFlag = !common.Dat._soundFlag;
+		TweenMax.to(sound.MyAudio.a,0.5,{ globalVolume : common.Dat._soundFlag?common.Config.globalVol:0});
 		break;
 	case 68:
 		if(common.Dat.gui.domElement.style.display == "block") common.Dat.hide(); else common.Dat.show(true);
@@ -1425,6 +1427,12 @@ common.Dat._onKeyDown = function(e) {
 	case 54:
 		common.StageRef.fadeOut(common.Dat._goURL6);
 		break;
+	case 55:
+		common.StageRef.fadeOut(common.Dat._goURL7);
+		break;
+	case 56:
+		common.StageRef.fadeOut(common.Dat._goURL8);
+		break;
 	}
 };
 common.Dat._goURL1 = function() {
@@ -1443,7 +1451,13 @@ common.Dat._goURL5 = function() {
 	common.Dat._goURL("../../k00/bin/");
 };
 common.Dat._goURL6 = function() {
+	common.Dat._goURL("../../k06/bin/");
+};
+common.Dat._goURL7 = function() {
 	common.Dat._goURL("../../k01/bin/");
+};
+common.Dat._goURL8 = function() {
+	common.Dat._goURL("../../k07/bin/");
 };
 common.Dat._goURL = function(url) {
 	Tracer.log("goURL " + url);
@@ -1923,10 +1937,12 @@ emoji.Emojis.prototype = $extend(THREE.Object3D.prototype,{
 			this._pos.setRandomIndex(Math.random() < 0.5?true:false);
 			this._pos.setRange(Math.random(),Math.pow(Math.random(),2));
 			this._isBlackPixel = data.getIsBlackPixel();
+			if(this._isRotate) this._isBlackPixel = false;
 			this._depthDir = 1;
 		} else if(keyCode == 37) this._tweenZoom(true); else if(keyCode == 38) this._tweenZoom(false); else if(keyCode == 40) this._tweenWide(); else if(keyCode == 80) this._isDepth = !this._isDepth; else if(keyCode == 82) {
 			this._isRotate = !this._isRotate;
 			if(this._isRotate) this._isDepth = true;
+			this._isBlackPixel = false;
 		}
 	}
 	,_tweenZoom: function(loop) {
@@ -3189,6 +3205,7 @@ common.Dat.Z = 90;
 common.Dat.hoge = 0;
 common.Dat.bg = false;
 common.Dat._showing = true;
+common.Dat._soundFlag = true;
 common.Key.keydown = "keydown";
 common.Path.assets = "../../assets/";
 common.QueryGetter.NORMAL = 0;

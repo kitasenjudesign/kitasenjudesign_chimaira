@@ -134,7 +134,9 @@ class Emojis extends Object3D
 			);
 			
 			_isBlackPixel = data.getIsBlackPixel();// (Math.random() < 0.5) ? true : false;
-			
+			if (_isRotate) {
+				_isBlackPixel = false;
+			}
 			//Browser.window.alert("isBlack " + _isBlackPixel);
 			_depthDir = 1;// Math.random() < 0.2 ? -1 : 1;
 			//_depthDir = Math.random() < 0.2 ? -1 : 1;
@@ -155,11 +157,12 @@ class Emojis extends Object3D
 			
 			_isDepth = !_isDepth;
 			
-			}else if (keyCode == Dat.R) {
+		}else if (keyCode == Dat.R) {
 			_isRotate = !_isRotate;
 			if(_isRotate){
 				_isDepth = true;
 			}
+			_isBlackPixel = false;
 		}
 		
 		//sara ni normal demo depth

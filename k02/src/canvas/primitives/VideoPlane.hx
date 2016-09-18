@@ -59,7 +59,7 @@ class VideoPlane extends PrimitiveBase
 			_material = new MeshBasicMaterial( { map:_texture } );
 			_material.side = Three.DoubleSide;
 			
-			var s:Float = 3.5;
+			var s:Float = 2.2;
 			_plane = new Mesh(untyped new PlaneBufferGeometry(W*s, H*s, 1, 1), _material);
 			add(_plane);
 		}		

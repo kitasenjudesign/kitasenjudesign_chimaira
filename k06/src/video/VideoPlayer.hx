@@ -8,6 +8,7 @@ import js.html.CanvasRenderingContext2D;
 import js.html.VideoElement;
 import light.MySpotLight;
 import light.ShadowPlane;
+import objects.objs.motion.FaceMotion;
 import three.Geometry;
 import three.Line;
 import three.LineBasicMaterial;
@@ -203,6 +204,15 @@ class VideoPlayer extends Object3D
 	private function _onKeyDown(e):Void {
 		//
 		switch(Std.parseInt(e.keyCode)) {
+			case Dat.L:
+				FaceMotion.globalScale = 1.5 + 1.5 * Math.random();
+				_onFinish(null);
+				
+			case Dat.M:
+				
+				FaceMotion.globalScale = 1;
+				_onFinish(null);
+				
 			case Dat.RIGHT,Dat.Q,Dat.W,Dat.E :
 				_onFinish(null);
 				

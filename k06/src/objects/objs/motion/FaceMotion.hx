@@ -16,6 +16,7 @@ class FaceMotion
 	public static inline var MODE_POS_FIX:Int = 10;//fix
 	public static inline var MODE_POS_MOVE_Y:Int = 11;//ugoku
 	
+	public static var globalScale:Float = 1;
 	
 	private var _faces:Array<MyFaceSingle>;
 	
@@ -55,14 +56,16 @@ class FaceMotion
 		
 		var pos:Array<Vector3> = _data.camData.positions;
 		var scales:Array<Float> = _data.camData.scales;
-		var ss:Float = _data.size;
+		var ss:Float = _data.size * globalScale;
 		var yy:Float = _data.offsetY;
 		
+		/////////////////////size wo chosei
 		//shokichi set
 		//if (_modePos == MODE_POS_MOVE_Y) {
 		//	ss = ss * 2;
 		//}
-
+		
+		
 		_spaceY = ss * 200;
 		
 		

@@ -129,6 +129,8 @@ class Mojis extends MatchMoveObects
 			var yy:Float = _data.offsetY;
 			var isRotate:Bool = Math.random()< 0.5 ? true : false;
 		
+			//_currentGeo
+			
 			for (i in 0..._meshes.length) {
 				
 				if (i < pos.length) {
@@ -183,38 +185,8 @@ class Mojis extends MatchMoveObects
 	private function _changeMat():Void {
 		
 		_matIndex++;
-		MaterialParams.setParam2(_material, _matIndex % 4);
-		/*
-		switch(_matIndex%4) {
-
-			//wire
-			case 0:
-				_material.color = (Math.random() < 0.5) ? new Color(0xff0000) : new Color(0xffffff);
-				_material.wireframe = true;
-				_material.vertexColors = Three.NoColors;
-				_material.reflectivity 		= 0;
-				_material.refractionRatio 	= 0;
-				
-			case 1:
-				_material.wireframe = false;
-				_material.vertexColors = Three.VertexColors;
-				_material.reflectivity 		= 0.8;
-				_material.refractionRatio 	= 0.8;
-				
-			case 2:
-				_material.wireframe = false;
-				_material.vertexColors = Three.NoColors;
-				_material.reflectivity 		= 0.8;
-				_material.refractionRatio 	= 0.8;
-				
-			case 3:
-				_material.color = (Math.random() < 0.5) ? new Color(0xff0000) : new Color(0xffffff);
-				_material.vertexColors = Three.NoColors;
-				_material.reflectivity 		= 0.8;
-				_material.refractionRatio 	= 0.8;
-			
-		}*/
 		
+		MaterialParams.setParam2(_material, _matIndex % 4);
 		_currentGeo.updateColor();
 		_material.needsUpdate = true;
 		

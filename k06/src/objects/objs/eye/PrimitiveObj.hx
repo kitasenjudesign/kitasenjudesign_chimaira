@@ -1,4 +1,6 @@
 package objects.objs.eye;
+import objects.objs.moji.MojiGeo;
+import objects.objs.moji.MojiMaker;
 import sound.MyAudio;
 import three.BoxGeometry;
 import three.BoxGeometry;
@@ -57,6 +59,10 @@ class PrimitiveObj extends Mesh
 		
 		this.geometry = g;// _geos[n % _geos.length];
 		_scale = ss;
+		
+		//MojiGeo.changeColor(this.geometry);// changeColor
+		
+		//(this.geometry);
 	}
 	
 	/**
@@ -65,7 +71,7 @@ class PrimitiveObj extends Mesh
 	 * @param	yy
 	 * @param	time
 	 */
-	public function tween(tgt:Vector3,yy:Float,time:Float):Void {
+	public function tween(tgt:Vector3,yy:Float,time:Float,callback:Void->Void):Void {
 		
 		if (_tween != null) {
 			_tween.kill();
@@ -73,15 +79,14 @@ class PrimitiveObj extends Mesh
 				
 		_tween = TweenMax.to(this.position, time, {
 			x:tgt.x,
-			y:tgt.y + yy*0.2 + yy * 3 * Math.random(),
-			z:tgt.z
+			y:tgt.y + yy*0.2 + yy * 2 * Math.random(),
+			z:tgt.z,
+			onComplete:callback
 		});
 		
 	}
 	
 	public function update(a:MyAudio):Void {
-		
-		
 		
 		_count++;
 		if (a.subFreqByteData[3] > 8 && _count>15) {
@@ -94,7 +99,7 @@ class PrimitiveObj extends Mesh
 		rotation.y += (_tgtRot.y - rotation.y) / 10;
 		rotation.z += (_tgtRot.z - rotation.z) / 10;
 		
-		var ss:Float = _scale + Math.pow(a.subFreqByteData[5] / 255, 3) * 0.5;
+		var ss:Float = _scale + Math.pow( Math.abs(a.freqByteData[5]) / 255, 3) * _scale;
 		scale.set(ss,ss,ss);
 		//kaiten
 		//rotation.x += 0.001;

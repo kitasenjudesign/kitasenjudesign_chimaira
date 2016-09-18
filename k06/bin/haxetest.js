@@ -535,7 +535,9 @@ common.Dat._onInit = function() {
 common.Dat._onKeyDown = function(e) {
 	var _g = Std.parseInt(e.keyCode);
 	switch(_g) {
-	case 65:
+	case 90:
+		common.Dat._soundFlag = !common.Dat._soundFlag;
+		TweenMax.to(sound.MyAudio.a,0.5,{ globalVolume : common.Dat._soundFlag?common.Config.globalVol:0});
 		break;
 	case 68:
 		if(common.Dat.gui.domElement.style.display == "block") common.Dat.hide(); else common.Dat.show(true);
@@ -558,6 +560,12 @@ common.Dat._onKeyDown = function(e) {
 	case 54:
 		common.StageRef.fadeOut(common.Dat._goURL6);
 		break;
+	case 55:
+		common.StageRef.fadeOut(common.Dat._goURL7);
+		break;
+	case 56:
+		common.StageRef.fadeOut(common.Dat._goURL8);
+		break;
 	}
 };
 common.Dat._goURL1 = function() {
@@ -576,7 +584,13 @@ common.Dat._goURL5 = function() {
 	common.Dat._goURL("../../k00/bin/");
 };
 common.Dat._goURL6 = function() {
+	common.Dat._goURL("../../k06/bin/");
+};
+common.Dat._goURL7 = function() {
 	common.Dat._goURL("../../k01/bin/");
+};
+common.Dat._goURL8 = function() {
+	common.Dat._goURL("../../k07/bin/");
 };
 common.Dat._goURL = function(url) {
 	console.log("goURL " + url);
@@ -2247,6 +2261,7 @@ objects.objs.Objs.prototype = $extend(THREE.Object3D.prototype,{
 	,__class__: objects.objs.Objs
 });
 objects.objs.Primitives = function() {
+	this._tweening = false;
 	this._geoIndex = 0;
 	this._matIndex = 0;
 	this._count = 0;
@@ -2310,7 +2325,9 @@ objects.objs.Primitives.prototype = $extend(objects.MatchMoveObects.prototype,{
 		this._material.needsUpdate = true;
 	}
 	,_move: function() {
+		if(this._tweening) return;
 		if(this._twn != null) this._twn.kill();
+		this._tweening = true;
 		var pos = this._data.camData.positions;
 		var yy = this._data.offsetY;
 		var _g1 = 0;
@@ -2318,17 +2335,18 @@ objects.objs.Primitives.prototype = $extend(objects.MatchMoveObects.prototype,{
 		while(_g1 < _g) {
 			var i = _g1++;
 			var p = pos[this._count % pos.length];
-			this._meshes[i].tween(p,yy,0.3);
+			this._meshes[i].tween(p,yy,0.3,$bind(this,this._onMove));
 			this._count++;
 		}
-		this._twn = TweenMax.delayedCall(4,$bind(this,this._move));
 	}
 	,_onMove: function() {
+		this._tweening = false;
 	}
 	,setEnvMap: function(texture) {
 		if(this._material != null) this._material.envMap = texture;
 	}
 	,update: function(a) {
+		if(!this._tweening && a.subFreqByteData[5] > 10) this._move();
 		this._rad += 0.1;
 		var camPos = Main3d.getCamera().position;
 		var _g1 = 0;
@@ -2396,9 +2414,9 @@ objects.objs.eye.PrimitiveObj.prototype = $extend(THREE.Mesh.prototype,{
 		this.geometry = g;
 		this._scale = ss;
 	}
-	,tween: function(tgt,yy,time) {
+	,tween: function(tgt,yy,time,callback) {
 		if(this._tween != null) this._tween.kill();
-		this._tween = TweenMax.to(this.position,time,{ x : tgt.x, y : tgt.y + yy * 0.2 + yy * 3 * Math.random(), z : tgt.z});
+		this._tween = TweenMax.to(this.position,time,{ x : tgt.x, y : tgt.y + yy * 0.2 + yy * 2 * Math.random(), z : tgt.z, onComplete : callback});
 	}
 	,update: function(a) {
 		this._count++;
@@ -2411,7 +2429,7 @@ objects.objs.eye.PrimitiveObj.prototype = $extend(THREE.Mesh.prototype,{
 		this.rotation.x += (this._tgtRot.x - this.rotation.x) / 10;
 		this.rotation.y += (this._tgtRot.y - this.rotation.y) / 10;
 		this.rotation.z += (this._tgtRot.z - this.rotation.z) / 10;
-		var ss = this._scale + Math.pow(a.subFreqByteData[5] / 255,3) * 0.5;
+		var ss = this._scale + Math.pow(Math.abs(a.freqByteData[5]) / 255,3) * this._scale;
 		this.scale.set(ss,ss,ss);
 	}
 	,kill: function() {
@@ -2476,12 +2494,9 @@ objects.objs.moji.MojiGeo.changeColor = function(g) {
 	var faceIndices_1 = "b";
 	var faceIndices_2 = "c";
 	var faceIndices_3 = "d";
-	var col1 = new THREE.Color(16777215);
-	var col2 = new THREE.Color(16777215);
-	var col3 = new THREE.Color(16777215);
-	col1.setHSL(Math.random(),1,1);
-	col2.setHSL(Math.random(),1,1);
-	col3.setHSL(Math.random(),1,1);
+	var col1 = new THREE.Color(Math.floor(Math.random() * 16777215));
+	var col2 = new THREE.Color(Math.floor(Math.random() * 16777215));
+	var col3 = new THREE.Color(Math.floor(Math.random() * 16777215));
 	var colors = [col1,col2,col3];
 	var _g1 = 0;
 	var _g = g.faces.length;
@@ -2698,7 +2713,7 @@ objects.objs.motion.FaceMotion.prototype = {
 		this._modePos = posMode;
 		var pos = this._data.camData.positions;
 		var scales = this._data.camData.scales;
-		var ss = this._data.size;
+		var ss = this._data.size * objects.objs.motion.FaceMotion.globalScale;
 		var yy = this._data.offsetY;
 		this._spaceY = ss * 200;
 		switch(posMode) {
@@ -3025,7 +3040,7 @@ video.Config.__name__ = true;
 video.Config.prototype = {
 	load: function(filename,callback) {
 		this._callback = callback;
-		var d = { data : [{ id : "WWW", cam : "mov2/cam_www.json", mov : "mov2/00_www.mp4", size : 0.5, y : 50, offsetFrame : 0},{ id : "HACHI", cam : "mov2/cam_hachi.json", mov : "mov2/03_hachi.mp4", size : 0.3, y : 2, offsetFrame : 0},{ id : "SCRAMBLE", cam : "mov2/cam_scramble.json", mov : "mov2/01_scramble.mp4", size : 0.8, y : 50, offsetFrame : 0},{ id : "OSHO", cam : "mov2/cam_osho.json", mov : "mov2/07_osho.mp4", size : 0.3, y : 40, offsetFrame : 0},{ id : "FUKAN", cam : "mov2/cam_fukan.json", mov : "mov2/04_fukan.mp4", size : 0.25, y : 10, offsetFrame : 0},{ id : "STATION", cam : "mov2/cam_station.json", mov : "mov2/02_station.mp4", size : 0.6, y : 50, offsetFrame : 0},{ id : "HACHI", cam : "mov2/cam_hachi.json", mov : "mov2/03_hachi.mp4", size : 0.3, y : 2, offsetFrame : 0},{ id : "KOKA", cam : "mov2/cam_koka.json", mov : "mov2/05_koka.mp4", size : 0.3, y : 10, offsetFrame : 0},{ id : "WWW3", cam : "mov2/cam_www3.json", mov : "mov2/08_www3.mp4", size : 0.4, y : 50, offsetFrame : 0}]};
+		var d = { data : [{ id : "WWW", cam : "mov2/cam_www.json", mov : "mov2/00_www.mp4", size : 0.5, y : 50, offsetFrame : 0},{ id : "HACHI", cam : "mov2/cam_hachi.json", mov : "mov2/03_hachi.mp4", size : 0.3, y : 2, offsetFrame : 0},{ id : "SCRAMBLE", cam : "mov2/cam_scramble.json", mov : "mov2/01_scramble.mp4", size : 0.8, y : 50, offsetFrame : 0},{ id : "OSHO", cam : "mov2/cam_osho.json", mov : "mov2/07_osho.mp4", size : 0.3, y : 40, offsetFrame : 0},{ id : "FUKAN", cam : "mov2/cam_fukan.json", mov : "mov2/04_fukan.mp4", size : 0.25, y : 10, offsetFrame : 0},{ id : "STATION", cam : "mov2/cam_station.json", mov : "mov2/02_station.mp4", size : 0.6, y : 50, offsetFrame : 0},{ id : "HACHI", cam : "mov2/cam_hachi.json", mov : "mov2/03_hachi.mp4", size : 0.3, y : 2, offsetFrame : 0},{ id : "KOKA", cam : "mov2/cam_koka.json", mov : "mov2/05_koka.mp4", size : 0.3, y : 10, offsetFrame : 0},{ id : "WWW3", cam : "mov2/cam_www3.json", mov : "mov2/08_www3.mp4", size : 0.4, y : 50, offsetFrame : 0},{ id : "DESKTOP", cam : "mov2/cam_desktop.json", mov : "mov2/09_desktop.mp4", size : 0.3, y : 50, offsetFrame : 0}]};
 		this.list = [];
 		var _g1 = 0;
 		var _g = d.data.length;
@@ -3161,6 +3176,14 @@ video.VideoPlayer.prototype = $extend(THREE.Object3D.prototype,{
 	,_onKeyDown: function(e) {
 		var _g = Std.parseInt(e.keyCode);
 		switch(_g) {
+		case 76:
+			objects.objs.motion.FaceMotion.globalScale = 1.5 + 1.5 * Math.random();
+			this._onFinish(null);
+			break;
+		case 77:
+			objects.objs.motion.FaceMotion.globalScale = 1;
+			this._onFinish(null);
+			break;
 		case 39:case 81:case 87:case 69:
 			this._onFinish(null);
 			break;
@@ -3464,6 +3487,7 @@ common.Dat.Z = 90;
 common.Dat.hoge = 0;
 common.Dat.bg = false;
 common.Dat._showing = true;
+common.Dat._soundFlag = true;
 common.Key.keydown = "keydown";
 common.Path.assets = "../../assets/";
 common.QueryGetter.NORMAL = 0;
@@ -3510,6 +3534,7 @@ objects.objs.motion.FaceMotion.MODE_ROT_Y = 0;
 objects.objs.motion.FaceMotion.MODE_ROT_XYZ = 1;
 objects.objs.motion.FaceMotion.MODE_POS_FIX = 10;
 objects.objs.motion.FaceMotion.MODE_POS_MOVE_Y = 11;
+objects.objs.motion.FaceMotion.globalScale = 1;
 sound.MyAudio.FFTSIZE = 64;
 three._WebGLRenderer.RenderPrecision_Impl_.highp = "highp";
 three._WebGLRenderer.RenderPrecision_Impl_.mediump = "mediump";

@@ -115,6 +115,14 @@ class Config
 					"size":0.4,
 					"y":50,
 					"offsetFrame":0
+				},
+				{
+					"id":"DESKTOP",			
+					"cam":"mov2/cam_desktop.json",
+					"mov":"mov2/09_desktop.mp4",
+					"size":0.3,
+					"y":50,
+					"offsetFrame":0
 				}				
 				
 			]
